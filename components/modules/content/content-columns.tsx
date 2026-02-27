@@ -51,7 +51,7 @@ export const ContentTableColumns = ({
   },
   {
     accessorKey: "blocked",
-    header: "Status",
+    header: "Estado",
     cell: ({ row }) => {
       const content = row.original;
       const blocked = content.blocked ? "Visible" : "Oculto";
