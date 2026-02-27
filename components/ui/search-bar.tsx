@@ -2,6 +2,7 @@
 
 import { Search } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { cn } from '@/lib/utils';
 
@@ -20,29 +21,29 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className, placeholder = '
   const pathname = usePathname();
   const { replace } = useRouter();
 
-//   const handleSearch = useDebouncedCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-//     const newValue = event.target.value;
-//     if (onSearch) {
-//       onSearch(event);
-//     }
-//     // Update the URL search params
-//     const params = new URLSearchParams(searchParams.toString());
-//     if (newValue) {
-//       params.set(SEARCH_PARAM, newValue);
-//     } else {
-//       params.delete(SEARCH_PARAM);
-//     }
-//     replace(`${pathname}?${params.toString()}`);
-//   }, 300);
+  const handleSearch = useDebouncedCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    if (onSearch) {
+      onSearch(event);
+    }
+    // Update the URL search params
+    const params = new URLSearchParams(searchParams.toString());
+    if (newValue) {
+      params.set(SEARCH_PARAM, newValue);
+    } else {
+      params.delete(SEARCH_PARAM);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }, 300);
 
   return (
-    <div className={cn('relative bg-background w-full md:max-w-2xl border rounded-md px-3 py-5', className)}>
+    <div className={cn('relative bg-background w-full md:max-w-2xl border shadow rounded-md px-3 py-5', className)}>
       <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
         type="search"
         placeholder={placeholder}
         className="pl-8 border-border"
-        // onChange={handleSearch}
+        onChange={handleSearch}
         defaultValue={searchParams.get(SEARCH_PARAM)?.toString()}
       />
     </div>

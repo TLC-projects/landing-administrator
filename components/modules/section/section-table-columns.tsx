@@ -1,12 +1,10 @@
+"use client";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { Section } from "./section-table";
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui";
+import { ArrowUpDown, Eye } from "lucide-react";
+import Link from "next/link";
 
 export const SectionTableColumns = (): ColumnDef<Section>[] => [
   {
@@ -26,7 +24,7 @@ export const SectionTableColumns = (): ColumnDef<Section>[] => [
   },
   {
     accessorKey: "title",
-    header: "Nombre de la seccion",
+    header: "Nombre de la sección",
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("title")}</div>
     ),
@@ -44,15 +42,13 @@ export const SectionTableColumns = (): ColumnDef<Section>[] => [
     cell: ({ row }) => {
       const section = row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end"></DropdownMenuContent>
-        </DropdownMenu>
+        <Link
+          href={`/projects/${section.projectId}/${section.id}`}
+           className="flex items-center gap-2"
+        >
+          <Eye className="h-4 w-4 " />
+          <span>Ver</span>
+        </Link>
       );
     },
   },

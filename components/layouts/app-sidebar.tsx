@@ -1,20 +1,20 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarHeader,
-} from "@/components/ui";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui";
+import { NavUser } from "./nav-user";
+import { NavMain } from "./nav-main";
+import { NavLogout } from "./nav-logout";
 
-export function AppSidebar() {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar>
-      <SidebarHeader />
+    <Sidebar collapsible="offcanvas" {...props}>
+      <SidebarHeader>
+        <NavUser />
+      </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup />
-        <SidebarGroup />
+        <NavMain />
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <NavLogout/>
+      </SidebarFooter>
     </Sidebar>
   );
 }

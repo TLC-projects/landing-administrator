@@ -20,11 +20,6 @@ export default async function ContentsListPage({
       <AppTitle
         title="Sección 1"
         description=""
-        breadcrumb={[
-          { label: "Proyectos", href: "/" },
-          { label: `Proyecto ${projectId}`, href: `/projects/${projectId}` },
-          { label: `Sección ${sectionId}` }
-        ]}
         action={
           <Link
             href={`/projects/${projectId}/${sectionId}/new`}

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Shell, AppTitle } from "@/components/layouts";
+import { SectionTable } from "@/components/modules/section";
 
 export default async function ProjectPage({
   params,
@@ -10,8 +10,8 @@ export default async function ProjectPage({
 
   // TODO: Fetch real sections data
   const mockSections = [
-    { id: "1", title: "Sección 1" },
-    { id: "2", title: "Sección 2" },
+    { id: "1", projectId: projectId, title: "Sección 1", contentNumber: 3 },
+    { id: "2", projectId: projectId, title: "Sección 2", contentNumber: 5 },
   ];
 
   return (
@@ -19,22 +19,11 @@ export default async function ProjectPage({
       <AppTitle
         title={`Proyecto ${projectId}`}
         description="Selecciona una sección para gestionar su contenido."
-        breadcrumb={[
-          { label: "Proyectos", href: "/" },
-          { label: `Proyecto ${projectId}` },
-        ]}
       />
-      <div className="space-y-2">
-        {mockSections.map((section) => (
-          <Link
-            key={section.id}
-            href={`/projects/${projectId}/${section.id}`}
-            className="block p-4 border rounded hover:bg-gray-50 transition-colors"
-          >
-            <h3 className="font-medium">{section.title}</h3>
-          </Link>
-        ))}
-      </div>
+      <SectionTable
+        sections={mockSections}
+        pageInfo={{ total: mockSections.length, page: 1, limit: 10 }}
+      />
     </Shell>
   );
 }

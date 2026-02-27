@@ -12,15 +12,6 @@ export default async function NewContentPage({
       <AppTitle
         title="Crear Nuevo Contenido"
         description={`Proyecto ${projectId} | Sección ${sectionId}`}
-        breadcrumb={[
-          { label: "Proyectos", href: "/" },
-          { label: `Proyecto ${projectId}`, href: `/projects/${projectId}` },
-          {
-            label: `Sección ${sectionId}`,
-            href: `/projects/${projectId}/${sectionId}`,
-          },
-          { label: "Nuevo" },
-        ]}
       />
       {/* Aquí va tu formulario de creación */}
       <div className="mt-6">
