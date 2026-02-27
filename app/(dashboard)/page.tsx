@@ -20,6 +20,14 @@ const projects: ProjectI[] = [
     id: 1,
     name: "Proyecto 1",
   },
+  /* {
+    id: 2,
+    name: "Proyecto 2",
+  },
+  {
+    id: 3,
+    name: "Proyecto 3",
+  } */
 ];
 
 export default function Page() {
@@ -30,7 +38,7 @@ export default function Page() {
         description="Aquí puedes encontrar todos los recursos disponibles para ti."
       />
       {/* TODO: Lista dinámica de proyectos */}
-      <div className="space-y-2">
+      <div className="space-y-2 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 ">
        {projects.map((project) => 
           <ProjectCard
             key={project.id}
