@@ -157,7 +157,7 @@ export const SectionTable: React.FC<SectionTableProps> = ({
               ))
             ) : (
               <TableRow className="hover:bg-transparent">
-                <TableCell colSpan={SectionTableColumns.length} className="text-center py-12 text-muted-foreground">
+                <TableCell colSpan={columns.length} className="text-center py-12 text-muted-foreground">
                   No hay recursos disponibles
                 </TableCell>
               </TableRow>

@@ -42,7 +42,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ className, placeholder = '
       <Input
         type="search"
         placeholder={placeholder}
-        className="pl-9 h-10 bg-card border-border/60 focus-visible:ring-primary/20 focus-visible:border-primary/40"
+        className="pl-8 h-10 bg-card border-border/60 focus-visible:ring-primary/20 focus-visible:border-primary/40"
         onChange={handleSearch}
         defaultValue={searchParams.get(SEARCH_PARAM)?.toString()}
       />
