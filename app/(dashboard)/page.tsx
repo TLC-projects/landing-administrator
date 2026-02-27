@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Library } from "lucide-react";
 import { Shell, AppTitle } from "@/components/layouts";
 import { ProjectList } from "@/components/modules/project";
 
@@ -32,6 +33,7 @@ export default function Page() {
       <AppTitle
         title="Biblioteca"
         description="Aquí puedes encontrar todos los recursos disponibles para ti."
+        icon={Library}
       />
       <ProjectList projects={mockProjects} />
     </Shell>

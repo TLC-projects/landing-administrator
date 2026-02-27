@@ -1,3 +1,4 @@
+import { FolderOpen } from "lucide-react";
 import { Shell, AppTitle } from "@/components/layouts";
 import { SectionTable } from "@/components/modules/sections";
 
@@ -19,6 +20,7 @@ export default async function ProjectPage({
       <AppTitle
         title={`Proyecto ${projectId}`}
         description="Selecciona una sección para gestionar su contenido."
+        icon={FolderOpen}
       />
       <SectionTable
         sections={mockSections}
