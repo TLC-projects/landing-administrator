@@ -1,0 +1,171 @@
+"use client";
+
+import {
+  SearchBar,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui";
+import {
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  PaginationState,
+  SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { SectionTableColumns } from "./section-table-columns";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { SectionTablePagination } from "./section-table-pagination";
+
+export type Section = {
+  id: string;
+  projectId: string;
+  title: string;
+  contentNumber: number;
+};
+
+interface SectionTableProps {
+  sections: Section[];
+  pageInfo: {
+    total: number;
+    page: number;
+    limit: number;
+  };
+}
+
+export const SectionTable: React.FC<SectionTableProps> = ({
+  sections,
+  pageInfo,
+}) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: pageInfo.page - 1, // React Table uses 0-based index
+    pageSize: pageInfo.limit,
+  });
+
+  const createQueryString = useCallback(
+    (newPage: number) => {
+      const params = new URLSearchParams(searchParams?.toString());
+
+      // If page is less than 1, return the base URL without page parameter
+      if (newPage < 1) {
+        return `${pathname}`;
+      }
+
+      // Set the page parameter and return the complete URL
+      params.set("page", newPage.toString());
+      return `${pathname}?${params.toString()}`;
+    },
+    [searchParams, pathname],
+  );
+
+  useEffect(() => {
+    setPagination({
+      pageIndex: pageInfo.page - 1, // React Table uses 0-based index
+      pageSize: pageInfo.limit,
+    });
+  }, [pageInfo.page, pageInfo.limit]);
+
+  useEffect(() => {
+    // Update the URL when pagination changes
+    const newPage = pagination.pageIndex + 1; // Convert to 1-based index for URL
+    const newUrl = createQueryString(newPage);
+    router.push(newUrl);
+  }, [pagination]);
+
+  const columns = useMemo(() => SectionTableColumns(), []);
+
+  const table = useReactTable({
+    data: sections,
+    columns: columns,
+    rowCount: pageInfo.total ?? -1, // Use -1 for unknown total
+    onPaginationChange: setPagination,
+    manualPagination: true,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
+    state: {
+      sorting,
+      columnFilters,
+      pagination,
+    },
+  });
+
+  return (
+    <div className="w-full space-y-4">
+      <div className="flex items-center">
+        <SearchBar
+          className="md:max-w-7xl"
+          placeholder="Filtrar por nombre de la seccion"
+          onSearch={(event) =>
+            table.getColumn("title")?.setFilterValue(event.target.value)
+          }
+        />
+      </div>
+      <div className="rounded-md border">
+        <Table className="px-3.5">
+          <TableHeader className="bg-muted">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getPaginationRowModel().rows?.length ? (
+              table.getPaginationRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className="hover:bg-muted"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className="text-muted-foreground truncate"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={SectionTableColumns.length} className="text-center">
+                  No hay recursos disponibles
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <SectionTablePagination table={table} />
+    </div>
+  );
+};

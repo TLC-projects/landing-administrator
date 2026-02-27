@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Input, PasswordInput, Button } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
+import { Shell } from "@/components/layouts";
 
 export const metadata: Metadata = {
   title: "Iniciar Sesión | Content Administrator",
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
+    <Shell className="grid min-h-screen lg:grid-cols-2">
 
       <section className="flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-6">
@@ -82,6 +83,6 @@ export default function LoginPage() {
           />
         </div>
       </aside>
-    </div>
+    </Shell>
   );
 }
