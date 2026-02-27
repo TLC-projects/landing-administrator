@@ -14,8 +14,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <AppSidebar variant="inset" />
       <SidebarInset className="flex flex-1 flex-col">
         <AppHeader />
-        <div className="@container/main flex flex-1 px-6 py-8 flex-col gap-2">
-          {children}
+        <div className="@container/main flex flex-1 flex-col gap-2">
+          <div className="container mx-auto max-w-7xl p-6">{children}</div>
         </div>
       </SidebarInset>
     </SidebarProvider>
