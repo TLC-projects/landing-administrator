@@ -46,7 +46,7 @@ export default async function ContentsListPage({
         content={mockContents}
         projectId={projectId}
         hasActiveFilters={false}
-        pagination={{ page: 1, limit: 10, total: mockContents.length }}
+        pageInfo={{ page: 1, limit: 10, total: mockContents.length }}
       />
     </Shell>
   );
