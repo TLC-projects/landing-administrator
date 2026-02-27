@@ -1,5 +1,6 @@
-import Link from "next/link";
 import { Shell, AppTitle } from "@/components/layouts";
+import { ContentForm } from "@/components/modules/content-form/content-form";
+import { getContent } from "@/components/modules/content-form/create-content";
 
 export default async function ContentPage({
   params,
@@ -8,6 +9,8 @@ export default async function ContentPage({
 }) {
   const { projectId, sectionId, contentId } = await params;
 
+  const content = await getContent(contentId);
+
   return (
     <Shell>
       <AppTitle
@@ -15,20 +18,7 @@ export default async function ContentPage({
         description={`Proyecto ${projectId} | Sección ${sectionId}`}
       />
       <div className="space-y-2">
-        <Link
-          href={`/projects/${projectId}/${sectionId}/${contentId}/edit`}
-          className="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-        >
-          ✏️ Editar este contenido
-        </Link>
-        <div className="mt-4">
-          <Link
-            href={`/projects/${projectId}/${sectionId}`}
-            className="text-gray-500 hover:underline block"
-          >
-            ← Volver a la lista de contenidos
-          </Link>
-        </div>
+        <ContentForm projectId={projectId} sectionId={sectionId} mode="view" content={content} />
       </div>
     </Shell>
   );

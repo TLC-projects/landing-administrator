@@ -1,4 +1,5 @@
 import { Shell, AppTitle } from "@/components/layouts";
+import { ContentForm } from "@/components/modules/content-form";
 
 export default async function NewContentPage({
   params,
@@ -13,9 +14,12 @@ export default async function NewContentPage({
         title="Crear Nuevo Contenido"
         description={`Proyecto ${projectId} | Sección ${sectionId}`}
       />
-      {/* Aquí va tu formulario de creación */}
-      <div className="mt-6">
-        <p>Formulario para crear contenido...</p>
+      <div className="mt-6 ">
+      <ContentForm 
+        projectId={projectId} 
+        sectionId={sectionId}
+        mode="create"
+      />
       </div>
     </Shell>
   );

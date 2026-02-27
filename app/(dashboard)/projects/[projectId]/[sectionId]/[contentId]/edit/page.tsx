@@ -1,5 +1,6 @@
 import { Shell, AppTitle } from "@/components/layouts";
-import Link from "next/link";
+import { ContentForm } from "@/components/modules/content-form/content-form";
+import { getContent } from "@/components/modules/content-form/create-content";
 
 export default async function EditContentPage({
   params,
@@ -7,6 +8,8 @@ export default async function EditContentPage({
   params: Promise<{ projectId: string; sectionId: string; contentId: string }>;
 }) {
   const { projectId, sectionId, contentId } = await params;
+
+   const content = await getContent(contentId);
 
   return (
     <Shell>
@@ -16,15 +19,7 @@ export default async function EditContentPage({
       />
       {/* Aquí va tu formulario de edición */}
       <div className="mt-6">
-        <p>Formulario para editar contenido...</p>
-      </div>
-      <div className="mt-6">
-        <Link
-          href={`/projects/${projectId}/${sectionId}`}
-          className="text-gray-500 hover:underline"
-        >
-          ← Cancelar y volver
-        </Link>
+        <ContentForm projectId={projectId} sectionId={sectionId} mode="edit" content={content} />
       </div>
     </Shell>
   );
