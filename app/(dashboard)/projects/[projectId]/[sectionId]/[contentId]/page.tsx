@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Breadcrumb } from "@/components/ui";
+import { Shell, AppTitle } from "@/components/layouts";
 
 export default async function ContentPage({
   params,
@@ -9,9 +9,11 @@ export default async function ContentPage({
   const { projectId, sectionId, contentId } = await params;
 
   return (
-    <div className="p-6">
-      <Breadcrumb
-        items={[
+    <Shell>
+      <AppTitle
+        title={`Contenido ${contentId}`}
+        description={`Proyecto ${projectId} | Sección ${sectionId}`}
+        breadcrumb={[
           { label: "Proyectos", href: "/" },
           { label: `Proyecto ${projectId}`, href: `/projects/${projectId}` },
           {
@@ -21,10 +23,6 @@ export default async function ContentPage({
           { label: `Contenido ${contentId}` },
         ]}
       />
-      <h1 className="text-2xl font-bold mb-4">Contenido {contentId}</h1>
-      <p className="text-muted-foreground mb-6">
-        Proyecto {projectId} | Sección {sectionId}
-      </p>
       <div className="space-y-2">
         <Link
           href={`/projects/${projectId}/${sectionId}/${contentId}/edit`}
@@ -41,7 +39,7 @@ export default async function ContentPage({
           </Link>
         </div>
       </div>
-    </div>
+    </Shell>
   );
 }
 

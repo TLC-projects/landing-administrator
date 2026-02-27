@@ -1,4 +1,4 @@
-import { Breadcrumb } from "@/components/ui";
+import { Shell, AppTitle } from "@/components/layouts";
 
 export default async function NewContentPage({
   params,
@@ -8,9 +8,11 @@ export default async function NewContentPage({
   const { projectId, sectionId } = await params;
 
   return (
-    <div className="p-6">
-      <Breadcrumb
-        items={[
+    <Shell>
+      <AppTitle
+        title="Crear Nuevo Contenido"
+        description={`Proyecto ${projectId} | Sección ${sectionId}`}
+        breadcrumb={[
           { label: "Proyectos", href: "/" },
           { label: `Proyecto ${projectId}`, href: `/projects/${projectId}` },
           {
@@ -20,15 +22,11 @@ export default async function NewContentPage({
           { label: "Nuevo" },
         ]}
       />
-      <h1 className="text-2xl font-bold mb-4">Crear Nuevo Contenido</h1>
-      <p className="text-muted-foreground mb-6">
-        Proyecto {projectId} | Sección {sectionId}
-      </p>
       {/* Aquí va tu formulario de creación */}
       <div className="mt-6">
         <p>Formulario para crear contenido...</p>
       </div>
-    </div>
+    </Shell>
   );
 }
 

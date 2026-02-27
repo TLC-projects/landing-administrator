@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Breadcrumb } from "@/components/ui";
+import { Shell, AppTitle } from "@/components/layouts";
 
 export default async function ProjectPage({
   params,
@@ -15,17 +15,15 @@ export default async function ProjectPage({
   ];
 
   return (
-    <div className="p-6">
-      <Breadcrumb
-        items={[
+    <Shell>
+      <AppTitle
+        title={`Proyecto ${projectId}`}
+        description="Selecciona una sección para gestionar su contenido."
+        breadcrumb={[
           { label: "Proyectos", href: "/" },
           { label: `Proyecto ${projectId}` },
         ]}
       />
-      <h1 className="text-2xl font-bold mb-4">Proyecto {projectId}</h1>
-      <p className="text-muted-foreground mb-6">
-        Selecciona una sección para gestionar su contenido.
-      </p>
       <div className="space-y-2">
         {mockSections.map((section) => (
           <Link
@@ -37,7 +35,7 @@ export default async function ProjectPage({
           </Link>
         ))}
       </div>
-    </div>
+    </Shell>
   );
 }
 

@@ -1,4 +1,4 @@
-import { Breadcrumb } from "@/components/ui";
+import { Shell, AppTitle } from "@/components/layouts";
 import Link from "next/link";
 
 export default async function EditContentPage({
@@ -9,9 +9,11 @@ export default async function EditContentPage({
   const { projectId, sectionId, contentId } = await params;
 
   return (
-    <div className="p-6">
-      <Breadcrumb
-        items={[
+    <Shell>
+      <AppTitle
+        title="Editar Contenido"
+        description={`Proyecto ${projectId} | Sección ${sectionId} | Contenido ${contentId}`}
+        breadcrumb={[
           { label: "Proyectos", href: "/" },
           { label: `Proyecto ${projectId}`, href: `/projects/${projectId}` },
           {
@@ -21,10 +23,6 @@ export default async function EditContentPage({
           { label: "Editar" },
         ]}
       />
-      <h1 className="text-2xl font-bold mb-4">Editar Contenido</h1>
-      <p className="text-muted-foreground mb-6">
-        Proyecto {projectId} | Sección {sectionId} | Contenido {contentId}
-      </p>
       {/* Aquí va tu formulario de edición */}
       <div className="mt-6">
         <p>Formulario para editar contenido...</p>
@@ -37,7 +35,7 @@ export default async function EditContentPage({
           ← Cancelar y volver
         </Link>
       </div>
-    </div>
+    </Shell>
   );
 }
 
