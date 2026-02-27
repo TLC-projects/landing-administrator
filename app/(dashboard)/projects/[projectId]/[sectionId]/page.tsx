@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Shell, AppTitle } from "@/components/layouts";
+import { SectionIdTable } from "@/components/modules/section-id";
 
 export default async function ContentsListPage({
   params,
@@ -10,36 +11,44 @@ export default async function ContentsListPage({
 
   // TODO: Fetch real data
   const mockContents = [
-    { id: "1", title: "Contenido 1" },
-    { id: "2", title: "Contenido 2" },
-    { id: "3", title: "Contenido 3" },
+    {
+      id: "1",
+      sectionId: sectionId,
+      duration: "60 horas",
+      url: "",
+      title: "Contenido 1",
+      blocked: true,
+    },
+    {
+      id: "2",
+      sectionId: sectionId,
+      duration: "60 horas",
+      url: "",
+      title: "Contenido 2",
+      blocked: true,
+    },
+    {
+      id: "3",
+      sectionId: sectionId,
+      duration: "60 horas",
+      url: "",
+      title: "Contenido 3",
+      blocked: false,
+    },
   ];
 
   return (
     <Shell>
       <AppTitle
         title="Sección 1"
-        description=""
-        action={
-          <Link
-            href={`/projects/${projectId}/${sectionId}/new`}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-          >
-            ➕ Crear contenido
-          </Link>
-        }
+        description="Lista de contenidos, puedes administrar tus contenidos."
       />
-      <div className="space-y-2">
-        {mockContents.map((content) => (
-          <Link
-            key={content.id}
-            href={`/projects/${projectId}/${sectionId}/${content.id}`}
-            className="block p-4 border rounded hover:bg-gray-50 transition-colors"
-          >
-            <h3 className="font-medium">{content.title}</h3>
-          </Link>
-        ))}
-      </div>
+      <SectionIdTable
+        section={mockContents}
+        projectId={projectId}
+        hasActiveFilters={false}
+        pagination={{ page: 1, limit: 10, total: mockContents.length }}
+      />
     </Shell>
   );
 }

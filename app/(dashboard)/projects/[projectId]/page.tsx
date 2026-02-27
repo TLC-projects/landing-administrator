@@ -1,5 +1,5 @@
 import { Shell, AppTitle } from "@/components/layouts";
-import { SectionTable } from "@/components/modules/section";
+import { SectionTable } from "@/components/modules/sections";
 
 export default async function ProjectPage({
   params,

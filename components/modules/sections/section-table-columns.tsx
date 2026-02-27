@@ -42,13 +42,15 @@ export const SectionTableColumns = (): ColumnDef<Section>[] => [
     cell: ({ row }) => {
       const section = row.original;
       return (
-        <Link
-          href={`/projects/${section.projectId}/${section.id}`}
-           className="flex items-center gap-2"
-        >
-          <Eye className="h-4 w-4 " />
-          <span>Ver</span>
-        </Link>
+        <Button variant={"secondary"} asChild>
+          <Link
+            href={`/projects/${section.projectId}/${section.id}`}
+            className="flex items-center gap-2"
+          >
+            <Eye className="h-4 w-4 " />
+            <span>Ver</span>
+          </Link>
+        </Button>
       );
     },
   },
