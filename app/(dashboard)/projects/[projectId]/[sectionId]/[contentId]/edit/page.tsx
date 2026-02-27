@@ -13,15 +13,6 @@ export default async function EditContentPage({
       <AppTitle
         title="Editar Contenido"
         description={`Proyecto ${projectId} | Sección ${sectionId} | Contenido ${contentId}`}
-        breadcrumb={[
-          { label: "Proyectos", href: "/" },
-          { label: `Proyecto ${projectId}`, href: `/projects/${projectId}` },
-          {
-            label: `Sección ${sectionId}`,
-            href: `/projects/${projectId}/${sectionId}`,
-          },
-          { label: "Editar" },
-        ]}
       />
       {/* Aquí va tu formulario de edición */}
       <div className="mt-6">

@@ -19,10 +19,6 @@ export default async function ProjectPage({
       <AppTitle
         title={`Proyecto ${projectId}`}
         description="Selecciona una sección para gestionar su contenido."
-        breadcrumb={[
-          { label: "Proyectos", href: "/" },
-          { label: `Proyecto ${projectId}` },
-        ]}
       />
       <div className="space-y-2">
         {mockSections.map((section) => (

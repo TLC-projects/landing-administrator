@@ -13,10 +13,6 @@ export default function Page() {
       <AppTitle
         title="Biblioteca"
         description="Aquí puedes encontrar todos los recursos disponibles para ti."
-        breadcrumb={[
-          { label: "Inicio", href: "/" },
-          { label: "Biblioteca", href: "/library" },
-        ]}
       />
       {/* TODO: Lista dinámica de proyectos */}
       <div className="space-y-2">

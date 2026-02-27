@@ -13,15 +13,6 @@ export default async function ContentPage({
       <AppTitle
         title={`Contenido ${contentId}`}
         description={`Proyecto ${projectId} | Sección ${sectionId}`}
-        breadcrumb={[
-          { label: "Proyectos", href: "/" },
-          { label: `Proyecto ${projectId}`, href: `/projects/${projectId}` },
-          {
-            label: `Sección ${sectionId}`,
-            href: `/projects/${projectId}/${sectionId}`,
-          },
-          { label: `Contenido ${contentId}` },
-        ]}
       />
       <div className="space-y-2">
         <Link
