@@ -1,7 +1,5 @@
 import { Metadata } from "next";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
-import { Button } from "@/components/ui/button";
+import { Input, PasswordInput, Button } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -65,7 +63,7 @@ export default function LoginPage() {
               />
             </div>
 
-            <Button type="submit" className="w-full mt-2 h-10 bg-black hover:bg-black/90 text-white">
+            <Button type="submit" size="lg">
               Iniciar sesión
             </Button>
           </form>
