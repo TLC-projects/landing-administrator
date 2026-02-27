@@ -1,3 +1,4 @@
+'use client';
 import { useReducer, useRef, type ChangeEvent } from "react"
 import type { Content, ContentFormModes } from "../types/content"
 
