@@ -1,11 +1,26 @@
-import Link from "next/link";
 import { Metadata } from "next";
 import { Shell, AppTitle } from "@/components/layouts";
+import { ProjectCard } from "@/components/modules/library";
 
 export const metadata: Metadata = {
   title: "Inicio | Content Administrator",
   description: "Panel de administración de contenidos",
 };
+
+
+interface ProjectI {
+  id: number;
+  name: string;
+  img?: string;
+}
+
+// Lista que viene de la API con los proyectos del usuario
+const projects: ProjectI[] = [
+  {
+    id: 1,
+    name: "Proyecto 1",
+  },
+];
 
 export default function Page() {
   return (
@@ -20,15 +35,14 @@ export default function Page() {
       />
       {/* TODO: Lista dinámica de proyectos */}
       <div className="space-y-2">
-        <Link
-          href="/projects/1"
-          className="block p-4 border rounded hover:bg-gray-50 transition-colors"
-        >
-          <h3 className="font-medium">Proyecto 1</h3>
-          <p className="text-sm text-muted-foreground">
-            Descripción del proyecto 1
-          </p>
-        </Link>
+       {projects.map((project) => 
+          <ProjectCard
+            key={project.id}
+            id={project.id}
+            name={project.name}
+            img={project.img}
+          />
+        )}
       </div>
     </Shell>
   );
