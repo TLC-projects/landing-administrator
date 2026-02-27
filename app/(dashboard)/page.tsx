@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Metadata } from "next";
 import { Shell, AppTitle } from "@/components/layouts";
+import { ProjectList } from "@/components/modules/project";
 
 export const metadata: Metadata = {
   title: "Inicio | Content Administrator",
@@ -8,24 +8,32 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
+  // TODO: Fetch real projects data
+  const mockProjects = [
+    {
+      id: "1",
+      title: "Proyecto Marketing",
+      description: "Contenidos y recursos para campañas de marketing digital",
+    },
+    {
+      id: "2",
+      title: "Proyecto Ventas",
+      description: "Materiales y documentación del equipo de ventas",
+    },
+    {
+      id: "3",
+      title: "Proyecto Formación",
+      description: "Cursos y material educativo para empleados",
+    },
+  ];
+
   return (
     <Shell>
       <AppTitle
         title="Biblioteca"
         description="Aquí puedes encontrar todos los recursos disponibles para ti."
       />
-      {/* TODO: Lista dinámica de proyectos */}
-      <div className="space-y-2">
-        <Link
-          href="/projects/1"
-          className="block p-4 border rounded hover:bg-gray-50 transition-colors"
-        >
-          <h3 className="font-medium">Proyecto 1</h3>
-          <p className="text-sm text-muted-foreground">
-            Descripción del proyecto 1
-          </p>
-        </Link>
-      </div>
+      <ProjectList projects={mockProjects} />
     </Shell>
   );
 }
