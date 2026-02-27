@@ -31,8 +31,8 @@ export default function Page() {
   return (
     <Shell>
       <AppTitle
-        title="Biblioteca"
-        description="Aquí puedes encontrar todos los recursos disponibles para ti."
+        title="Proyectos"
+        description="Gestiona tus proyectos y sus contenidos de manera eficiente."
         icon={Library}
       />
       <ProjectList projects={mockProjects} />
