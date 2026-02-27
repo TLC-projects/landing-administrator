@@ -107,7 +107,7 @@ export const SectionTable: React.FC<SectionTableProps> = ({
 
   return (
     <div className="w-full space-y-4">
-      <div className="flex items-center">
+      <div className="flex items-center border shadow rounded-md px-3 py-5">
         <SearchBar
           className="md:max-w-7xl"
           placeholder="Filtrar por nombre de la seccion"

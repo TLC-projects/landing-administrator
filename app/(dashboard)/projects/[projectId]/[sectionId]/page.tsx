@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { Shell, AppTitle } from "@/components/layouts";
-import { SectionIdTable } from "@/components/modules/section-id";
+import { ContentTable } from "@/components/modules/content";
 
 export default async function ContentsListPage({
   params,
@@ -43,8 +42,8 @@ export default async function ContentsListPage({
         title="Sección 1"
         description="Lista de contenidos, puedes administrar tus contenidos."
       />
-      <SectionIdTable
-        section={mockContents}
+      <ContentTable
+        content={mockContents}
         projectId={projectId}
         hasActiveFilters={false}
         pagination={{ page: 1, limit: 10, total: mockContents.length }}
