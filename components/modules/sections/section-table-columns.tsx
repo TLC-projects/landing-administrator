@@ -14,26 +14,27 @@ export const SectionTableColumns = (): ColumnDef<Section>[] => [
         <Button
           variant={"ghost"}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-transparent px-0"
         >
           ID
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 h-3 w-3" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="px-4">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="font-medium text-foreground/70">{row.getValue("id")}</div>,
   },
   {
     accessorKey: "title",
     header: "Nombre de la sección",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("title")}</div>
+      <div className="font-medium">{row.getValue("title")}</div>
     ),
   },
   {
     accessorKey: "contentNumber",
     header: "N° de contenidos",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("contentNumber")}</div>
+      <div className="text-muted-foreground">{row.getValue("contentNumber")}</div>
     ),
   },
   {
@@ -42,12 +43,12 @@ export const SectionTableColumns = (): ColumnDef<Section>[] => [
     cell: ({ row }) => {
       const section = row.original;
       return (
-        <Button variant={"secondary"} asChild>
+        <Button asChild variant="outline" size="sm" className="hover:bg-primary hover:text-primary-foreground transition-colors">
           <Link
             href={`/projects/${section.projectId}/${section.id}`}
             className="flex items-center gap-2"
           >
-            <Eye className="h-4 w-4 " />
+            <Eye className="h-4 w-4" />
             <span>Ver</span>
           </Link>
         </Button>

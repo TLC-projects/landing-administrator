@@ -116,13 +116,13 @@ export const SectionTable: React.FC<SectionTableProps> = ({
           }
         />
       </div>
-      <div className="rounded-md border">
-        <Table className="px-3.5">
-          <TableHeader className="bg-muted">
+      <div className="rounded-lg border border-border/50 overflow-hidden bg-card shadow-sm">
+        <Table>
+          <TableHeader className="bg-muted/30">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="hover:bg-transparent border-b border-border/50">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="font-medium text-muted-foreground text-xs uppercase tracking-wider h-12">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -140,12 +140,12 @@ export const SectionTable: React.FC<SectionTableProps> = ({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-muted"
+                  className="hover:bg-primary/10 transition-colors border-b border-border/30 last:border-0 group"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="text-muted-foreground truncate"
+                      className="text-foreground py-4"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -156,8 +156,8 @@ export const SectionTable: React.FC<SectionTableProps> = ({
                 </TableRow>
               ))
             ) : (
-              <TableRow>
-                <TableCell colSpan={SectionTableColumns.length} className="text-center">
+              <TableRow className="hover:bg-transparent">
+                <TableCell colSpan={SectionTableColumns.length} className="text-center py-12 text-muted-foreground">
                   No hay recursos disponibles
                 </TableCell>
               </TableRow>
