@@ -92,7 +92,7 @@ export const ContentTableColumns = ({
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
               <Link
-                href={`/projects/${projectId}/${content.sectionId}/view?contentId=${content.id}/`}
+                href={`/projects/${projectId}/${content.sectionId}/${content.id}`}
                 className="flex items-center gap-2"
               >
                 <Eye className="h-4 w-4 " />
@@ -101,7 +101,7 @@ export const ContentTableColumns = ({
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link
-                href={`/projects/${projectId}/${content.sectionId}/edit?contentId=${content.id}/`}
+                href={`/projects/${projectId}/${content.sectionId}/${content.id}/edit`}
                 className="flex items-center gap-2"
               >
                 <SquarePen className="h-4 w-4 " />

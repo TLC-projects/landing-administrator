@@ -1,31 +1,40 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Clock, FileText, Eye, EyeOff, Save, Edit, X } from "lucide-react"
-import { Switch, Input, Textarea, Button } from "@/components/ui"
-import { ImageUpload } from "./image-upload"
-import { useContentForm } from "./hooks/use-content-form"
-import { createContent, updateContent } from "./create-content"
-import type { Content, ContentFormModes } from "./types/content"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import {
+  Clock,
+  FileText,
+  Eye,
+  EyeOff,
+  Save,
+  Edit,
+  X,
+  ChevronLeft,
+} from "lucide-react";
+import { Switch, Input, Textarea, Button } from "@/components/ui";
+import { ImageUpload } from "./image-upload";
+import { useContentForm } from "./hooks/use-content-form";
+import { createContent, updateContent } from "./create-content";
+import type { Content, ContentFormModes } from "./types/content";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface ContentFormProps {
-  projectId: string
-  sectionId: string
-  mode?: ContentFormModes
-  content?: Content | null
+  projectId: string;
+  sectionId: string;
+  mode?: ContentFormModes;
+  content?: Content | null;
 }
 
-export function ContentForm({ 
-  projectId, 
-  sectionId, 
+export function ContentForm({
+  projectId,
+  sectionId,
   mode = "create",
-  content = null 
+  content = null,
 }: ContentFormProps) {
-  const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     title,
@@ -48,64 +57,71 @@ export function ContentForm({
     resetForm,
     toggleEditMode,
     cancelEdit,
-  } = useContentForm({ mode, initialData: content })
+  } = useContentForm({ mode, initialData: content });
 
-  const charLimit = 500
-  const charPercent = Math.min((description.length / charLimit) * 100, 100)
-  const isViewMode = mode === "view" && !isEditing
+  const charLimit = 500;
+  const charPercent = Math.min((description.length / charLimit) * 100, 100);
+  const isViewMode = mode === "view" && !isEditing;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setError(null)
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
 
     try {
-      const formData = new FormData()
-      formData.append("projectId", projectId)
-      formData.append("sectionId", sectionId)
-      formData.append("title", title)
-      formData.append("duration", duration)
-      formData.append("description", description)
-      formData.append("isVisible", String(isVisible))
-      
+      const formData = new FormData();
+      formData.append("projectId", projectId);
+      formData.append("sectionId", sectionId);
+      formData.append("title", title);
+      formData.append("duration", duration);
+      formData.append("description", description);
+      formData.append("isVisible", String(isVisible));
+
       if (imageFile) {
-        formData.append("image", imageFile)
+        formData.append("image", imageFile);
       }
 
-      let result
-      if (mode === "edit" || (mode === "view" && content?.id)) {
-        result = await updateContent(content!.id, formData)
+      let result;
+      // Si estamos en modo edit o view+editing, actualizar
+      if (mode === "edit" || (mode === "view" && isEditing && content?.id)) {
+        result = await updateContent(content!.id, formData);
       } else {
-        result = await createContent(formData)
+        // Modo create
+        result = await createContent(formData);
       }
-      
+
       if (result?.error) {
-        setError(result.error)
+        setError(result.error);
       } else {
         if (mode === "create") {
-          resetForm()
+          resetForm();
         }
-        router.push(`/projects/${projectId}/${sectionId}`)
+        router.push(`/projects/${projectId}/${sectionId}`);
       }
     } catch (err) {
-      setError("Error al guardar el contenido")
-      console.error(err)
+      setError("Error al guardar el contenido");
+      console.error(err);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
+
+  // URL de cancelacion/vuelta
+  const cancelUrl = `/projects/${projectId}/${sectionId}`;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8 lg:w-3/5">
-      {/* Header con botones de acción para modo view */}
+      {/* Header co boton de accion para modo view */}
       {mode === "view" && (
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">
+            <h3 className="text-xl  tracking-tight">
               {isEditing ? "Editar contenido" : "Detalles del contenido"}
-            </h2>
+            </h3>
             <p className="text-sm text-muted-foreground">
-              {isEditing ? "Modifica los campos necesarios" : "Visualiza la información del contenido"}
+              {isEditing
+                ? "Modifica los campos necesarios"
+                : "Visualiza la información del contenido"}
             </p>
           </div>
           {!isEditing && (
@@ -175,7 +191,10 @@ export function ContentForm({
 
         {/* Description */}
         <div className="flex flex-col gap-2">
-          <label htmlFor="description" className="text-sm font-medium text-foreground">
+          <label
+            htmlFor="description"
+            className="text-sm font-medium text-foreground"
+          >
             Descripción
           </label>
           <Textarea
@@ -185,7 +204,7 @@ export function ContentForm({
             value={description}
             onChange={(e) => {
               if (e.target.value.length <= charLimit) {
-                setDescription(e.target.value)
+                setDescription(e.target.value);
               }
             }}
             required
@@ -238,11 +257,16 @@ export function ContentForm({
               )}
             </div>
             <div className="flex flex-col">
-              <label htmlFor="visibility" className="text-sm font-medium text-foreground">
+              <label
+                htmlFor="visibility"
+                className="text-sm font-medium text-foreground"
+              >
                 Visibilidad del contenido
               </label>
               <span className="text-xs text-muted-foreground">
-                {isVisible ? "El contenido será visible" : "El contenido estará oculto"}
+                {isVisible
+                  ? "El contenido será visible"
+                  : "El contenido estará oculto"}
               </span>
             </div>
           </div>
@@ -267,43 +291,57 @@ export function ContentForm({
       {/* Actions */}
       <div className="flex items-center justify-between border-t border-border/40 pt-6">
         {isViewMode ? (
+          // Modo view (solo lectura): botón "Volver" para ir a la lista
           <Button
             type="button"
             variant="ghost"
-            className="text-muted-foreground hover:text-foreground"
-            asChild
+            className="gap-2 text-muted-foreground hover:text-foreground"
           >
-            <Link href={`/projects/${projectId}/${sectionId}`}>Volver</Link>
+            <ChevronLeft className="size-4" />
+            <Link href={cancelUrl}>Volver</Link>
           </Button>
         ) : (
           <>
+            {/* Botón Cancelar */}
+            {mode === "view" && isEditing ? (
+              // En modo view con edición activa: "cancelar" restaura valores
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={cancelEdit}
+                className="gap-2 text-muted-foreground hover:text-foreground"
+              >
+                <X className="size-4" />
+                Cancelar
+              </Button>
+            ) : (
+              // En modos create/edit: cancelar es un link
+              <Button
+                type="button"
+                variant="ghost"
+                className="text-muted-foreground hover:text-foreground"
+                asChild
+              >
+                <Link href={cancelUrl}>Cancelar</Link>
+              </Button>
+            )}
+
+            {/* Botón Submit TODO: enviar por API cuando se guarda o edita*/}
             <Button
-              type="button"
-              variant="ghost"
-              onClick={mode === "view" ? cancelEdit : undefined}
-              className="text-muted-foreground hover:text-foreground"
-              asChild={mode !== "view"}
+              type="submit"
+              disabled={isSubmitting}
+              className="gap-2 px-6"
             >
-              {mode === "view" ? (
-                <>
-                  <X className="size-4 mr-2" />
-                  Cancelar
-                </>
-              ) : (
-                <Link href={`/projects/${projectId}/${sectionId}`}>Cancelar</Link>
-              )}
-            </Button>
-            <Button type="submit" disabled={isSubmitting} className="gap-2 px-6">
               <Save className="size-4" />
               {isSubmitting
                 ? "Guardando..."
                 : mode === "create"
-                ? "Crear contenido"
-                : "Guardar cambios"}
+                  ? "Crear contenido"
+                  : "Guardar cambios"}
             </Button>
           </>
         )}
       </div>
     </form>
-  )
+  );
 }
