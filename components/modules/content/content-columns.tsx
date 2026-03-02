@@ -7,6 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  Separator,
 } from "@/components/ui";
 import { Content } from "./content-table";
 import {
@@ -58,7 +59,10 @@ export const ContentTableColumns = ({
       const backgroundColor = content.blocked ? "#DBFCE7" : "#DDDDDD";
       const color = content.blocked ? "green" : "#121212";
       return (
-        <Badge className={`capitalize border-0`} style={{ backgroundColor: backgroundColor, color: color }}>
+        <Badge
+          className={`capitalize border-0`}
+          style={{ backgroundColor: backgroundColor, color: color }}
+        >
           <span>
             {content.blocked ? (
               <Eye className="h-4 w-4" />
@@ -81,7 +85,7 @@ export const ContentTableColumns = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">Abrir menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -104,6 +108,10 @@ export const ContentTableColumns = ({
                 <span>Editar contenido</span>
               </Link>
             </DropdownMenuItem>
+            <Separator
+              orientation="horizontal"
+              className="h-px bg-border"
+            />
             <DropdownMenuItem
               variant="destructive"
               aria-label="No publicar recurso"

@@ -150,8 +150,9 @@ export const ContentTable: React.FC<ContentTableProps> = ({
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2.5 border shadow rounded-md px-3 py-5 flex items-center gap-4">
+      <div className="space-y-2.5 border shadow rounded-md px-3 py-5 flex flex-col md:flex-row items-start gap-4">
         <SearchBar
+          className="md:max-w-7xl"
           onSearch={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
@@ -193,7 +194,7 @@ export const ContentTable: React.FC<ContentTableProps> = ({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className="hover:bg-muted"
+                    className="hover:bg-primary/10 transition-colors border-b border-border/30 last:border-0 group"
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell

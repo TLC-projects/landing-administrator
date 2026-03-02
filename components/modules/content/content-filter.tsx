@@ -88,7 +88,7 @@ export const ContentFilter = () => {
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
-          className="w-[220px] justify-between"
+          className="w-full md:w-55 h-10 justify-between"
         >
           <span className="flex items-center gap-2 text-sm">
             {getIcon(currentBlocked)}
@@ -98,7 +98,7 @@ export const ContentFilter = () => {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-[260px] p-4 space-y-4">
+      <PopoverContent className="w-auto md:w-65 p-4 space-y-4">
         <div className="space-y-2">
           <Label className="text-xs text-muted-foreground">
             Estado del contenido
