@@ -150,7 +150,7 @@ export const ContentTable: React.FC<ContentTableProps> = ({
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2.5 border shadow rounded-md px-3 py-5 flex flex-col md:flex-row items-start gap-4">
+      <div className="space-y-2.5 border shadow rounded-md px-3 pt-5 pb-3 flex flex-col md:flex-row items-start gap-4">
         <SearchBar
           className="md:max-w-7xl"
           onSearch={(event) =>
@@ -174,9 +174,9 @@ export const ContentTable: React.FC<ContentTableProps> = ({
           <Table className="px-3.5">
             <TableHeader className="bg-muted">
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
+                <TableRow key={headerGroup.id} className="hover:bg-transparent border-b border-border/50">
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className="font-medium text-muted-foreground text-xs uppercase tracking-wider h-12">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
