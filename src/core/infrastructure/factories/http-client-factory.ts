@@ -3,7 +3,7 @@ import { HttpRepository } from "@core/domain/interfaces/http-repository";
 import { CookieStorage } from "../datasources/cookie-storage/cookie-storage";
 import { FetchClient } from "../datasources/fetch/fetch";
 import { BasicFetchClient } from "../datasources/fetch/fetch-basic";
-import { SessionRepositoryImpl } from "../repositories/user-repository";
+import { SessionRepositoryImpl } from "../repositories/session-repository";
 
 export enum DataSourceType {
     HTTP = 'http',

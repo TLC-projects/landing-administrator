@@ -10,7 +10,7 @@ export class LoginWithTokenUseCase {
 
     async execute(credentials: TokenCredentialsDto): Promise<AuthResultDto> {
         try {
-      const token = credentials.token;
+      const token = credentials.data;
       const auth = await this.authRepository.authenticateWithToken(token);
 
       if (!auth) {
@@ -18,14 +18,16 @@ export class LoginWithTokenUseCase {
       }
 
       const userId = auth.getId();
-      const role = auth.getRole();
+      const userName = auth.getName();
+      const lastName = auth.getLastName();
+      const email = auth.getEmail();
 
       // Crear sesión usando el repositorio de sesiones
-      await this.sessionRepository.createSession({ userId, role, token });
+      await this.sessionRepository.createSession({ userId, token });
 
       return {
         success: true,
-        user: { id: userId, role: role }
+        user: { id: userId, email, name: userName, lastName }
       };
     } catch (error) {
       console.error('Error en login con token:', error);

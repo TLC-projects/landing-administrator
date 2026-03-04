@@ -3,27 +3,36 @@ import { decrypt } from "./lib/auth/jwt";
 
 export async function proxy(request: NextRequest) {
 
+  const { pathname } = request.nextUrl;
+
   const sessionCookie = request.cookies.get("auth_session")?.value;
   const tokenCookie = request.cookies.get("auth_token")?.value;
 
-  const isProtectedRoute = request.nextUrl.pathname.startsWith("/dashboard");
+  const isLoginPage = pathname.startsWith("/login");
 
-  // Si no hay cookies y es ruta protegida
-  if (isProtectedRoute && (!sessionCookie || !tokenCookie)) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  let isAuthenticated = false;
 
   if (sessionCookie && tokenCookie) {
     try {
       const session = await decrypt(sessionCookie);
       const token = await decrypt(tokenCookie);
 
-      if (!session || !token) {
-        return NextResponse.redirect(new URL("/login", request.url));
+      if (session && token) {
+        isAuthenticated = true;
       }
     } catch {
-      return NextResponse.redirect(new URL("/login", request.url));
+      isAuthenticated = false;
     }
+  }
+
+  // ❌ Usuario NO autenticado
+  if (!isAuthenticated && !isLoginPage) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // ✅ Usuario autenticado no puede ver login
+  if (isAuthenticated && isLoginPage) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();

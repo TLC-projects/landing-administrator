@@ -1,10 +1,10 @@
 'use server';
 
-import { AuthService } from "@core/application/services/auth-service";
+import { AuthService } from "@core/application/services/auth/auth-service";
 import { CookieStorage } from "../datasources/cookie-storage/cookie-storage";
 import { DataSourceType, HttpClientFactory } from "../factories/http-client-factory";
 import { AuthRepositoryImpl } from "../repositories/auth-repository";
-import { SessionRepositoryImpl } from "../repositories/user-repository";
+import { SessionRepositoryImpl } from "../repositories/session-repository";
 
 export async function initializeAuthService() {
     // Inicializar el servicio de autenticación

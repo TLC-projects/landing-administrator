@@ -1,9 +1,9 @@
 import { AuthRepository } from "@core/domain/interfaces/auth-repository";
 import { SessionRepository } from "@core/domain/interfaces/session-repository";
-import { LoginUseCase } from "../use-cases/auth/login-use-case";
-import { LogoutUseCase } from "../use-cases/auth/logout-use-case";
-import { AuthResultDto, LoginCredentialsDto } from "../dto/auth-dto";
-import { LoginWithTokenUseCase } from "../use-cases/auth/login-with-token-use-case";
+import { LoginUseCase } from "@core/application/use-cases/auth/login-use-case";
+import { LogoutUseCase } from "@core/application/use-cases/auth/logout-use-case";
+import { AuthResultDto, LoginCredentialsDto } from "@core/application/dto/auth-dto";
+import { LoginWithTokenUseCase } from "@core/application/use-cases/auth/login-with-token-use-case";
 
 export class AuthService {
   private loginUseCase: LoginUseCase;
@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   async loginWithToken(token: string): Promise<AuthResultDto> {
-    return await this.loginWithTokenUseCase.execute({ token });
+    return await this.loginWithTokenUseCase.execute({ data: token });
   }
 
   async logout(): Promise<AuthResultDto> {
