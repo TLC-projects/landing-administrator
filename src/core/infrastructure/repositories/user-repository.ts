@@ -15,9 +15,9 @@ export class SessionRepositoryImpl implements SessionRepository {
     secure: process.env.NODE_ENV === "production"
   }
 
-  async createSession({ userId, role, token }: Session): Promise<void> {
+  async createSession({ userId, token }: Session): Promise<void> {
 
-    const sessionEncrypted = await encrypt({ userId, role })
+    const sessionEncrypted = await encrypt({ userId })
     const tokenEncrypted = await encrypt({ token })
 
     await this.cookieStorage.set(
@@ -40,7 +40,7 @@ export class SessionRepositoryImpl implements SessionRepository {
 
     if (!sessionCookie || !tokenCookie) return null
 
-    const session = await decrypt<{ userId: number; role: string }>(sessionCookie)
+    const session = await decrypt<{ userId: string }>(sessionCookie)
     const token = await decrypt<{ token: string }>(tokenCookie)
 
     if (!session || !token) return null

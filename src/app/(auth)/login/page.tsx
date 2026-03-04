@@ -1,8 +1,6 @@
 import { Metadata } from "next";
-import { Input, PasswordInput, Button } from "@/src/components/ui";
-import Link from "next/link";
 import { Shell } from "@/src/components/layouts";
-import { LoginHeader } from "@/src/components/modules/auth";
+import { LoginForm, LoginHeader } from "@components/modules/auth";
 
 export const metadata: Metadata = {
   title: "Iniciar Sesión | Content Administrator",
@@ -19,43 +17,7 @@ export default function LoginPage() {
           <LoginHeader />
 
           {/* Formulario */}
-          <form className="space-y-5" action="#" method="POST">
-            <div className="space-y-2">
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="nombre@ejemplo.com"
-                autoComplete="email"
-                className="h-12"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <PasswordInput
-                id="password"
-                name="password"
-                autoComplete="current-password"
-                placeholder="Ingresa contraseña"
-                className="h-12"
-                required
-              />
-            </div>
-
-            <div className="flex items-center justify-end">
-              <Link
-                href="/forgot-password"
-                className="text-sm text-primary hover:underline"
-              >
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
-
-            <Button type="submit" size="lg" className="w-full h-12">
-              Iniciar sesión
-            </Button>
-          </form>
+          <LoginForm />
         </div>
       </section>
 

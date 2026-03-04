@@ -20,7 +20,7 @@ export class HttpClientFactory {
 
     public static getInstance() : HttpClientFactory {
         if (!HttpClientFactory.instance) {
-            HttpClientFactory.instance = new HttpClientFactory(process.env.BASE_API_URL || 'http://localhost:3000/content-manager/backend/api');
+            HttpClientFactory.instance = new HttpClientFactory(process.env.API_BASE_URL || 'https://demos.booksandbooksdigital.com.co/content-manager/back/api');
         }
         return HttpClientFactory.instance;
     }
