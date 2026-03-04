@@ -1,9 +1,6 @@
-import { Content, CreateContentDto, UpdateContentDto } from "../entities/Content"
+import { ContentViewModel } from "@core/application/dto/content-dto"
 
 export interface IContentRepository {
-  getAllBySectionId(sectionId: number): Promise<Content[] | null>
-  getById(id: number): Promise<Content | null>
-  create(data: CreateContentDto): Promise<Content | null>
-  update(id: number, data: UpdateContentDto): Promise<Content | null>
-  delete(id: number): Promise<boolean>
+  getAllBySectionId(sectionId: number): Promise<ContentViewModel[] | null>
+  getById(id: number): Promise<ContentViewModel | null>
 }

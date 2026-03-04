@@ -65,21 +65,23 @@ export async function updateContent(contentId: string, formData: FormData) {
   }
 }
 
-export async function getContent(contentId: string) {
+export async function getContent(contentId: string, projectId: string, sectionId: string) {
   try {
-    // TODO: Obtener de base de datos
-    // const content = await db.content.findUnique({ where: { id: contentId } })
-    
-    // Mock data para ejemplo
+    const { ContentService } = await import("@core/application/services/content/content-service")
+    const service = new ContentService()
+    const result = await service.getContentById(Number(contentId))
+    if (!result) return null
+
+    // Mapea ContentViewModel → tipo Content del formulario
     return {
-      id: contentId,
-      title: "Métodos de Evaluación Formativa",
-      duration: "20 Horas",
-      description: "Este contenido explora diferentes métodos...",
-      imageUrl: "/placeholder.jpg",
-      isVisible: true,
-      projectId: "1",
-      sectionId: "1",
+      id: result.id,
+      title: result.title,
+      duration: result.duration,
+      description: result.description,  // viene del getById completo
+      imageUrl: result.url,      // url del primer recurso → src de la imagen
+      isVisible: !result.blocked, // blocked true → no visible
+      projectId,
+      sectionId,
     }
   } catch (error) {
     console.error("Error fetching content:", error)

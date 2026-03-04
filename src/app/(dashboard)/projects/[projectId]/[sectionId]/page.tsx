@@ -1,5 +1,6 @@
 import { Shell, AppTitle } from "@/src/components/layouts";
 import { ContentTable } from "@/src/components/modules/content";
+import { getContentsBySection } from "@/src/components/modules/content/actions/content-actions";
 
 export default async function ContentsListPage({
   params,
@@ -8,45 +9,20 @@ export default async function ContentsListPage({
 }) {
   const { projectId, sectionId } = await params;
 
-  // TODO: Fetch real data
-  const mockContents = [
-    {
-      id: "1",
-      sectionId: sectionId,
-      duration: "60 horas",
-      url: "",
-      title: "Contenido 1",
-      blocked: true,
-    },
-    {
-      id: "2",
-      sectionId: sectionId,
-      duration: "60 horas",
-      url: "",
-      title: "Contenido 2",
-      blocked: true,
-    },
-    {
-      id: "3",
-      sectionId: sectionId,
-      duration: "60 horas",
-      url: "",
-      title: "Contenido 3",
-      blocked: false,
-    },
-  ];
+  const contents = await getContentsBySection(Number(sectionId))
+  console.log("CONTENIDOS API", contents)
 
   return (
     <Shell>
       <AppTitle
-        title="Sección 1"
+        title={`Sección ${sectionId}`}
         description="Lista de contenidos, puedes administrar tus contenidos."
       />
       <ContentTable
-        content={mockContents}
+        content={contents}
         projectId={projectId}
         hasActiveFilters={false}
-        pageInfo={{ page: 1, limit: 10, total: mockContents.length }}
+        pageInfo={{ page: 1, limit: 10, total: contents.length }}
       />
     </Shell>
   );

@@ -7,7 +7,14 @@ if (!BASE_PATH) {
 }
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "demos.booksandbooksdigital.com.co",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

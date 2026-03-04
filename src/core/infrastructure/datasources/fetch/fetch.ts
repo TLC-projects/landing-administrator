@@ -53,7 +53,11 @@ export class FetchClient<T = any> implements HttpRepository<T> {
         ...options
       });
     } catch (error) {
-      console.error(`Error in GET ${url}:`, error);
+      const fullUrl = `${this.baseApiUrl}/${url}`
+      console.error(`[FetchClient] GET ${fullUrl} falló:`, error)
+      if (error instanceof Error && error.cause) {
+        console.error(`[FetchClient] Causa:`, error.cause)
+      }
       return null;
     }
   }

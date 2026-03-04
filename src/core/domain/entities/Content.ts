@@ -13,19 +13,3 @@ export interface Content {
     blocked: string
     resources: ContentResource[]
 }
-
-export interface CreateContentDto {
-    section_id: number
-    title: string
-    description: string
-    duration: string
-    blocked: string
-}
-
-export interface UpdateContentDto {
-    section_id?: number
-    title?: string
-    description?: string
-    duration?: string
-    blocked?: string
-}
