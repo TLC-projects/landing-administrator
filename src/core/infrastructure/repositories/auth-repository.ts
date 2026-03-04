@@ -55,15 +55,15 @@ export class AuthRepositoryImpl implements AuthRepository {
       });
 
       if (!response) return null;
-      const data = response.user;
+      const data = response.data;
 
       // Verify that the response contains the necessary data
-      if (!data || !data.id || !data.name || !data.lastName || !data.email) {
+      if (!data ) {
         console.error('Invalid token response:', data);
         return null;
       }
 
-      const auth = AuthMapper.toAuth(data.id, data.name, data.lastName, data.email, token);
+      const auth = AuthMapper.toAuth(data, token);
       return auth;
       
     } catch (error) {

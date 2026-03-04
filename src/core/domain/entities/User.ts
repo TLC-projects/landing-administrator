@@ -2,30 +2,20 @@ export class User {
 
   constructor(
     private readonly id: string,
-    private readonly name: string,
-    private readonly lastName: string,
-    private readonly email: string,
-    private readonly password?: string
+    private readonly fullName: string,
+    private readonly email: string
   ) {}
 
   getId() {
     return this.id;
   }
 
-  getName() {
-    return this.name;
-  }
-
-  getLastName() {
-    return this.lastName;
+  getFullName() {
+    return this.fullName;
   }
 
   getEmail() {
     return this.email;
-  }
-
-  getPassword() {
-    return this.password;
   }
 
 }

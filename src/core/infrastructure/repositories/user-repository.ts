@@ -17,6 +17,7 @@ export class UserRepositoryImpl implements UserRepository {
   async getUserById(id: string): Promise<User | null> {
     try {
       const response = await this.httpClient.get(`${this.baseUrl}/${id}`);
+      
       if (!response?.data) return null;
 
       return UserMapper.toUser(response.data as UserResultDto);

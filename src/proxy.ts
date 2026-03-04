@@ -25,15 +25,19 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // ❌ Usuario NO autenticado
   if (!isAuthenticated && !isLoginPage) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // ✅ Usuario autenticado no puede ver login
   if (isAuthenticated && isLoginPage) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico).*)",
+  ],
+};

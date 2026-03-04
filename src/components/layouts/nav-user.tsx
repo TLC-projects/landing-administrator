@@ -9,8 +9,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/src/components/ui";
+import { dataFetcher } from "@lib/data-fetching";
+import { User } from "@core/domain/entities/User";
+import { withBasePath } from "@lib/with-base-path";
 
 export const NavUser = () => {
+   const { data, loading, error } = dataFetcher.useQuery<User>(withBasePath('/api/user/me'));
   return (
     <SidebarMenu>
       <SidebarMenuItem>

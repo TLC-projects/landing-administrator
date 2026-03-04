@@ -18,6 +18,8 @@ export const loginAction = async (
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
 
+        console.log(email, password);
+
         const response = await (await getAuthService()).login({ email, password });
 
         // Handle unsuccessful login attempts

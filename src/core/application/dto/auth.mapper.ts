@@ -26,8 +26,8 @@ export class AuthMapper {
 
     }
 
-    static toAuth(id: string, name: string, lastName: string, email: string, token: string ): Auth {
-    return new Auth( id, name, lastName, email, token );
+    static toAuth(data: any, token: string ): Auth {
+    return new Auth( data.id, data.name, data.lastName, data.email, token);
   }
 
 }

@@ -81,8 +81,6 @@ export const ContentFilter = () => {
     return <Funnel className="h-4 w-4 text-muted-foreground" />;
   };
 
-  console.log("selectedStatus", selectedStatus);
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
