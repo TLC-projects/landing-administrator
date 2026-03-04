@@ -6,7 +6,7 @@ import {
   LoginCredentialsDto,
 } from "@core/application/dto/auth-dto";
 import { Auth } from "../../domain/entities/Auth";
-import { AuthMapper } from "../../application/dto/auth.mapper";
+import { AuthMapper } from "../../application/dto/auth-mapper";
 
 export class AuthRepositoryImpl implements AuthRepository {
   private baseUrl: string;

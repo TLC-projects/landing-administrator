@@ -1,9 +1,9 @@
 export class User {
 
   constructor(
-    private readonly id: string,
-    private readonly fullName: string,
-    private readonly email: string
+    public readonly id: string,
+    public readonly fullName: string,
+    public readonly email: string
   ) {}
 
   getId() {
@@ -18,4 +18,11 @@ export class User {
     return this.email;
   }
 
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.fullName,
+      email: this.email,
+    };
+  }
 }

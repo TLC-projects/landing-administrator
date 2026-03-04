@@ -3,7 +3,7 @@
 import { getAuthService } from "@/src/core/infrastructure/config/auth-dependency";
 
 export const loginAction = async (
-    state: { message: string; status: null | boolean }, 
+    state: { message: string; status: null | boolean },
     formData: FormData
 ): Promise<{ status: boolean | null; message: string }> => {
     try {
@@ -17,8 +17,6 @@ export const loginAction = async (
 
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
-
-        console.log(email, password);
 
         const response = await (await getAuthService()).login({ email, password });
 

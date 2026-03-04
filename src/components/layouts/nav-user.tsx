@@ -12,9 +12,17 @@ import {
 import { dataFetcher } from "@lib/data-fetching";
 import { User } from "@core/domain/entities/User";
 import { withBasePath } from "@lib/with-base-path";
+import { ProfileSkeleton } from "../modules/skeleton";
 
 export const NavUser = () => {
-   const { data, loading, error } = dataFetcher.useQuery<User>(withBasePath('/api/user/me'));
+  const { data, loading } = dataFetcher.useQuery<User>(
+    withBasePath("/api/user/me"),
+  );
+
+  if (loading) {
+    <ProfileSkeleton />;
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -24,7 +32,7 @@ export const NavUser = () => {
         >
           <Avatar className="h-8 w-8 rounded-lg" aria-hidden="true">
             <AvatarFallback className="rounded-lg bg-primary text-primary-foreground">
-              {getInitials("Sabrina Carpenter")}
+              {getInitials(data?.fullName || "")}
             </AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-left text-sm leading-tight">
@@ -32,13 +40,13 @@ export const NavUser = () => {
               className="truncate capitalize font-medium"
               aria-label="Nombre del usuario"
             >
-              Sabrina Carpenter
+              {data?.fullName}
             </span>
             <span
               className="truncate text-xs text-muted-foreground"
               aria-label="Correo electrónico del usuario"
             >
-              johndue@email.com
+              {data?.email}
             </span>
           </div>
         </SidebarMenuButton>

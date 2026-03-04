@@ -1,10 +1,5 @@
+import { Project } from "@/src/core/domain/entities/Project";
 import { ProjectCard } from "./project-card";
-
-interface Project {
-  id: string;
-  title: string;
-  description?: string;
-}
 
 interface ProjectListProps {
   projects: Project[];
@@ -27,7 +22,7 @@ export function ProjectList({ projects }: ProjectListProps) {
         <ProjectCard
           key={project.id}
           id={project.id}
-          title={project.title}
+          title={project.name}
           description={project.description}
         />
       ))}

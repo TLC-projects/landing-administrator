@@ -9,10 +9,11 @@ export async function GET() {
         if(!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
+        
         return NextResponse.json({
-            id: user.getId(),
-            name: user.getFullName(),
-            email: user.getEmail()
+            id: user.id,
+            fullName: user.fullName,
+            email: user.email
         })
     } catch (error) {
         console.log('Error to get current user', error);

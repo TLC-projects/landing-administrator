@@ -17,8 +17,6 @@ export class SessionRepositoryImpl implements SessionRepository {
 
   async createSession({ userId, token }: Session): Promise<void> {
 
-    console.log(userId, token);
-
     const sessionEncrypted = await encrypt({ userId })
     const tokenEncrypted = await encrypt({ token })
 

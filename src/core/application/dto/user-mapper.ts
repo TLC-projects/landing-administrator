@@ -15,4 +15,12 @@ export class UserMapper {
 
   }
 
+  static toResponse(user: User) {
+    return {
+      id: user.getId(),
+      name: user.getFullName(),
+      email: user.getEmail()
+    };
+  }
+
 }

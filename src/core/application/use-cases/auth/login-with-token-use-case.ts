@@ -11,6 +11,7 @@ export class LoginWithTokenUseCase {
     async execute(credentials: TokenCredentialsDto): Promise<AuthResultDto> {
         try {
       const token = credentials.data;
+
       const auth = await this.authRepository.authenticateWithToken(token);
 
       if (!auth) {
