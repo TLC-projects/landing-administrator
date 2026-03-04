@@ -23,16 +23,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { SectionTableColumns } from "./section-table-columns";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SectionTablePagination } from "./section-table-pagination";
+import { SectionViewModel } from "@core/application/dto/section-dto"
 
-export type Section = {
-  id: string;
-  projectId: string;
-  title: string;
-  contentNumber: number;
-};
 
 interface SectionTableProps {
-  sections: Section[];
+  sections: SectionViewModel[];
   pageInfo: {
     total: number;
     page: number;

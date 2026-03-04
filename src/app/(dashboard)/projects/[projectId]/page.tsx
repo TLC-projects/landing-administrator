@@ -1,6 +1,7 @@
 import { FolderOpen } from "lucide-react";
 import { Shell, AppTitle } from "@/src/components/layouts";
 import { SectionTable } from "@/src/components/modules/sections";
+import { getSectionsByProject } from "@/src/components/modules/sections/actions/section-actions";
 
 export default async function ProjectPage({
   params,
@@ -9,12 +10,8 @@ export default async function ProjectPage({
 }) {
   const { projectId } = await params;
 
-  // TODO: Fetch real sections data
-  const mockSections = [
-    { id: "1", projectId: projectId, title: "Sección 1", contentNumber: 3 },
-    { id: "2", projectId: projectId, title: "Sección 2", contentNumber: 5 },
-  ];
-
+ const sections = await getSectionsByProject(Number(projectId))
+ 
   return (
     <Shell>
       <AppTitle
@@ -23,8 +20,8 @@ export default async function ProjectPage({
         icon={FolderOpen}
       />
       <SectionTable
-        sections={mockSections}
-        pageInfo={{ total: mockSections.length, page: 1, limit: 10 }}
+        sections={sections}
+        pageInfo={{ total: sections.length, page: 1, limit: 10 }}
       />
     </Shell>
   );
