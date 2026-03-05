@@ -3,31 +3,31 @@ import { ContentServerResponseDto, ContentDto, CreateContentDto, UpdateContentDt
 
 // API → Entity (Infrastructure layer)
 export function contentApiToEntity(api: ContentServerResponseDto): Content {
-  return {
-    id: api.id,
-    section_id: api.section_id,
-    title: api.title,
-    description: api.description,
-    duration: api.duration,
-    blocked: api.blocked === 1 || api.blocked === true,
-    resources: api.resources ?? [],
-  }
+  return new Content(
+    api.id,
+    api.section_id,
+    api.title,
+    api.description,
+    api.duration,
+    api.blocked === 1 || api.blocked === true,
+    api.resources ?? [],
+  )
 }
 
 export function contentsApiToEntity(api: ContentServerResponseDto[]): Content[] {
   return api.map(contentApiToEntity)
 }
 
-// Entity → ViewModel (Application layer)
+// Entidad -> ViewModel (Application capa)
 export function contentToViewModel(content: Content): ContentDto {
   return {
     id: String(content.id),
-    sectionId: String(content.section_id),
+    sectionId: String(content.sectionId),
     title: content.title,
     description: content.description,
     duration: content.duration,
-    url: content.resources?.[0]?.url ?? "",
-    blocked: content.blocked,
+    url: content.getMainResourceUrl() ?? "", // URL del recurso principal
+    blocked: content.isBlocked(),
   }
 }
 
@@ -35,7 +35,7 @@ export function contentsToViewModel(contents: Content[]): ContentDto[] {
   return contents.map(contentToViewModel)
 }
 
-// Domain DTO → FormData (Infrastructure layer — para enviar al servidor)
+// Domain DTO ->FormData (Infrastructure capa — para enviar al servidor)
 export function createContentDtoToFormData(dto: CreateContentDto): FormData {
   const formData = new FormData()
   formData.append('title', dto.title)

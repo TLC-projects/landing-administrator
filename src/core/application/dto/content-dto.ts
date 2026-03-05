@@ -29,7 +29,7 @@ export interface CreateContentDto {
   duration: string
   blocked: boolean
   section_id: number
-  resource?: File
+  resource: File
 }
 
 export interface UpdateContentDto {
