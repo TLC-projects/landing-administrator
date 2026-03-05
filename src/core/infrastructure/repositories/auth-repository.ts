@@ -90,7 +90,11 @@ export class AuthRepositoryImpl implements AuthRepository {
    */
   async deauthenticate(token: string): Promise<void> {
     try {
-      await this.httpClient.post(`${this.baseUrl}/logout`, { token });
+      await this.httpClient.delete(`${this.baseUrl}/logout`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
     } catch (error) {
       console.error(`Error in GET ${this.baseUrl}:`, error);
     }
