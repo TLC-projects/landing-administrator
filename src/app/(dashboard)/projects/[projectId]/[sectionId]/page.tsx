@@ -1,6 +1,6 @@
 import { Shell, AppTitle } from "@/src/components/layouts";
 import { ContentTable } from "@/src/components/modules/content";
-import { getContentsBySection } from "@/src/components/modules/content/actions/content-actions";
+import { getContentService } from "@core/infrastructure/config/content-dependency";
 
 export default async function ContentsListPage({
   params,
@@ -9,8 +9,8 @@ export default async function ContentsListPage({
 }) {
   const { projectId, sectionId } = await params;
 
-  const contents = await getContentsBySection(Number(sectionId))
-  console.log("CONTENIDOS API", contents)
+  const contentService = await getContentService();
+  const contents = await contentService.getContentsBySection(Number(sectionId));
 
   return (
     <Shell>

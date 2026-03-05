@@ -67,8 +67,8 @@ export async function updateContent(contentId: string, formData: FormData) {
 
 export async function getContent(contentId: string, projectId: string, sectionId: string) {
   try {
-    const { ContentService } = await import("@core/application/services/content/content-service")
-    const service = new ContentService()
+    const { getContentService } = await import("@core/infrastructure/config/content-dependency")
+    const service = await getContentService()
     const result = await service.getContentById(Number(contentId))
     if (!result) return null
 

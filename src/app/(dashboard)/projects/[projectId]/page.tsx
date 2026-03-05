@@ -33,9 +33,9 @@ export default async function ProjectPage({
   if(paramsSearch.search) console.log(paramsSearch.search);
 
   const sectionService = await getSectionService();
-  const sections = await sectionService.getSectionsByProjectId(projectId, pagination, paramsSearch.search);
+  const sections = await sectionService.getSectionsWithContentCount(projectId, pagination, paramsSearch.search);
 
-  const mockSections = sections.data.map((section) => ({
+  const sectionsWithCount = sections.data.map((section) => ({
     id: section.id,
     name: section.name,
     project_id: section.project_id,
@@ -50,7 +50,7 @@ export default async function ProjectPage({
         icon={FolderOpen}
       />
       <SectionTable
-        sections={mockSections}
+        sections={sectionsWithCount}
         pageInfo={{ total: sections.total, page: sections.page, limit: sections.limit }}
       />
     </Shell>

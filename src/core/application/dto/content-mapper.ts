@@ -1,19 +1,36 @@
+import { Content } from "@core/domain/entities/Content"
 import { ContentApiResponse, ContentViewModel } from "./content-dto"
 
-// API → UI: transforma UN contenido
-export function contentToViewModel(api: ContentApiResponse): ContentViewModel {
+// API → Entity (Infrastructure layer)
+export function contentApiToEntity(api: ContentApiResponse): Content {
   return {
-    id: String(api.id),
-    sectionId: String(api.section_id),
+    id: api.id,
+    section_id: api.section_id,
     title: api.title,
     description: api.description,
     duration: api.duration,
-    url: api.resources?.[0]?.url ?? "", //src -> imagen
-    blocked: api.blocked === 1,
+    blocked: String(api.blocked),
+    resources: api.resources ?? [],
   }
 }
 
-// API -> iu
-export function contentsToViewModel(api: ContentApiResponse[]): ContentViewModel[] {
-  return api.map(contentToViewModel)
+export function contentsApiToEntity(api: ContentApiResponse[]): Content[] {
+  return api.map(contentApiToEntity)
+}
+
+// Entity → ViewModel (Application layer)
+export function contentToViewModel(content: Content): ContentViewModel {
+  return {
+    id: String(content.id),
+    sectionId: String(content.section_id),
+    title: content.title,
+    description: content.description,
+    duration: content.duration,
+    url: content.resources?.[0]?.url ?? "",
+    blocked: content.blocked === '1',
+  }
+}
+
+export function contentsToViewModel(contents: Content[]): ContentViewModel[] {
+  return contents.map(contentToViewModel)
 }
