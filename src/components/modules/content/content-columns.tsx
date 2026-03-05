@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
+import { deleteContent } from "@/src/lib/actions/content-actions";
 
 interface Props {
   projectId: string;
@@ -55,9 +56,9 @@ export const ContentTableColumns = ({
     header: "Estado",
     cell: ({ row }) => {
       const content = row.original;
-      const blocked = content.blocked ? "Visible" : "Oculto";
-      const backgroundColor = content.blocked ? "#DBFCE7" : "#DDDDDD";
-      const color = content.blocked ? "green" : "#121212";
+      const blocked = content.blocked ? "Oculto" : "Visible";
+      const backgroundColor = content.blocked ? "#DDDDDD" : "#DBFCE7";
+      const color = content.blocked ? "#121212" : "green";
       return (
         <Badge
           className={`capitalize border-0`}
@@ -65,9 +66,9 @@ export const ContentTableColumns = ({
         >
           <span>
             {content.blocked ? (
-              <Eye className="h-4 w-4" />
-            ) : (
               <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
             )}
           </span>
           {blocked}
@@ -117,7 +118,7 @@ export const ContentTableColumns = ({
               aria-label="No publicar recurso"
               className="text-red-600"
               onClick={() =>
-                console.log(`Eliminando el contenido con ID: ${content.id}`)
+                deleteContent(content.id, projectId, content.sectionId)
               }
             >
               <Ban className="h-4 w-4 text-gray-500" />

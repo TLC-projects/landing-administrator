@@ -14,7 +14,7 @@ import {
 import { Switch, Input, Textarea, Button } from "@/src/components/ui";
 import { ImageUpload } from "./image-upload";
 import { useContentForm } from "./hooks/use-content-form";
-import { createContent, updateContent } from "./actions/create-content";
+import { createContent, updateContent } from "@lib/actions/content-actions";
 import type { Content, ContentFormModes } from "./types/content";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -63,48 +63,32 @@ export function ContentForm({
   const charPercent = Math.min((description.length / charLimit) * 100, 100);
   const isViewMode = mode === "view" && !isEditing;
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+  setError(null);
 
-    try {
-      const formData = new FormData();
-      formData.append("projectId", projectId);
-      formData.append("sectionId", sectionId);
-      formData.append("title", title);
-      formData.append("duration", duration);
-      formData.append("description", description);
-      formData.append("isVisible", String(isVisible));
+  const formData = new FormData();
+  formData.append("projectId", projectId);
+  formData.append("sectionId", sectionId);
+  formData.append("title", title);
+  formData.append("duration", duration);
+  formData.append("description", description);
+  formData.append("isVisible", String(isVisible));
+  if (imageFile) formData.append("image", imageFile);
 
-      if (imageFile) {
-        formData.append("image", imageFile);
-      }
+  const isUpdate = mode === "edit" || (mode === "view" && isEditing && content?.id);
+  const result = isUpdate
+    ? await updateContent(content!.id, formData)
+    : await createContent(formData);
 
-      let result;
-      // Si estamos en modo edit o view+editing, actualizar
-      if (mode === "edit" || (mode === "view" && isEditing && content?.id)) {
-        result = await updateContent(content!.id, formData);
-      } else {
-        // Modo create
-        result = await createContent(formData);
-      }
-
-      if (result?.error) {
-        setError(result.error);
-      } else {
-        if (mode === "create") {
-          resetForm();
-        }
-        router.push(`/projects/${projectId}/${sectionId}`);
-      }
-    } catch (err) {
-      setError("Error al guardar el contenido");
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  if (result?.error) {
+    setError(result.error);
+    setIsSubmitting(false);
+  } else if (mode === "create") {
+    resetForm();
+  }
+};
 
   // URL de cancelacion/vuelta
   const cancelUrl = `/projects/${projectId}/${sectionId}`;

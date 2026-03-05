@@ -4,6 +4,16 @@ export const PAGINATION_CONFIG = {
     DEFAULT_LIMIT: 10,
     MAX_LIMIT: 50
   },
+  SECTIONS:{
+    DEFAULT_PAGE: 1,
+    DEFAULT_LIMIT: 10,
+    MAX_LIMIT: 30
+  },
+  CONTENTS: {
+    DEFAULT_PAGE: 1,
+    DEFAULT_LIMIT: 10,
+    MAX_LIMIT: 50
+  }
 } as const;
 
 export interface PaginationParamsType {
@@ -28,6 +38,25 @@ export class PaginationParams {
         // Ensure page is at least 1, defaulting to config value if not provided
         const validPage = Math.max(page || config.DEFAULT_PAGE, 1);
         // Ensure limit is between 1 and MAX_LIMIT, defaulting to config value if not provided
+        const validLimit = Math.min(Math.max(limit || config.DEFAULT_LIMIT, 1), config.MAX_LIMIT);
+
+        return new PaginationParams(validPage, validLimit);
+    }
+
+    static forSections(page?: number, limit?: number): PaginationParams {
+        // Get projects-specific pagination configuration
+        const config = PAGINATION_CONFIG.SECTIONS;
+        // Ensure page is at least 1, defaulting to config value if not provided
+        const validPage = Math.max(page || config.DEFAULT_PAGE, 1);
+        // Ensure limit is between 1 and MAX_LIMIT, defaulting to config value if not provided
+        const validLimit = Math.min(Math.max(limit || config.DEFAULT_LIMIT, 1), config.MAX_LIMIT);
+
+        return new PaginationParams(validPage, validLimit);
+    }
+
+    static forContents(page?: number, limit?: number): PaginationParams {
+        const config = PAGINATION_CONFIG.CONTENTS;
+        const validPage = Math.max(page || config.DEFAULT_PAGE, 1);
         const validLimit = Math.min(Math.max(limit || config.DEFAULT_LIMIT, 1), config.MAX_LIMIT);
 
         return new PaginationParams(validPage, validLimit);

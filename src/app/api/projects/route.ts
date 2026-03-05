@@ -14,7 +14,12 @@ export async function GET() {
       );
     }
     
-    return NextResponse.json({ projects });
+    return NextResponse.json({ 
+      data: projects.data,
+      total: projects.total,
+      page: projects.page,
+      limit: projects.limit
+     });
 
   } catch (error) {
 

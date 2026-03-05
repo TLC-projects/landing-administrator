@@ -54,9 +54,13 @@ export class SessionRepositoryImpl implements SessionRepository {
 
     if (!session || !token) return null
 
-    return {
-      ...session,
-      ...token
+    try {
+      return {
+        ...session,
+        ...token
+      };
+    } catch {
+      return null;
     }
   }
 

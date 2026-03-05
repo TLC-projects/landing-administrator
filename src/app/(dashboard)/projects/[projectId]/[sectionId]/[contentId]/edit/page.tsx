@@ -1,6 +1,6 @@
 import { Shell, AppTitle } from "@/src/components/layouts";
 import { ContentForm } from "@/src/components/modules/content-form/content-form";
-import { getContent } from "@/src/components/modules/content-form/actions/create-content";
+import { getContentService } from "@core/infrastructure/config/content-dependency";
 
 export default async function EditContentPage({
   params,
@@ -9,7 +9,19 @@ export default async function EditContentPage({
 }) {
   const { projectId, sectionId, contentId } = await params;
 
-   const content = await getContent(contentId);
+  const contentService = await getContentService();
+  const result = await contentService.getContentById(Number(contentId));
+
+  const content = result ? {
+    id: result.id,
+    title: result.title,
+    duration: result.duration,
+    description: result.description,
+    imageUrl: result.url,
+    isVisible: !result.blocked,
+    projectId,
+    sectionId,
+  } : null;
 
   return (
     <Shell>
@@ -17,7 +29,7 @@ export default async function EditContentPage({
         title="Editar Contenido"
         description={`Proyecto ${projectId} | Sección ${sectionId} | Contenido ${contentId}`}
       />
-      {/* Aquí va tu formulario de edición */}
+      
       <div className="mt-6">
         <ContentForm projectId={projectId} sectionId={sectionId} mode="edit" content={content} />
       </div>

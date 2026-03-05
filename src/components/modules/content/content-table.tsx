@@ -41,6 +41,7 @@ export type Content = {
 interface ContentTableProps {
   content: Content[];
   projectId: string;
+  sectionId: string;
   hasActiveFilters?: boolean;
   pageInfo: {
     total: number;
@@ -52,6 +53,7 @@ interface ContentTableProps {
 export const ContentTable: React.FC<ContentTableProps> = ({
   content = [],
   projectId,
+  sectionId,
   hasActiveFilters,
   pageInfo,
 }) => {
@@ -153,9 +155,7 @@ export const ContentTable: React.FC<ContentTableProps> = ({
       <div className="space-y-2.5 border shadow rounded-md px-3 pt-5 pb-3 flex flex-col md:flex-row items-start gap-4">
         <SearchBar
           className="md:max-w-7xl"
-          onSearch={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
+          placeholder="Buscar por nombre..."
         />
         <ContentFilter />
       </div>
@@ -163,7 +163,7 @@ export const ContentTable: React.FC<ContentTableProps> = ({
         <div className="flex" style={{ justifyContent: "flex-end" }}>
           <Button asChild>
             <Link
-              href={`/projects/${projectId}/${content[0].sectionId}/new`}
+              href={`/projects/${projectId}/${sectionId}/new`}
               className="flex items-center gap-2"
             >
               <Plus /> <span>Crear contenido</span>

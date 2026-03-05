@@ -1,6 +1,6 @@
 import { Shell, AppTitle } from "@/src/components/layouts";
 import { ContentForm } from "@/src/components/modules/content-form/content-form";
-import { getContent } from "@/src/components/modules/content-form/actions/create-content";
+import { getContentService } from "@core/infrastructure/config/content-dependency";
 
 export default async function ContentPage({
   params,
@@ -9,7 +9,19 @@ export default async function ContentPage({
 }) {
   const { projectId, sectionId, contentId } = await params;
 
-  const content = await getContent(contentId, projectId, sectionId);
+  const contentService = await getContentService();
+  const result = await contentService.getContentById(Number(contentId));
+
+  const content = result ? {
+    id: result.id,
+    title: result.title,
+    duration: result.duration,
+    description: result.description,
+    imageUrl: result.url,
+    isVisible: !result.blocked,
+    projectId,
+    sectionId,
+  } : null;
 
   return (
     <Shell>

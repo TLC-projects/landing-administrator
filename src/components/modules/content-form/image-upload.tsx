@@ -104,7 +104,7 @@ export function ImageUpload({
             <p className="text-sm font-medium text-foreground">
               Arrastra una imagen o haz clic para seleccionar
             </p>
-            <p className="text-xs text-muted-foreground">PNG, JPG o WebP</p>
+            <p className="text-xs text-muted-foreground">PNG, JPG o WebP(No más de 1 MB)</p>
           </div>
         </div>
       )}

@@ -1,16 +1,36 @@
 import { Shell, AppTitle } from "@/src/components/layouts";
 import { ContentTable } from "@/src/components/modules/content";
-import { getContentsBySection } from "@/src/components/modules/content/actions/content-actions";
+import { getContentService } from "@core/infrastructure/config/content-dependency";
+import { PaginationParams } from "@core/domain/value-objects/pagination";
 
 export default async function ContentsListPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ projectId: string; sectionId: string }>;
+  searchParams: Promise<{
+    page?: string;
+    limit?: string;
+    search?: string;
+    blocked?: string;
+  }>;
 }) {
   const { projectId, sectionId } = await params;
+  const paramsSearch = await searchParams;
 
-  const contents = await getContentsBySection(Number(sectionId))
-  console.log("CONTENIDOS API", contents)
+  const pagination = PaginationParams.forContents(
+    paramsSearch?.page ? parseInt(paramsSearch.page) : undefined,
+    paramsSearch?.limit ? parseInt(paramsSearch.limit) : undefined,
+  );
+
+  const contentService = await getContentService();
+  const result = await contentService.getContentsBySection(
+    Number(sectionId),
+    pagination,
+    paramsSearch.search,
+  );
+
+  const hasActiveFilters = !!(paramsSearch.search || paramsSearch.blocked);
 
   return (
     <Shell>
@@ -19,10 +39,11 @@ export default async function ContentsListPage({
         description="Lista de contenidos, puedes administrar tus contenidos."
       />
       <ContentTable
-        content={contents}
+        content={result.data}
         projectId={projectId}
-        hasActiveFilters={false}
-        pageInfo={{ page: 1, limit: 10, total: contents.length }}
+        sectionId={sectionId}
+        hasActiveFilters={hasActiveFilters}
+        pageInfo={{ page: result.page, limit: result.limit, total: result.total }}
       />
     </Shell>
   );
