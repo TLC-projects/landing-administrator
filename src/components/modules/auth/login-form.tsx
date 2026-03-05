@@ -10,7 +10,7 @@ import { useEffect } from "react";
 export const LoginForm = () => {
   const router = useRouter();
 
-  const [state, formAction, isPending] = useResettableActionState(loginAction, {
+  const [state, formAction] = useResettableActionState(loginAction, {
     status: null,
     message: "",
   });

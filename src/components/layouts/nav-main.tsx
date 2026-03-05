@@ -13,23 +13,20 @@ import {
 import Link from "next/link";
 import { dataFetcher } from "@lib/data-fetching";
 import { withBasePath } from "@lib/with-base-path";
-import { Project } from "@core/domain/entities/Project";
+import { PaginatedProjectResponse } from "@core/application/dto/project-dto";
 
-type ProjectsResponse = {
-  projects: Project[];
-};
 
 export const NavMain = () => {
-  const { data } = dataFetcher.useQuery<ProjectsResponse>(
+  const { data } = dataFetcher.useQuery<PaginatedProjectResponse>(
     withBasePath("/api/projects"),
   );
-  console.log(data);
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Proyectos</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
-          {data?.projects.map((project) => (
+          {data?.data.map((project) => (
             <SidebarMenuItem key={project.id}>
               <SidebarMenuButton asChild>
                 <Link href={`/projects/${project.id}`}>

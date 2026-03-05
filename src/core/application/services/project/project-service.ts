@@ -3,6 +3,7 @@ import { GetAllProjectsUseCase } from "@core/application/use-cases/project/get-a
 import { Project } from "@core/domain/entities/Project";
 import { PaginationParams } from "@core/domain/value-objects/pagination";
 import { GetProjectByIdUseCase } from "@core/application/use-cases/project/get-project-by-id-use-case";
+import { PaginatedProjectResponse } from "@core/application/dto/project-dto";
 
 export class ProjectService {
     private getAllProjectsUseCase: GetAllProjectsUseCase;
@@ -13,8 +14,8 @@ export class ProjectService {
         this.getProjectByIdUseCase = new GetProjectByIdUseCase(projectRepository);
     }
 
-    async getAllProjects(param: PaginationParams, search?: string): Promise<Project[] | []> {
-        return await this.getAllProjectsUseCase.execute(param, search);
+    async getAllProjects(params: PaginationParams, search?: string): Promise<PaginatedProjectResponse> {
+        return await this.getAllProjectsUseCase.execute(params, search);
     }
 
     async getProjectById(id: string): Promise<Project | null> {

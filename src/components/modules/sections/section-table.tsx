@@ -51,7 +51,7 @@ export const SectionTable: React.FC<SectionTableProps> = ({
 
   const createQueryString = useCallback(
     (newPage: number) => {
-      const params = new URLSearchParams(searchParams?.toString());
+      const params = new URLSearchParams(searchParams?.toString() ?? "");
 
       // If page is less than 1, return the base URL without page parameter
       if (newPage < 1) {
@@ -73,20 +73,23 @@ export const SectionTable: React.FC<SectionTableProps> = ({
   }, [pageInfo.page, pageInfo.limit]);
 
   useEffect(() => {
-    // Update the URL when pagination changes
-    const newPage = pagination.pageIndex + 1; // Convert to 1-based index for URL
-    const newUrl = createQueryString(newPage);
-    router.push(newUrl);
-  }, [pagination]);
+    const newPage = pagination.pageIndex + 1;
+
+    if (newPage !== pageInfo.page) {
+      const newUrl = createQueryString(newPage);
+      router.push(newUrl);
+    }
+  }, [pagination.pageIndex]);
 
   const columns = useMemo(() => SectionTableColumns(), []);
 
   const table = useReactTable({
     data: sections,
-    columns: columns,
-    rowCount: pageInfo.total ?? -1, // Use -1 for unknown total
-    onPaginationChange: setPagination,
+    columns,
+    rowCount: pageInfo.total,
+    pageCount: Math.ceil(pageInfo.total / pageInfo.limit),
     manualPagination: true,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -114,9 +117,15 @@ export const SectionTable: React.FC<SectionTableProps> = ({
         <Table>
           <TableHeader className="bg-muted/30">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-transparent border-b border-border/50">
+              <TableRow
+                key={headerGroup.id}
+                className="hover:bg-transparent border-b border-border/50"
+              >
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="font-medium text-muted-foreground text-xs uppercase tracking-wider h-12">
+                  <TableHead
+                    key={header.id}
+                    className="font-medium text-muted-foreground text-xs uppercase tracking-wider h-12"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -137,10 +146,7 @@ export const SectionTable: React.FC<SectionTableProps> = ({
                   className="hover:bg-primary/10 transition-colors border-b border-border/30 last:border-0 group"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className="text-foreground py-4"
-                    >
+                    <TableCell key={cell.id} className="text-foreground py-4">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -151,7 +157,10 @@ export const SectionTable: React.FC<SectionTableProps> = ({
               ))
             ) : (
               <TableRow className="hover:bg-transparent">
-                <TableCell colSpan={columns.length} className="text-center py-12 text-muted-foreground">
+                <TableCell
+                  colSpan={columns.length}
+                  className="text-center py-12 text-muted-foreground"
+                >
                   No hay recursos disponibles
                 </TableCell>
               </TableRow>

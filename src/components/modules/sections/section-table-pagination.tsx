@@ -12,12 +12,13 @@ interface SectionTablePaginationProps<T> {
 }
 
 function SectionTablePagination<T>({ table }: SectionTablePaginationProps<T>) {
+  const totalPages = table.getPageCount() || 1;
+
   return (
     <div className="flex items-center justify-end px-2">
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          Página {table.getState().pagination.pageIndex + 1} de{" "}
-          {table.getPageCount()}
+          Página {table.getState().pagination.pageIndex + 1} de {totalPages}
         </div>
         <div className="flex items-center gap-2 px-2">
           <Button

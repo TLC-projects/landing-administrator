@@ -24,13 +24,12 @@ export default async function ProjectPage({
   const project = await projectService.getProjectById(projectId);
 
   const paramsSearch = await searchParams;
+  
   // Parse pagination parameters from searchParams
   const pagination = PaginationParams.forProjects(
     paramsSearch?.page ? parseInt(paramsSearch.page) : undefined,
     paramsSearch?.limit ? parseInt(paramsSearch.limit) : undefined
   );
-
-  if(paramsSearch.search) console.log(paramsSearch.search);
 
   const sectionService = await getSectionService();
   const sections = await sectionService.getSectionsByProjectId(projectId, pagination, paramsSearch.search);
