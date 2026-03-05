@@ -2,7 +2,7 @@ import { getAuthService } from '@core/infrastructure/config/auth-dependency';
 import { NextResponse } from 'next/server';
 
 
-export async function GET() {
+export async function DELETE() {
     try {
         const authService = await getAuthService();
         const result = await authService.logout();

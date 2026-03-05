@@ -3,6 +3,7 @@
 import { Ellipsis, Folder } from "lucide-react";
 
 import {
+  Button,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -14,12 +15,35 @@ import Link from "next/link";
 import { dataFetcher } from "@lib/data-fetching";
 import { withBasePath } from "@lib/with-base-path";
 import { PaginatedProjectResponse } from "@core/application/dto/project-dto";
-
+import { useEffect, useState } from "react";
+import { PAGINATION_CONFIG } from "@/src/core/domain/value-objects/pagination";
 
 export const NavMain = () => {
-  const { data } = dataFetcher.useQuery<PaginatedProjectResponse>(
-    withBasePath("/api/projects"),
+  const [page, setPage] = useState(1);
+  const [projects, setProjects] = useState<any[]>([]);
+
+  const { data, loading } = dataFetcher.useQuery<PaginatedProjectResponse>(
+    withBasePath(`/api/projects?page=${page}&limit=${PAGINATION_CONFIG.SECTIONS.DEFAULT_LIMIT}`),
   );
+
+  useEffect(() => {
+    if (data?.data) {
+      setProjects((prev) => {
+        const merged = [...prev, ...data.data];
+        return merged.slice(0, PAGINATION_CONFIG.SECTIONS.MAX_LIMIT); // 👈 máximo 30
+      });
+    }
+  }, [data]);
+
+  const hasMore =
+    projects.length < (data?.total ?? 0) &&
+    projects.length < PAGINATION_CONFIG.SECTIONS.MAX_LIMIT;
+
+  const loadMore = () => {
+    if (projects.length < PAGINATION_CONFIG.SECTIONS.MAX_LIMIT) {
+      setPage((prev) => prev + 1);
+    }
+  };
 
   return (
     <SidebarGroup>
@@ -36,14 +60,33 @@ export const NavMain = () => {
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
-          <SidebarMenuItem>
-            <SidebarMenuButton className="text-sidebar-foreground/70" asChild>
-              <Link href="/">
+          {hasMore && (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                className="text-sidebar-foreground/70"
+                onClick={loadMore}
+              >
                 <Ellipsis />
-                <span>Ver todos</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+                <span>{loading ? "Cargando..." : "Ver más proyectos"}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+          {!hasMore && (
+            <SidebarMenuItem>
+              <SidebarMenuButton className="text-sidebar-foreground/70" asChild>
+                <Button
+                  variant="ghost"
+                  size={"icon-xs"}
+                  className="justify-start"
+                  asChild
+                >
+                  <Link href="/">
+                    <span>Ver todos</span>
+                  </Link>
+                </Button>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

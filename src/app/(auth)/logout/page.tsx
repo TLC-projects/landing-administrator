@@ -1,4 +1,4 @@
-import { Logout } from "@/src/components/modules/auth/logout";
+import { Logout } from "@components/modules/auth/logout";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
