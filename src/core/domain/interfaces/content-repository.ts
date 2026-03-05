@@ -1,8 +1,16 @@
 import { Content } from "@core/domain/entities/Content"
 import { CreateContentDto, UpdateContentDto } from "@core/application/dto/content-dto"
+import { PaginationParams } from "@core/domain/value-objects/pagination"
+
+export interface PaginatedContentEntityResponse {
+  data: Content[]
+  total: number
+  page: number
+  limit: number
+}
 
 export interface IContentRepository {
-  getAllBySectionId(sectionId: number): Promise<Content[] | null>
+  getAllBySectionId(sectionId: number, params?: PaginationParams, search?: string): Promise<PaginatedContentEntityResponse | null>
   getById(id: number): Promise<Content | null>
   getCountBySectionId(sectionId: number): Promise<number>
   create(data: CreateContentDto): Promise<Content | null>

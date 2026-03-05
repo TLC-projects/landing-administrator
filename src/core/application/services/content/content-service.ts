@@ -4,9 +4,10 @@ import { GetContentCountBySectionUseCase } from "@core/application/use-cases/con
 import { CreateContentUseCase } from "@core/application/use-cases/content/create-content.use-case"
 import { UpdateContentUseCase } from "@core/application/use-cases/content/update-content.use-case"
 import { DeleteContentUseCase } from "@core/application/use-cases/content/delete-content.use-case"
-import { ContentDto, CreateContentDto, UpdateContentDto } from "@core/application/dto/content-dto"
+import { ContentDto, PaginatedContentResponse, CreateContentDto, UpdateContentDto } from "@core/application/dto/content-dto"
 import { contentToViewModel } from "@core/application/dto/content-mapper"
 import { IContentRepository } from "@core/domain/interfaces/content-repository"
+import { PaginationParams } from "@core/domain/value-objects/pagination"
 
 export class ContentService {
   private getContentsBySectionUseCase: GetContentsBySectionUseCase
@@ -25,9 +26,10 @@ export class ContentService {
     this.deleteContentUseCase = new DeleteContentUseCase(contentRepository)
   }
 
-  async getContentsBySection(sectionId: number): Promise<ContentDto[]> {
-    const result = await this.getContentsBySectionUseCase.execute(sectionId)
-    return result ?? []
+  async getContentsBySection(sectionId: number, params?: PaginationParams, search?: string): Promise<PaginatedContentResponse> {
+    const result = await this.getContentsBySectionUseCase.execute(sectionId, params, search)
+    if (!result) return { data: [], total: 0, page: params?.page ?? 1, limit: params?.limit ?? 10 }
+    return result
   }
 
   async getContentById(id: number): Promise<ContentDto | null> {

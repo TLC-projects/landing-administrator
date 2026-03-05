@@ -1,8 +1,9 @@
 import { Content } from "@core/domain/entities/Content"
-import { IContentRepository } from "@core/domain/interfaces/content-repository"
-import { ContentServerResponseDto, CreateContentDto, UpdateContentDto } from "@core/application/dto/content-dto"
+import { IContentRepository, PaginatedContentEntityResponse } from "@core/domain/interfaces/content-repository"
+import { ContentListServerResponseDto, ContentServerResponseDto, CreateContentDto, UpdateContentDto } from "@core/application/dto/content-dto"
 import { contentApiToEntity, contentsApiToEntity, createContentDtoToFormData, updateContentDtoToFormData } from "@core/application/dto/content-mapper"
 import { HttpRepository } from "@core/domain/interfaces/http-repository"
+import { PaginationParams } from "@core/domain/value-objects/pagination"
 
 export class ContentRepositoryImpl implements IContentRepository {
   private baseUrl: string;
@@ -13,11 +14,26 @@ export class ContentRepositoryImpl implements IContentRepository {
     this.httpClient = httpClient;
   }
 
-  async getAllBySectionId(sectionId: number): Promise<Content[] | null> {
+  async getAllBySectionId(sectionId: number, params?: PaginationParams, search?: string): Promise<PaginatedContentEntityResponse | null> {
     try {
-      const response = await this.httpClient.get<{ data: ContentServerResponseDto[] }>(`${this.baseUrl}/section/${sectionId}`)
+      const queryParams = new URLSearchParams()
+      if (params) {
+        queryParams.set('page', params.page.toString())
+        queryParams.set('limit', params.limit.toString())
+      }
+      if (search) {
+        queryParams.set('search', search)
+      }
+      const query = queryParams.toString()
+      const url = `${this.baseUrl}/section/${sectionId}${query ? `?${query}` : ''}`
+      const response = await this.httpClient.get<ContentListServerResponseDto>(url)
       if (!response) return null
-      return contentsApiToEntity(response.data)
+      return {
+        data: contentsApiToEntity(response.data),
+        total: response.total ?? response.data.length,
+        page: response.page ?? params?.page ?? 1,
+        limit: response.limit ?? params?.limit ?? 10,
+      }
     } catch (error) {
       console.error(`[ContentRepository] Error al obtener contenidos de la sección ${sectionId}:`, error)
       return null

@@ -15,6 +15,13 @@ export interface ContentServerResponseDto {
   resources: ContentResourceServerResponseDto[]
 }
 
+export interface ContentListServerResponseDto {
+  data: ContentServerResponseDto[]
+  total?: number
+  page?: number
+  limit?: number
+}
+
 // Lo que envía el cliente al servidor (POST / PUT)
 export interface CreateContentDto {
   title: string
@@ -42,4 +49,11 @@ export interface ContentDto {
   duration: string
   url: string
   blocked: boolean // 0 = false, 1 = true
+}
+
+export interface PaginatedContentResponse {
+  data: ContentDto[]
+  total: number
+  page: number
+  limit: number
 }
