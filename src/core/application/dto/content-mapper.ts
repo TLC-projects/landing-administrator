@@ -9,7 +9,7 @@ export function contentApiToEntity(api: ContentServerResponseDto): Content {
     title: api.title,
     description: api.description,
     duration: api.duration,
-    blocked: String(api.blocked),
+    blocked: api.blocked === 1 || api.blocked === true,
     resources: api.resources ?? [],
   }
 }
@@ -27,7 +27,7 @@ export function contentToViewModel(content: Content): ContentDto {
     description: content.description,
     duration: content.duration,
     url: content.resources?.[0]?.url ?? "",
-    blocked: content.blocked === '1',
+    blocked: content.blocked,
   }
 }
 

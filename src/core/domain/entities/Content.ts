@@ -10,6 +10,6 @@ export interface Content {
     title: string
     description: string
     duration: string
-    blocked: string
+    blocked: boolean
     resources: ContentResource[]
 }

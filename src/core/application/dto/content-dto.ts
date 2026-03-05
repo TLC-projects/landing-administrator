@@ -11,7 +11,7 @@ export interface ContentServerResponseDto {
   title: string
   description: string
   duration: string
-  blocked: number // 0 | 1
+  blocked: number | boolean // 0 | 1 | true | false
   resources: ContentResourceServerResponseDto[]
 }
 
