@@ -11,7 +11,7 @@ export default async function ContentsListPage({
 
   const contentService = await getContentService();
   const contents = await contentService.getContentsBySection(Number(sectionId));
-
+  
   return (
     <Shell>
       <AppTitle
