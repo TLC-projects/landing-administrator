@@ -26,8 +26,8 @@ export class ContentService {
     this.deleteContentUseCase = new DeleteContentUseCase(contentRepository)
   }
 
-  async getContentsBySection(sectionId: number, params?: PaginationParams, search?: string): Promise<PaginatedContentResponse> {
-    const result = await this.getContentsBySectionUseCase.execute(sectionId, params, search)
+  async getContentsBySection(sectionId: number, params?: PaginationParams, search?: string, blocked?: boolean): Promise<PaginatedContentResponse> {
+    const result = await this.getContentsBySectionUseCase.execute(sectionId, params, search, blocked)
     if (!result) return { data: [], total: 0, page: params?.page ?? 1, limit: params?.limit ?? 10 }
     return result
   }

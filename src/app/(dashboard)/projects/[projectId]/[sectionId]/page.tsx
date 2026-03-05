@@ -24,10 +24,18 @@ export default async function ContentsListPage({
   );
 
   const contentService = await getContentService();
+  const blocked =
+    paramsSearch.blocked === "true"
+      ? true
+      : paramsSearch.blocked === "false"
+        ? false
+        : undefined;
+
   const result = await contentService.getContentsBySection(
     Number(sectionId),
     pagination,
     paramsSearch.search,
+    blocked,
   );
 
   const hasActiveFilters = !!(paramsSearch.search || paramsSearch.blocked);

@@ -14,7 +14,7 @@ export class ContentRepositoryImpl implements IContentRepository {
     this.httpClient = httpClient;
   }
 
-  async getAllBySectionId(sectionId: number, params?: PaginationParams, search?: string): Promise<PaginatedContentEntityResponse | null> {
+  async getAllBySectionId(sectionId: number, params?: PaginationParams, search?: string, blocked?: boolean): Promise<PaginatedContentEntityResponse | null> {
     try {
       const queryParams = new URLSearchParams()
       if (params) {
@@ -23,6 +23,9 @@ export class ContentRepositoryImpl implements IContentRepository {
       }
       if (search) {
         queryParams.set('search', search)
+      }
+      if (blocked !== undefined) {
+        queryParams.set('blocked', blocked.toString())
       }
       const query = queryParams.toString()
       const url = `${this.baseUrl}/section/${sectionId}${query ? `?${query}` : ''}`

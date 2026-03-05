@@ -6,9 +6,9 @@ import { PaginationParams } from "@core/domain/value-objects/pagination"
 export class GetContentsBySectionUseCase {
   constructor(private readonly contentRepo: IContentRepository) {}
 
-  async execute(sectionId: number, params?: PaginationParams, search?: string): Promise<PaginatedContentResponse | null> {
+  async execute(sectionId: number, params?: PaginationParams, search?: string, blocked?: boolean): Promise<PaginatedContentResponse | null> {
     try {
-      const result = await this.contentRepo.getAllBySectionId(sectionId, params, search)
+      const result = await this.contentRepo.getAllBySectionId(sectionId, params, search, blocked)
       if (!result) return null
       return {
         data: contentsToViewModel(result.data),
