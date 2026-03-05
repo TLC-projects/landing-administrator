@@ -56,15 +56,3 @@ export default async function ProjectPage({
     </Shell>
   );
 }
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ projectId: string }>;
-}) {
-  const { projectId } = await params;
-  return {
-    title: `Proyecto ${projectId} | Content Admin`,
-    description: `Gestiona las secciones del proyecto ${projectId}`,
-  };
-}

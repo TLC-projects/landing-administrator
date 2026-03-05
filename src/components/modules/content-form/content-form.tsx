@@ -14,7 +14,7 @@ import {
 import { Switch, Input, Textarea, Button } from "@/src/components/ui";
 import { ImageUpload } from "./image-upload";
 import { useContentForm } from "./hooks/use-content-form";
-import { createContent, updateContent } from "./create-content";
+import { createContent, updateContent } from "./actions/create-content";
 import type { Content, ContentFormModes } from "./types/content";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

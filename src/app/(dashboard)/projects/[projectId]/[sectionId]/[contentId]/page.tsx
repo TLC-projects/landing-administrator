@@ -1,6 +1,6 @@
 import { Shell, AppTitle } from "@/src/components/layouts";
 import { ContentForm } from "@/src/components/modules/content-form/content-form";
-import { getContent } from "@/src/components/modules/content-form/create-content";
+import { getContent } from "@/src/components/modules/content-form/actions/create-content";
 
 export default async function ContentPage({
   params,
@@ -9,7 +9,7 @@ export default async function ContentPage({
 }) {
   const { projectId, sectionId, contentId } = await params;
 
-  const content = await getContent(contentId);
+  const content = await getContent(contentId, projectId, sectionId);
 
   return (
     <Shell>

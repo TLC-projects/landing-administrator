@@ -1,15 +1,15 @@
-export interface Resources {
-    id: string;
-    url: string;
-    content_id: string
+export interface ContentResource {
+    id: number
+    url: string
+    content_id: number
 }
 
 export interface Content {
-    id: string;
-    section_id: string;
-    title: string;
-    description: string;
-    duration: string;
-    blocked: boolean;
-    resources?: Resources[]
+    id: number
+    section_id: number
+    title: string
+    description: string
+    duration: string
+    blocked: string
+    resources: ContentResource[]
 }

@@ -1,6 +1,6 @@
 import { Shell, AppTitle } from "@/src/components/layouts";
 import { ContentForm } from "@/src/components/modules/content-form/content-form";
-import { getContent } from "@/src/components/modules/content-form/create-content";
+import { getContent } from "@/src/components/modules/content-form/actions/create-content";
 
 export default async function EditContentPage({
   params,
