@@ -18,29 +18,33 @@ import { PaginatedProjectResponse } from "@core/application/dto/project-dto";
 import { useEffect, useState } from "react";
 import { PAGINATION_CONFIG } from "@/src/core/domain/value-objects/pagination";
 
+const DEFAULT_LIMIT = 10;
+const MAX_LIMIT = 20
+
+
 export const NavMain = () => {
   const [page, setPage] = useState(1);
   const [projects, setProjects] = useState<any[]>([]);
 
   const { data, loading } = dataFetcher.useQuery<PaginatedProjectResponse>(
-    withBasePath(`/api/projects?page=${page}&limit=${PAGINATION_CONFIG.SECTIONS.DEFAULT_LIMIT}`),
+    withBasePath(`/api/projects?page=${page}&limit=${DEFAULT_LIMIT}`),
   );
 
   useEffect(() => {
     if (data?.data) {
       setProjects((prev) => {
         const merged = [...prev, ...data.data];
-        return merged.slice(0, PAGINATION_CONFIG.SECTIONS.MAX_LIMIT); // 👈 máximo 30
+        return merged.slice(0, MAX_LIMIT); // 👈 máximo 20
       });
     }
   }, [data]);
 
   const hasMore =
     projects.length < (data?.total ?? 0) &&
-    projects.length < PAGINATION_CONFIG.SECTIONS.MAX_LIMIT;
+    projects.length < MAX_LIMIT;
 
   const loadMore = () => {
-    if (projects.length < PAGINATION_CONFIG.SECTIONS.MAX_LIMIT) {
+    if (projects.length < MAX_LIMIT) {
       setPage((prev) => prev + 1);
     }
   };

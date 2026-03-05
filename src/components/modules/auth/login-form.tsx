@@ -16,7 +16,6 @@ export const LoginForm = () => {
     message: "",
   });
 
-
   useEffect(() => {
     if (state.status === true) {
       router.push("/");
@@ -76,7 +75,7 @@ export const LoginForm = () => {
       </div>
 
       <Button type="submit" size="lg" className="w-full h-12">
-        {state.status === null ? "Iniciando..." : "Iniciar sesión"}
+        {state.status === null ? "Iniciar sesión" : "Iniciando..."}
       </Button>
     </form>
   );

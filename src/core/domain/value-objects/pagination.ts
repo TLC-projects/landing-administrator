@@ -1,5 +1,3 @@
-import { DEFAULT_CIPHERS } from "tls";
-
 export const PAGINATION_CONFIG = {
   PROJECTS: {
     DEFAULT_PAGE: 1,
@@ -9,7 +7,7 @@ export const PAGINATION_CONFIG = {
   SECTIONS:{
     DEFAULT_PAGE: 1,
     DEFAULT_LIMIT: 10,
-    MAX_LIMIT: 30
+    MAX_LIMIT: 20
   }
 } as const;
 
