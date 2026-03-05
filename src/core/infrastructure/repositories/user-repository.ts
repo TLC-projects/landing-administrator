@@ -14,6 +14,11 @@ export class UserRepositoryImpl implements UserRepository {
     this.httpClient = httpClient;
   }
 
+  /**
+   * Gets a user by their ID.
+   * @param {string} id - The ID of the user to get.
+   * @returns {Promise<User | null>} - A promise that resolves with the user or null if the user does not exist.
+   */
   async getUserById(id: string): Promise<User | null> {
     try {
       const response = await this.httpClient.get(`${this.baseUrl}/${id}`);

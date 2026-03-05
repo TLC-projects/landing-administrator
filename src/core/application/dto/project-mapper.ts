@@ -7,7 +7,8 @@ export class ProjectMapper {
     return new Project(
       dto.id,
       dto.name,
-      dto.description
+      dto.description,
+      dto.sections
     )
   }
 

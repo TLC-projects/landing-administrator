@@ -1,10 +1,10 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Section } from "./section-table";
 import { Button } from "@/src/components/ui";
 import { ArrowUpDown, Eye } from "lucide-react";
 import Link from "next/link";
+import { Section } from "@core/domain/entities/Section";
 
 export const SectionTableColumns = (): ColumnDef<Section>[] => [
   {
@@ -24,10 +24,10 @@ export const SectionTableColumns = (): ColumnDef<Section>[] => [
     cell: ({ row }) => <div className="font-medium text-foreground/70">{row.getValue("id")}</div>,
   },
   {
-    accessorKey: "title",
+    accessorKey: "name",
     header: "Nombre de la sección",
     cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("title")}</div>
+      <div className="font-medium lowercase">{row.getValue("name")}</div>
     ),
   },
   {
@@ -45,7 +45,7 @@ export const SectionTableColumns = (): ColumnDef<Section>[] => [
       return (
         <Button asChild variant="outline" size="sm" className="hover:bg-primary hover:text-primary-foreground transition-colors">
           <Link
-            href={`/projects/${section.projectId}/${section.id}`}
+            href={`/projects/${section.project_id}/${section.id}`}
             className="flex items-center gap-2"
           >
             <Eye className="h-4 w-4" />

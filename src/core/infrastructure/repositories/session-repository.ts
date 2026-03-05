@@ -5,7 +5,7 @@ import { CookieStorage } from "../datasources/cookie-storage/cookie-storage"
 import { decrypt, encrypt } from "@/src/lib/auth/jwt"
 
 export class SessionRepositoryImpl implements SessionRepository {
-  constructor(private cookieStorage: CookieStorage) {}
+  constructor(private cookieStorage: CookieStorage) { }
 
   private COOKIE_OPTIONS = {
     path: "/",
@@ -15,6 +15,11 @@ export class SessionRepositoryImpl implements SessionRepository {
     secure: process.env.NODE_ENV === "production"
   }
 
+  /**
+   * Creates a session for the given user and token
+   * @param {Session} session - An object containing the user ID and token
+   * @returns {Promise<void>} - A promise that resolves when the session is created
+   */
   async createSession({ userId, token }: Session): Promise<void> {
 
     const sessionEncrypted = await encrypt({ userId })
@@ -33,6 +38,10 @@ export class SessionRepositoryImpl implements SessionRepository {
     )
   }
 
+  /**
+   * Gets the current session, if any
+   * @returns {Promise<Session | null>} - A promise that resolves with the current session or null if no session is found
+   */
   async getSession(): Promise<Session | null> {
 
     const sessionCookie = await this.cookieStorage.get("auth_session")
@@ -51,11 +60,20 @@ export class SessionRepositoryImpl implements SessionRepository {
     }
   }
 
+  /**
+   * Removes the current session, if any
+   * @returns {Promise<void>} - A promise that resolves when the session is removed
+   */
   async removeSession(): Promise<void> {
     await this.cookieStorage.remove("auth_session")
     await this.cookieStorage.remove("auth_token")
   }
 
+  /**
+   * Updates the current session with the given session
+   * @param {session} session - An object containing the user ID and token
+   * @returns {Promise<void>} - A promise that resolves when the session is updated
+   */
   async updateSession(session: Session): Promise<void> {
     const current = await this.getSession()
 

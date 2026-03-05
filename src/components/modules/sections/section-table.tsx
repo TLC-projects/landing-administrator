@@ -23,13 +23,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { SectionTableColumns } from "./section-table-columns";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SectionTablePagination } from "./section-table-pagination";
-
-export type Section = {
-  id: string;
-  projectId: string;
-  title: string;
-  contentNumber: number;
-};
+import { Section } from "@/src/core/domain/entities/Section";
 
 interface SectionTableProps {
   sections: Section[];
@@ -112,7 +106,7 @@ export const SectionTable: React.FC<SectionTableProps> = ({
           className="md:max-w-7xl"
           placeholder="Filtrar por nombre de la seccion"
           onSearch={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
         />
       </div>

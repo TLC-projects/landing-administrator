@@ -17,6 +17,11 @@ export class AuthRepositoryImpl implements AuthRepository {
     this.httpClient = httpClient;
   }
 
+  /**
+   * Authenticate a user with the given email and password.
+   * @param {LoginCredentialsDto} credentials - The user credentials to authenticate.
+   * @returns {Promise<Auth | null>} - A promise that resolves with the authenticated user or null if authentication fails.
+   */
   async authenticate({
     email,
     password,
@@ -45,6 +50,11 @@ export class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  /**
+   * Authenticate a user with the given token.
+   * @param {string} token - The authentication token to use.
+   * @returns {Promise<Auth | null>} - A promise that resolves with the authenticated user or null if authentication fails.
+   */
   async authenticateWithToken(token: string): Promise<Auth | null> {
     try {
       // Make the authentication request with token
@@ -58,20 +68,26 @@ export class AuthRepositoryImpl implements AuthRepository {
       const data = response.data;
 
       // Verify that the response contains the necessary data
-      if (!data ) {
+      if (!data) {
         console.error('Invalid token response:', data);
         return null;
       }
 
       const auth = AuthMapper.toAuth(data, token);
       return auth;
-      
+
     } catch (error) {
       console.error(`Error in GET ${this.baseUrl}:`, error);
       return null;
     }
   }
 
+  /**
+   * Deauthenticate a user with the given token.
+   * This method will remove the given token from the server, effectively logging out the user.
+   * @param {string} token - The authentication token to use for deauthentication.
+   * @returns {Promise<void>} - A promise that resolves when the deauthentication is complete.
+   */
   async deauthenticate(token: string): Promise<void> {
     try {
       await this.httpClient.post(`${this.baseUrl}/logout`, { token });

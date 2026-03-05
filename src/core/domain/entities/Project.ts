@@ -1,8 +1,12 @@
+import { Section } from "./Section"
+
+
 export class Project {
   constructor(
     public readonly id: string,
     public readonly name: string,
-    public readonly description?: string
+    public readonly description?: string,
+    public readonly sections?: Section[]
   ) {}
 
   getId() {
@@ -15,5 +19,9 @@ export class Project {
 
   getDescription() {
     return this.description
+  }
+
+  getSections() {
+    return this.sections
   }
 }

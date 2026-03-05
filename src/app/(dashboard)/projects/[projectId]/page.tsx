@@ -1,30 +1,57 @@
 import { FolderOpen } from "lucide-react";
-import { Shell, AppTitle } from "@/src/components/layouts";
-import { SectionTable } from "@/src/components/modules/sections";
+import { Shell, AppTitle } from "@components/layouts";
+import { SectionTable } from "@components/modules/sections";
+import { getProjectService } from "@core/infrastructure/config/project-dependency";
+import { getSectionService } from "@core/infrastructure/config/section-dependency";
+import { PaginationParams } from "@core/domain/value-objects/pagination";
+
+interface ProjectPageProps {
+  params: Promise<{ projectId: string }>;
+  searchParams: Promise<{
+    page?: string;
+    limit?: string;
+    search?: string;
+  }>;
+}
 
 export default async function ProjectPage({
+  searchParams,
   params,
-}: {
-  params: Promise<{ projectId: string }>;
-}) {
+}: ProjectPageProps) {
   const { projectId } = await params;
 
-  // TODO: Fetch real sections data
-  const mockSections = [
-    { id: "1", projectId: projectId, title: "Sección 1", contentNumber: 3 },
-    { id: "2", projectId: projectId, title: "Sección 2", contentNumber: 5 },
-  ];
+  const projectService = await getProjectService();
+  const project = await projectService.getProjectById(projectId);
+
+  const paramsSearch = await searchParams;
+  // Parse pagination parameters from searchParams
+  const pagination = PaginationParams.forProjects(
+    paramsSearch?.page ? parseInt(paramsSearch.page) : undefined,
+    paramsSearch?.limit ? parseInt(paramsSearch.limit) : undefined
+  );
+
+  if(paramsSearch.search) console.log(paramsSearch.search);
+
+  const sectionService = await getSectionService();
+  const sections = await sectionService.getSectionsByProjectId(projectId, pagination, paramsSearch.search);
+
+  const mockSections = sections.data.map((section) => ({
+    id: section.id,
+    name: section.name,
+    project_id: section.project_id,
+    contentNumber: section.content_number ?? 0,
+  }));
 
   return (
     <Shell>
       <AppTitle
-        title={`Proyecto ${projectId}`}
+        title={`Proyecto ${project?.name}`}
         description="Selecciona una sección para gestionar su contenido."
         icon={FolderOpen}
       />
       <SectionTable
         sections={mockSections}
-        pageInfo={{ total: mockSections.length, page: 1, limit: 10 }}
+        pageInfo={{ total: sections.total, page: sections.page, limit: sections.limit }}
       />
     </Shell>
   );

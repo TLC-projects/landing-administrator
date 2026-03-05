@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { Library } from "lucide-react";
-import { Shell, AppTitle } from "@/src/components/layouts";
-import { ProjectList } from "@/src/components/modules/project";
-import { getProjectService } from "@/src/core/infrastructure/config/project-dependency";
+import { Shell, AppTitle } from "@components/layouts";
+import { ProjectList } from "@components/modules/project";
+import { getProjectService } from "@core/infrastructure/config/project-dependency";
 
 export const metadata: Metadata = {
   title: "Inicio | Content Administrator",
