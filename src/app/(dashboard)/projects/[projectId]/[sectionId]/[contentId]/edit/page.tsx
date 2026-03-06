@@ -27,7 +27,7 @@ export default async function EditContentPage({
     <Shell>
       <AppTitle
         title="Editar Contenido"
-        description={`Proyecto ${projectId} | Sección ${sectionId} | Contenido ${contentId}`}
+        description="Modifica los campos necesarios para actualizar el contenido."
       />
       
       <div className="mt-6">
