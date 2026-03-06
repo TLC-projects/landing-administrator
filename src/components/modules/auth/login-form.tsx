@@ -16,10 +16,13 @@ import { useRouter } from "next/navigation";
 import { startTransition, useEffect, useState } from "react";
 import { LoginFormValues } from "./schema/login-form-scheme";
 import { CircleCheck, Loader2, TriangleAlert, X } from "lucide-react";
+import { dataFetcher } from "@/src/lib/data-fetching";
+import { withBasePath } from "@/src/lib/with-base-path";
+import { toast } from "sonner";
 
 export const LoginForm = () => {
   const router = useRouter();
-  
+
   const [state, formAction, isLoading, reset] = useResettableActionState(
     loginAction,
     {
@@ -43,10 +46,46 @@ export const LoginForm = () => {
     });
   };
 
+  const resend = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const emailInput = document.getElementById("email") as HTMLInputElement;
+
+    if (!emailInput?.value) {
+      toast.error("Por favor ingresa tu correo primero.");
+      return;
+    }
+
+    const toastId = toast.loading("Enviando solicitud...");
+
+    try {
+      const res = await fetch(withBasePath("/api/auth/forgot-password"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: emailInput.value }),
+      });
+
+      if (!res.ok) {
+        throw new Error();
+      }
+
+      toast.success(
+        "Hemos notificado al administrador para ayudarte a recuperar tu acceso.",
+        { id: toastId },
+      );
+    } catch (error) {
+      toast.error("No se pudo enviar la solicitud. Intenta nuevamente.", {
+        id: toastId,
+      });
+    }
+  };
+
   // Redirect on successful login
   useEffect(() => {
     if (state.status === true && state.message) {
-      router.push('/');
+      router.push("/");
     }
   }, [state.status, state.message, router]);
 
@@ -83,12 +122,14 @@ export const LoginForm = () => {
         </div>
 
         <div className="flex items-center justify-end">
-          <Link
-            href="/forgot-password"
+          <Button
+            type="button"
+            variant="link"
             className="text-sm text-primary hover:underline"
+            onClick={resend}
           >
             ¿Olvidaste tu contraseña?
-          </Link>
+          </Button>
         </div>
 
         <Button
