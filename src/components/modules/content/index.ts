@@ -1,3 +1,5 @@
 export * from './content-table'
 export * from './content-columns'
 export * from './content-filter'
+export * from './content-delete-dialog'
+export * from './content-table-actions'

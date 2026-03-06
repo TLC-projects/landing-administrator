@@ -12,7 +12,7 @@ export default async function NewContentPage({
     <Shell>
       <AppTitle
         title="Crear Nuevo Contenido"
-        description={`Proyecto ${projectId} | Sección ${sectionId}`}
+        description="Completa la información del contenido que deseas agregar a esta sección."
       />
       <div className="mt-6 ">
       <ContentForm 

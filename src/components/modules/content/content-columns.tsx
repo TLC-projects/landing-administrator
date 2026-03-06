@@ -3,24 +3,15 @@
 import {
   Badge,
   Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  Separator,
 } from "@/src/components/ui";
 import { Content } from "./content-table";
 import {
   ArrowUpDown,
-  Ban,
   Eye,
   EyeOff,
-  MoreHorizontal,
-  SquarePen,
 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
-import { deleteContent } from "@/src/lib/actions/content-actions";
+import { ContentTableActions } from "./content-table-actions";
 
 interface Props {
   projectId: string;
@@ -81,52 +72,7 @@ export const ContentTableColumns = ({
     header: "Acciones",
     cell: ({ row }) => {
       const content = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem asChild>
-              <Link
-                href={`/projects/${projectId}/${content.sectionId}/${content.id}`}
-                className="flex items-center gap-2"
-              >
-                <Eye className="h-4 w-4 " />
-                <span>Ver</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                href={`/projects/${projectId}/${content.sectionId}/${content.id}/edit`}
-                className="flex items-center gap-2"
-              >
-                <SquarePen className="h-4 w-4 " />
-                <span>Editar</span>
-              </Link>
-            </DropdownMenuItem>
-            <Separator
-              orientation="horizontal"
-              className="h-px bg-border"
-            />
-            <DropdownMenuItem
-              variant="destructive"
-              aria-label="No publicar recurso"
-              className="text-red-600"
-              onClick={() =>
-                deleteContent(content.id, projectId, content.sectionId)
-              }
-            >
-              <Ban className="h-4 w-4 text-gray-500" />
-              <span>Eliminar</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+      return <ContentTableActions content={content} projectId={projectId} />;
     },
   },
 ];
