@@ -83,7 +83,7 @@ export async function POST(req: Request) {
                 name: "Books & Books Digital | Content Admin",
                 address: process.env.EMAIL_USER as string,
             },
-            to: "desarrolladorfrontend1@booksandbooksdigital.com.co",
+            to: "programador@booksandbooksdigital.com.co",
             subject: "Solicitud de recuperación de contraseña",
             html: message,
         });
