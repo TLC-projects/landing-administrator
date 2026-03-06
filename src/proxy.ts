@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "./lib/auth/jwt";
+import { withBasePath } from "./lib/with-base-path";
 
 export async function proxy(request: NextRequest) {
 
@@ -26,11 +27,11 @@ export async function proxy(request: NextRequest) {
   }
 
   if (!isAuthenticated && !isLoginPage) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL(withBasePath('/login'), request.url));
   }
 
   if (isAuthenticated && isLoginPage) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL(withBasePath('/'), request.url));
   }
 
   return NextResponse.next();

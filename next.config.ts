@@ -7,6 +7,8 @@ if (!BASE_PATH) {
 }
 
 const nextConfig: NextConfig = {
+  basePath: BASE_PATH,
+  assetPrefix: BASE_PATH,
   images: {
     remotePatterns: [
       {
