@@ -5,12 +5,8 @@ export async function POST(req: Request) {
     const { email } = await req.json();
 
     try {
-
-        console.log(email)
         const transporter = nodamailer.createTransport({
-            host: "smtp.office365.com",
-            port: 587,
-            secure: false,
+            service: "gmail",
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASSWORD,
@@ -84,10 +80,10 @@ export async function POST(req: Request) {
 
         await transporter.sendMail({
             from: {
-                name: "Books & Books Digital | Content Adminr",
+                name: "Books & Books Digital | Content Admin",
                 address: process.env.EMAIL_USER as string,
             },
-            to: "programador@booksandbooksdigital.com.co",
+            to: "desarrolladorfrontend1@booksandbooksdigital.com.co",
             subject: "Solicitud de recuperación de contraseña",
             html: message,
         });
