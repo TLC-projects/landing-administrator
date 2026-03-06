@@ -21,13 +21,13 @@ export async function createContent(formData: FormData) {
 
   try {
     const contentService = await getContentService();
-    await contentService.createContent({
+     await contentService.createContent({
       title,
       description,
       duration,
       blocked: !isVisible,
       section_id: Number(sectionId),
-      resource: image instanceof File && image.size > 0 ? image : undefined,
+      resource: image instanceof File && image.size > 0 ? image : new File([], ''),
     });
   } catch (error) {
     console.error("Error creating content:", error);
