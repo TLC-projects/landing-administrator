@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "./lib/auth/jwt";
 import { withBasePath } from "./lib/with-base-path";
+import { getStrippedPath } from "./lib/get-stripped-path";
 
 export async function proxy(request: NextRequest) {
 
-  const { pathname } = request.nextUrl;
+  // Get the current path (stripped of basePath)
+  const path = getStrippedPath(request);
 
   const sessionCookie = request.cookies.get("auth_session")?.value;
   const tokenCookie = request.cookies.get("auth_token")?.value;
 
-  const isLoginPage = pathname.startsWith("/login");
+  const isLoginPage = path.startsWith("/login");
 
   let isAuthenticated = false;
 
