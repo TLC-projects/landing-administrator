@@ -64,7 +64,7 @@ export async function generateMetadata({
 }) {
   const { sectionId } = await params;
   return {
-    title: `Contenidos - Sección ${sectionId} | Content Admin`,
+    title: `Contenidos - Sección ${sectionId} | Content Administrator`,
     description: `Lista de contenidos de la sección ${sectionId}`,
   };
 }

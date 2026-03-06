@@ -59,7 +59,7 @@ export function ContentForm({
     cancelEdit,
   } = useContentForm({ mode, initialData: content });
 
-  const charLimit = 500;
+  const charLimit = 1000;
   const charPercent = Math.min((description.length / charLimit) * 100, 100);
   const isViewMode = mode === "view" && !isEditing;
 

@@ -97,7 +97,7 @@ export const ContentTableColumns = ({
                 className="flex items-center gap-2"
               >
                 <Eye className="h-4 w-4 " />
-                <span>Ver contenido</span>
+                <span>Ver</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
@@ -106,7 +106,7 @@ export const ContentTableColumns = ({
                 className="flex items-center gap-2"
               >
                 <SquarePen className="h-4 w-4 " />
-                <span>Editar contenido</span>
+                <span>Editar</span>
               </Link>
             </DropdownMenuItem>
             <Separator

@@ -44,7 +44,7 @@ export async function generateMetadata({
 }) {
   const { contentId } = await params;
   return {
-    title: `Editar Contenido ${contentId} | Content Admin`,
+    title: `Editar Contenido ${contentId} | Content Administrator`,
     description: `Editar el contenido ${contentId}`,
   };
 }
