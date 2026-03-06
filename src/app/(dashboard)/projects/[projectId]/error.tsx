@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { AlertCircle, RefreshCw, Home } from "lucide-react";
-import { Button, Card, CardContent } from "@/components/ui";
+import { Button, Card, CardContent } from "@components/ui";;
 import Link from "next/link";
 
 export default function Error({
