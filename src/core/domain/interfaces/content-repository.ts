@@ -10,7 +10,7 @@ export interface PaginatedContentEntityResponse {
 }
 
 export interface IContentRepository {
-  getAllBySectionId(sectionId: number, params?: PaginationParams, search?: string): Promise<PaginatedContentEntityResponse | null>
+  getAllBySectionId(sectionId: number, params?: PaginationParams, search?: string, blocked?: boolean): Promise<PaginatedContentEntityResponse | null>
   getById(id: number): Promise<Content | null>
   getCountBySectionId(sectionId: number): Promise<number>
   create(data: CreateContentDto): Promise<Content | null>

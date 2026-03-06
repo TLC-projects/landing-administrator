@@ -313,7 +313,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             {/* Botón Submit TODO: enviar por API cuando se guarda o edita*/}
             <Button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || (mode === "create" && !imageFile)}
               className="gap-2 px-6"
             >
               <Save className="size-4" />

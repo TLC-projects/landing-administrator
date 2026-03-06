@@ -14,9 +14,21 @@ import {
 import { Check, ChevronsUpDown, Eye, EyeOff, Funnel } from "lucide-react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { cn } from "@/src/lib/utils";
 
-type StatusOption = "true" | "false" | null;
+type StatusOption = "visible" | "hidden" | null;
+
+const STATUS_OPTIONS = {
+  visible: {
+    label: "Visible",
+    value: false,
+    icon: Eye,
+  },
+  hidden: {
+    label: "Oculto",
+    value: true,
+    icon: EyeOff,
+  },
+};
 
 export const ContentFilter = () => {
   const router = useRouter();
@@ -25,12 +37,13 @@ export const ContentFilter = () => {
 
   const [open, setOpen] = useState(false);
 
-  // 🔹 Normalizamos correctamente el valor desde la URL
+  const blockedParam = searchParams.get("blocked");
+
   const currentBlocked: StatusOption =
-    searchParams.get("blocked") === "true"
-      ? "true"
-      : searchParams.get("blocked") === "false"
-        ? "false"
+    blockedParam === "true"
+      ? "hidden"
+      : blockedParam === "false"
+        ? "visible"
         : null;
 
   // 🔹 Estado temporal dentro del popover
@@ -44,21 +57,30 @@ export const ContentFilter = () => {
 
   const hasFilterApplied = selectedStatus !== null;
 
+  /**
+   * Aplica los filtros a la URL y cierra el popover
+   * eliminando los par metros "page" de la URL
+   */
   const handleApplyFilters = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
 
     if (selectedStatus === null) {
       params.delete("blocked");
     } else {
-      params.set("blocked", selectedStatus);
+      params.set("blocked", STATUS_OPTIONS[selectedStatus].value.toString());
     }
 
-    params.delete("page"); // reset paginación
+    params.delete("page");
 
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     setOpen(false);
   }, [selectedStatus, searchParams, pathname, router]);
 
+/**
+ * Limpia los filtros de la URL y vuelve a la p gina anterior
+ * eliminando los par metros "blocked" y "page" de la URL.
+ * Adem s, se resetea el estado del popover y se cierra.
+ */
   const cleanFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("blocked");
@@ -69,17 +91,11 @@ export const ContentFilter = () => {
     setOpen(false);
   };
 
-  const getLabel = useMemo(() => {
-    if (currentBlocked === "true") return "Visible";
-    if (currentBlocked === "false") return "Oculto";
-    return null;
-  }, [currentBlocked]);
+  const getLabel = selectedStatus
+    ? STATUS_OPTIONS[selectedStatus].label
+    : "Filtrar";
 
-  const getIcon = (value: StatusOption) => {
-    if (value === "true") return <Eye className="h-4 w-4 text-green-600" />;
-    if (value === "false") return <EyeOff className="h-4 w-4" />;
-    return <Funnel className="h-4 w-4 text-muted-foreground" />;
-  };
+  const Icon = selectedStatus ? STATUS_OPTIONS[selectedStatus].icon : Funnel;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -89,8 +105,8 @@ export const ContentFilter = () => {
           className="w-full md:w-55 h-10 justify-between"
         >
           <span className="flex items-center gap-2 text-sm">
-            {getIcon(currentBlocked)}
-            {getLabel ?? "Filtrar"}
+            <Icon className="h-4 w-4" />
+            {getLabel}
           </span>
           <ChevronsUpDown className="h-4 w-4 opacity-50" />
         </Button>
@@ -106,23 +122,23 @@ export const ContentFilter = () => {
             <CommandEmpty>No hay resultados</CommandEmpty>
 
             <CommandGroup>
-              {/* Visible */}
-              <CommandItem onSelect={() => setSelectedStatus("true")}>
-                {selectedStatus === "true" ? (
-                  <Check className="mr-2 h-4 w-4 text-primary" />
-                ) : null}
-                <Eye className="mr-2 h-4 w-4" />
-                Visible
-              </CommandItem>
+              {Object.entries(STATUS_OPTIONS).map(([key, option]) => {
+                const Icon = option.icon;
 
-              {/* Oculto */}
-              <CommandItem onSelect={() => setSelectedStatus("false")}>
-                {selectedStatus === "false" ? (
-                  <Check className="mr-2 h-4 w-4 text-primary" />
-                ) : null}
-                <EyeOff className="mr-2 h-4 w-4" />
-                Oculto
-              </CommandItem>
+                return (
+                  <CommandItem
+                    key={key}
+                    onSelect={() => setSelectedStatus(key as StatusOption)}
+                  >
+                    {selectedStatus === key && (
+                      <Check className="mr-2 h-4 w-4 text-primary" />
+                    )}
+
+                    <Icon className="mr-2 h-4 w-4" />
+                    {option.label}
+                  </CommandItem>
+                );
+              })}
             </CommandGroup>
           </Command>
         </div>
