@@ -4,6 +4,7 @@ import { SectionTable } from "@components/modules/sections";
 import { getProjectService } from "@core/infrastructure/config/project-dependency";
 import { getSectionService } from "@core/infrastructure/config/section-dependency";
 import { PaginationParams } from "@core/domain/value-objects/pagination";
+import { Metadata } from "next";
 
 interface ProjectPageProps {
   params: Promise<{ projectId: string }>;
