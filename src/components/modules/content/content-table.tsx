@@ -166,7 +166,7 @@ export const ContentTable: React.FC<ContentTableProps> = ({
               href={`/projects/${projectId}/${sectionId}/new`}
               className="flex items-center gap-2"
             >
-              <Plus /> <span>Crear contenido</span>
+              <Plus /> <span>Crear</span>
             </Link>
           </Button>
         </div>

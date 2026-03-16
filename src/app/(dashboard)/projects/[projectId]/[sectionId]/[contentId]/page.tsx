@@ -27,7 +27,7 @@ export default async function ContentPage({
     <Shell>
       <AppTitle
         title={`Contenido ${contentId}`}
-        description={`Proyecto ${projectId} | Sección ${sectionId}`}
+        description={`Visualiza la información del contenido y edítalo si necesitas realizar cambios.`}
       />
       <div className="space-y-2">
         <ContentForm projectId={projectId} sectionId={sectionId} mode="view" content={content} />
@@ -43,7 +43,7 @@ export async function generateMetadata({
 }) {
   const { sectionId, contentId } = await params;
   return {
-    title: `Contenido ${contentId} - Sección ${sectionId} | Content Admin`,
+    title: `Contenido ${contentId} - Sección ${sectionId} | Content Administrator`,
     description: `Ver detalles del contenido ${contentId}`,
   };
 }

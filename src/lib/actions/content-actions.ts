@@ -34,7 +34,6 @@ export async function createContent(formData: FormData) {
     return { error: "Error al crear el contenido" };
   }
   revalidatePath(`/projects/${projectId}/${sectionId}`);
-  redirect(`/projects/${projectId}/${sectionId}`);
 }
 
 export async function updateContent(contentId: string, formData: FormData) {
@@ -65,7 +64,6 @@ export async function updateContent(contentId: string, formData: FormData) {
   }
 
   revalidatePath(`/projects/${projectId}/${sectionId}`);
-  redirect(`/projects/${projectId}/${sectionId}`);
 }
 
 export async function deleteContent(
@@ -82,5 +80,4 @@ export async function deleteContent(
   }
 
   revalidatePath(`/projects/${projectId}/${sectionId}`);
-  redirect(`/projects/${projectId}/${sectionId}`);
 }

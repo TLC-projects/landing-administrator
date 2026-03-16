@@ -18,6 +18,8 @@ import { createContent, updateContent } from "@lib/actions/content-actions";
 import type { Content, ContentFormModes } from "./types/content";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Error from "../../../app/(dashboard)/projects/[projectId]/[sectionId]/[contentId]/error";
+import { toast } from "sonner";
 
 interface ContentFormProps {
   projectId: string;
@@ -59,36 +61,46 @@ export function ContentForm({
     cancelEdit,
   } = useContentForm({ mode, initialData: content });
 
-  const charLimit = 500;
+  const charLimit = 1000;
   const charPercent = Math.min((description.length / charLimit) * 100, 100);
   const isViewMode = mode === "view" && !isEditing;
 
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  setError(null);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
 
-  const formData = new FormData();
-  formData.append("projectId", projectId);
-  formData.append("sectionId", sectionId);
-  formData.append("title", title);
-  formData.append("duration", duration);
-  formData.append("description", description);
-  formData.append("isVisible", String(isVisible));
-  if (imageFile) formData.append("image", imageFile);
+    const formData = new FormData();
+    formData.append("projectId", projectId);
+    formData.append("sectionId", sectionId);
+    formData.append("title", title);
+    formData.append("duration", duration);
+    formData.append("description", description);
+    formData.append("isVisible", String(isVisible));
+    if (imageFile) formData.append("image", imageFile);
 
-  const isUpdate = mode === "edit" || (mode === "view" && isEditing && content?.id);
-  const result = isUpdate
-    ? await updateContent(content!.id, formData)
-    : await createContent(formData);
+    const isUpdate =
+      mode === "edit" || (mode === "view" && isEditing && content?.id);
+    const result = isUpdate
+      ? await updateContent(content!.id, formData)
+      : await createContent(formData);
 
-  if (result?.error) {
-    setError(result.error);
-    setIsSubmitting(false);
-  } else if (mode === "create") {
-    resetForm();
-  }
-};
+    if (result?.error) {
+      setError(result.error);
+      toast.error(result.error);
+      setIsSubmitting(false);
+    } else if (mode === "create") {
+      resetForm();
+    }
+
+    toast.success(
+      isUpdate
+        ? "Contenido actualizado correctamente"
+        : "Contenido creado correctamente",
+    );
+
+    router.push(`/projects/${projectId}/${sectionId}`);
+  };
 
   // URL de cancelacion/vuelta
   const cancelUrl = `/projects/${projectId}/${sectionId}`;

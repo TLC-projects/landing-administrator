@@ -35,9 +35,9 @@ export const Logout = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-primary/80 to-primary relative">
-        <div className="absolute top-10 right-10 h-32 w-32 rounded-full bg-white/30 blur-2xl" />
-        <div className="absolute bottom-20 left-10 h-40 w-40 rounded-full bg-white/30 blur-3xl" />
+      <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-sidebar to-chart-5 relative">
+        <div className="absolute top-10 right-10 h-32 w-32 rounded-full bg-chart-1/30 blur-2xl" />
+        <div className="absolute bottom-20 left-10 h-40 w-40 rounded-full bg-chart-1/30 blur-3xl" />
         <div className="w-full max-w-md p-10 text-center space-y-8 text-white bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl">
           <h1 className="text-4xl font-bold tracking-tight">Hasta Pronto!</h1>
           <p>Esperamos verte de nuevo muy pronto.</p>
@@ -49,9 +49,9 @@ export const Logout = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-primary/80 to-primary relative">
-        <div className="absolute top-10 right-10 h-32 w-32 rounded-full bg-white/30 blur-2xl" />
-        <div className="absolute bottom-20 left-10 h-40 w-40 rounded-full bg-white/30 blur-3xl" />
+      <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-sidebar to-chart-5 relative">
+        <div className="absolute top-10 right-10 h-32 w-32 rounded-full bg-chart-1/30 blur-2xl" />
+        <div className="absolute bottom-20 left-10 h-40 w-40 rounded-full bg-chart-1/30 blur-3xl" />
         <div className="w-full max-w-md p-10 text-center space-y-8 text-white bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl">
           <h1 className="text-4xl font-bold tracking-tight">{error}</h1>
           <p>Esperamos verte de nuevo muy pronto.</p>

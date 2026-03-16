@@ -27,7 +27,7 @@ export default async function EditContentPage({
     <Shell>
       <AppTitle
         title="Editar Contenido"
-        description={`Proyecto ${projectId} | Sección ${sectionId} | Contenido ${contentId}`}
+        description="Modifica los campos necesarios para actualizar el contenido."
       />
       
       <div className="mt-6">
@@ -44,7 +44,7 @@ export async function generateMetadata({
 }) {
   const { contentId } = await params;
   return {
-    title: `Editar Contenido ${contentId} | Content Admin`,
+    title: `Editar Contenido ${contentId} | Content Administrator`,
     description: `Editar el contenido ${contentId}`,
   };
 }
