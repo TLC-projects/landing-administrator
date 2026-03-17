@@ -132,18 +132,28 @@ export const ContentTable: React.FC<ContentTableProps> = ({
     return (
       <div className="flex items-center justify-center flex-col space-y-4">
         <Card className="w-full">
-          <CardContent className="flex h-48 text-center items-center justify-center flex-col space-y-4">
-            <div className="flex items-center p-4 bg-primary-500 rounded-full">
-              <FunnelX className="h-12 w-12 text-primary-foreground" />
+          <CardContent className="flex h-64 text-center items-center justify-center flex-col space-y-5">
+            <div className="flex items-center p-4 bg-muted rounded-full">
+              <Plus className="h-10 w-10 text-muted-foreground" />
             </div>
-            <div className="space-y-2">
-              <h3 className="text-lg font-medium">
-                No hay recursos disponibles
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-semibold">
+                Aún no hay contenido en esta sección
               </h3>
-              <p className="text-sm text-muted-foreground">
-                Te notificaremos cuando haya nuevos recursos disponibles.
+              <p className="text-sm text-muted-foreground max-w-sm">
+                Empieza agregando tu primer recurso. Podrás organizarlo,
+                editarlo y gestionarlo desde aquí.
               </p>
             </div>
+            <Button asChild>
+              <Link
+                href={`/projects/${projectId}/${sectionId}/new`}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Crear primer recurso</span>
+              </Link>
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -174,9 +184,15 @@ export const ContentTable: React.FC<ContentTableProps> = ({
           <Table className="px-3.5">
             <TableHeader className="bg-muted">
               {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="hover:bg-transparent border-b border-border/50">
+                <TableRow
+                  key={headerGroup.id}
+                  className="hover:bg-transparent border-b border-border/50"
+                >
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} className="font-medium text-muted-foreground text-xs uppercase tracking-wider h-12">
+                    <TableHead
+                      key={header.id}
+                      className="font-medium text-muted-foreground text-xs uppercase tracking-wider h-12"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
