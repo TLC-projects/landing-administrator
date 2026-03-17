@@ -14,6 +14,8 @@ export class Content {
     public readonly duration: string,
     private readonly _blocked: boolean,
     public readonly resources: ContentResource[],
+    public readonly objectives?: string,
+    public readonly performance?: string,
   ) {}
 
   isBlocked(): boolean {
@@ -39,4 +41,5 @@ export class Content {
   unblock(): Content {
     return new Content(this.id, this.sectionId, this.title, this.description, this.duration, false, this.resources)
   }
+  
 }

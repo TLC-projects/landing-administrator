@@ -19,6 +19,8 @@ export default async function ContentPage({
     description: result.description,
     imageUrl: result.url,
     isVisible: !result.blocked,
+    objectives: result.objectives,
+    performance: result.performance,
     projectId,
     sectionId,
   } : null;

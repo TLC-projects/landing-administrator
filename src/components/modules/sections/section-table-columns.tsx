@@ -21,7 +21,7 @@ export const SectionTableColumns = (): ColumnDef<Section>[] => [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="font-medium text-foreground/70">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="font-medium text-foreground/70 px-4">{row.getValue("id")}</div>,
   },
   {
     accessorKey: "name",

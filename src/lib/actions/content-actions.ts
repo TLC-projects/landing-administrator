@@ -1,8 +1,7 @@
 "use server";
 
+import { getContentService } from "@/src/core/infrastructure/config/content-dependency";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { getContentService } from "@core/infrastructure/config/content-dependency";
 
 
 
@@ -15,6 +14,10 @@ export async function createContent(formData: FormData) {
   const projectId = formData.get("projectId") as string;
   const sectionId = formData.get("sectionId") as string;
 
+  const objectives = formData.get("objective") as string;
+  const performances = formData.get('performances') as string;
+
+  
   if (!title || !duration || !description) {
     return { error: "Todos los campos son requeridos" };
   }
@@ -28,6 +31,8 @@ export async function createContent(formData: FormData) {
       blocked: !isVisible,
       section_id: Number(sectionId),
       resource: image instanceof File && image.size > 0 ? image : new File([], ''),
+      objectives,
+      performance: performances
     });
   } catch (error) {
     console.error("Error creating content:", error);
@@ -45,6 +50,9 @@ export async function updateContent(contentId: string, formData: FormData) {
   const projectId = formData.get("projectId") as string;
   const sectionId = formData.get("sectionId") as string;
 
+   const objectives = formData.get("objective") as string;
+  const performances = formData.get('performances') as string;
+
   if (!title || !duration || !description) {
     return { error: "Todos los campos son requeridos" };
   }
@@ -57,6 +65,8 @@ export async function updateContent(contentId: string, formData: FormData) {
       duration,
       blocked: !isVisible,
       resource: image instanceof File && image.size > 0 ? image : undefined,
+      objectives,
+      performance: performances
     });
   } catch (error) {
     console.error("Error updating content:", error);

@@ -11,6 +11,8 @@ interface FormState {
   title: string
   duration: string
   description: string
+  objective: string
+  performances: string[]
   imageFile: File | null
   imagePreview: string | null
   isVisible: boolean
@@ -22,6 +24,10 @@ type FormAction =
   | { type: "SET_TITLE"; payload: string }
   | { type: "SET_DURATION"; payload: string }
   | { type: "SET_DESCRIPTION"; payload: string }
+  | { type: "SET_OBJECTIVE"; payload: string }
+  | { type: "ADD_PERFORMANCE" }
+  | { type: "UPDATE_PERFORMANCE"; payload: { index: number; value: string } }
+  | { type: "REMOVE_PERFORMANCE"; payload: number }
   | { type: "SET_IMAGE"; payload: { file: File; preview: string } }
   | { type: "SET_VISIBILITY"; payload: boolean }
   | { type: "SET_DRAGGING"; payload: boolean }
@@ -38,12 +44,24 @@ function formReducer(state: FormState, action: FormAction): FormState {
       return { ...state, duration: action.payload }
     case "SET_DESCRIPTION":
       return { ...state, description: action.payload }
-    case "SET_IMAGE":
+    case "SET_OBJECTIVE":
+      return { ...state, objective: action.payload }
+    case "ADD_PERFORMANCE":
+      return { ...state, performances: [...state.performances, ""] }
+    case "UPDATE_PERFORMANCE":
       return {
         ...state,
-        imageFile: action.payload.file,
-        imagePreview: action.payload.preview,
+        performances: state.performances.map((item, i) =>
+          i === action.payload.index ? action.payload.value : item
+        ),
       }
+    case "REMOVE_PERFORMANCE":
+      return {
+        ...state,
+        performances: state.performances.filter((_, i) => i !== action.payload),
+      }
+    case "SET_IMAGE":
+      return { ...state, imageFile: action.payload.file, imagePreview: action.payload.preview }
     case "SET_VISIBILITY":
       return { ...state, isVisible: action.payload }
     case "SET_DRAGGING":
@@ -61,14 +79,24 @@ function formReducer(state: FormState, action: FormAction): FormState {
   }
 }
 
-function getInitialState(
-  mode: ContentFormModes,
-  initialData: Content | null
-): FormState {
+function getInitialState(mode: ContentFormModes, initialData: Content | null): FormState {
+  let performances = [""];
+
+  if (initialData?.performance) {
+    try {
+      const parsed = JSON.parse(initialData.performance);
+      performances = Array.isArray(parsed) && parsed.length > 0 ? parsed : [""];
+    } catch {
+      performances = [""];
+    }
+  }
+
   return {
     title: initialData?.title || "",
     duration: initialData?.duration || "",
     description: initialData?.description || "",
+    objective: initialData?.objectives || "",
+    performances,
     imageFile: null,
     imagePreview: initialData?.imageUrl || null,
     isVisible: initialData?.isVisible ?? true,
@@ -77,15 +105,8 @@ function getInitialState(
   }
 }
 
-export function useContentForm({
-  mode = "create",
-  initialData = null,
-}: UseContentFormProps = {}) {
-  const [state, dispatch] = useReducer(
-    formReducer,
-    getInitialState(mode, initialData)
-  )
-
+export function useContentForm({ mode = "create", initialData = null }: UseContentFormProps = {}) {
+  const [state, dispatch] = useReducer(formReducer, getInitialState(mode, initialData))
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -93,10 +114,7 @@ export function useContentForm({
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader()
       reader.onloadend = () => {
-        dispatch({
-          type: "SET_IMAGE",
-          payload: { file, preview: reader.result as string },
-        })
+        dispatch({ type: "SET_IMAGE", payload: { file, preview: reader.result as string } })
       }
       reader.readAsDataURL(file)
     }
@@ -115,15 +133,11 @@ export function useContentForm({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     dispatch({ type: "SET_DRAGGING", payload: false })
-    
     const file = e.dataTransfer.files?.[0]
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader()
       reader.onloadend = () => {
-        dispatch({
-          type: "SET_IMAGE",
-          payload: { file, preview: reader.result as string },
-        })
+        dispatch({ type: "SET_IMAGE", payload: { file, preview: reader.result as string } })
       }
       reader.readAsDataURL(file)
     }
@@ -131,40 +145,28 @@ export function useContentForm({
 
   const removeImage = () => {
     dispatch({ type: "REMOVE_IMAGE" })
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""
-    }
+    if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
   const resetForm = () => {
-    dispatch({
-      type: "RESET_FORM",
-      payload: getInitialState("create", null),
-    })
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""
-    }
+    dispatch({ type: "RESET_FORM", payload: getInitialState("create", null) })
+    if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
-  const toggleEditMode = () => {
-    dispatch({ type: "TOGGLE_EDIT_MODE" })
-  }
+  const toggleEditMode = () => dispatch({ type: "TOGGLE_EDIT_MODE" })
 
   const cancelEdit = () => {
-    dispatch({
-      type: "CANCEL_EDIT",
-      payload: getInitialState(mode, initialData),
-    })
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""
-    }
+    dispatch({ type: "CANCEL_EDIT", payload: getInitialState(mode, initialData) })
+    if (fileInputRef.current) fileInputRef.current.value = ""
   }
 
   return {
-    // State values
+    // State
     title: state.title,
     duration: state.duration,
     description: state.description,
+    objective: state.objective,
+    performances: state.performances,
     imageFile: state.imageFile,
     imagePreview: state.imagePreview,
     isVisible: state.isVisible,
@@ -172,11 +174,16 @@ export function useContentForm({
     isEditing: state.isEditing,
     fileInputRef,
 
-    // Setters (dispatch wrapped)
+    // Setters
     setTitle: (value: string) => dispatch({ type: "SET_TITLE", payload: value }),
     setDuration: (value: string) => dispatch({ type: "SET_DURATION", payload: value }),
     setDescription: (value: string) => dispatch({ type: "SET_DESCRIPTION", payload: value }),
+    setObjective: (value: string) => dispatch({ type: "SET_OBJECTIVE", payload: value }),
     setIsVisible: (value: boolean) => dispatch({ type: "SET_VISIBILITY", payload: value }),
+    addPerformance: () => dispatch({ type: "ADD_PERFORMANCE" }),
+    updatePerformance: (index: number, value: string) =>
+      dispatch({ type: "UPDATE_PERFORMANCE", payload: { index, value } }),
+    removePerformance: (index: number) => dispatch({ type: "REMOVE_PERFORMANCE", payload: index }),
 
     // Handlers
     handleImageChange,
