@@ -11,6 +11,8 @@ export function contentApiToEntity(api: ContentServerResponseDto): Content {
     api.duration,
     api.blocked === 1 || api.blocked === true,
     api.resources ?? [],
+    api.objectives,
+    api.performance
   )
 }
 
@@ -28,6 +30,8 @@ export function contentToViewModel(content: Content): ContentDto {
     duration: content.duration,
     url: content.getMainResourceUrl() ?? "", // URL del recurso principal
     blocked: content.isBlocked(),
+    objectives: content.objectives,
+    performance: content.performance
   }
 }
 
@@ -43,6 +47,8 @@ export function createContentDtoToFormData(dto: CreateContentDto): FormData {
   formData.append('duration', dto.duration)
   formData.append('blocked', String(dto.blocked))
   formData.append('section_id', String(dto.section_id))
+  formData.append('objectives', dto.objectives ?? '')
+  formData.append('performance', dto.performance ?? '')
   if (dto.resource) formData.append('resources', dto.resource)
   return formData
 }
@@ -54,5 +60,7 @@ export function updateContentDtoToFormData(dto: UpdateContentDto): FormData {
   if (dto.duration !== undefined) formData.append('duration', dto.duration)
   if (dto.blocked !== undefined) formData.append('blocked', String(dto.blocked))
   if (dto.resource) formData.append('resources', dto.resource)
+  if (dto.objectives !== undefined) formData.append('objectives', dto.objectives)
+  if (dto.performance !== undefined) formData.append('performance', dto.performance)
   return formData
 }

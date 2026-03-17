@@ -10,6 +10,9 @@ import {
   Edit,
   X,
   ChevronLeft,
+  Target,
+  ListCheck,
+  Plus,
 } from "lucide-react";
 import { Switch, Input, Textarea, Button } from "@/src/components/ui";
 import { ImageUpload } from "./image-upload";
@@ -18,7 +21,6 @@ import { createContent, updateContent } from "@lib/actions/content-actions";
 import type { Content, ContentFormModes } from "./types/content";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Error from "../../../app/(dashboard)/projects/[projectId]/[sectionId]/[contentId]/error";
 import { toast } from "sonner";
 
 interface ContentFormProps {
@@ -49,12 +51,18 @@ export function ContentForm({
     imagePreview,
     isVisible,
     setIsVisible,
+    objective,
+    setObjective,
+    performances,
     isDragging,
     isEditing,
     handleImageChange,
     handleDragOver,
     handleDragLeave,
     handleDrop,
+    updatePerformance,
+    addPerformance,
+    removePerformance,
     removeImage,
     resetForm,
     toggleEditMode,
@@ -77,6 +85,11 @@ export function ContentForm({
     formData.append("duration", duration);
     formData.append("description", description);
     formData.append("isVisible", String(isVisible));
+    formData.append("objective", objective);
+    formData.append(
+      "performances",
+      JSON.stringify(performances.filter(Boolean)),
+    );
     if (imageFile) formData.append("image", imageFile);
 
     const isUpdate =
@@ -89,9 +102,10 @@ export function ContentForm({
       setError(result.error);
       toast.error(result.error);
       setIsSubmitting(false);
-    } else if (mode === "create") {
-      resetForm();
+      return; // ← detiene la ejecución aquí
     }
+
+    if (mode === "create") resetForm();
 
     toast.success(
       isUpdate
@@ -106,7 +120,7 @@ export function ContentForm({
   const cancelUrl = `/projects/${projectId}/${sectionId}`;
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-8 lg:w-3/5">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-8 max-w-4xl">
       {/* Header co boton de accion para modo view */}
       {mode === "view" && (
         <div className="flex items-center justify-between">
@@ -227,6 +241,99 @@ export function ContentForm({
               </span>
             </div>
           )}
+        </div>
+
+        {/* Objectives */}
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="objective"
+            className="flex items-center gap-2 text-sm font-medium text-foreground"
+          >
+            <Target className="size-3.5 text-primary" />
+            Objetivo
+          </label>
+          <Textarea
+            id="objective"
+            name="objective"
+            placeholder="Describe el objetivo principal del contenido..."
+            value={objective}
+            onChange={(e) => {
+              if (e.target.value.length <= charLimit) {
+                setObjective(e.target.value);
+              }
+            }}
+            disabled={isViewMode}
+            className="resize-none border-border/60 bg-card transition-all focus-visible:border-primary focus-visible:ring-primary/20 disabled:cursor-default disabled:opacity-100"
+            rows={5}
+          />
+          {!isViewMode && (
+            <div className="flex items-center justify-between">
+              <div className="h-1 w-24 overflow-hidden rounded-full bg-border">
+                <div
+                  className="h-full rounded-full bg-primary transition-all"
+                  style={{
+                    width: `${Math.min((objective.length / charLimit) * 100, 100)}%`,
+                  }}
+                />
+              </div>
+              <span
+                className={`text-xs ${
+                  objective.length >= charLimit
+                    ? "text-destructive"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {objective.length}/{charLimit}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Perfomances */}
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="performance"
+            className="flex items-center gap-2 text-sm font-medium text-foreground"
+          >
+            <ListCheck className="size-3.5 text-primary" />
+            Lista de Desempeños
+          </label>
+          <div className="flex flex-col gap-2">
+            {performances.map((item, index) => (
+              <div key={index} className="flex gap-2">
+                <Textarea
+                  placeholder={`Desempeño ${index + 1}`}
+                  value={item}
+                  onChange={(e) => updatePerformance(index, e.target.value)}
+                  disabled={isViewMode}
+                  className="min-h-8 resize-none border-border/60 bg-card transition-all focus-visible:border-primary focus-visible:ring-primary/20 disabled:cursor-default disabled:opacity-100"
+                  rows={1}
+                />
+                {!isViewMode && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removePerformance(index)}
+                    className="shrink-0 text-muted-foreground hover:text-destructive"
+                  >
+                    <X className="size-4" />
+                  </Button>
+                )}
+              </div>
+            ))}
+            {!isViewMode && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={addPerformance}
+                className="mt-1 w-full gap-2 border-dashed"
+              >
+                <Plus className="size-4" />
+                Agregar desempeño
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Image Upload */}

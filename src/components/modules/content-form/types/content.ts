@@ -4,6 +4,8 @@ export interface Content {
     description: string;
     duration: string;
     imageUrl?: string;
+    objectives?: string;
+    performance?: string;
     isVisible: boolean;
     projectId: string;
     sectionId: string;

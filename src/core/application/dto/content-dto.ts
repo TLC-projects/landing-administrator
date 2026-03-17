@@ -13,6 +13,8 @@ export interface ContentServerResponseDto {
   duration: string
   blocked: number | boolean // 0 | 1 | true | false
   resources: ContentResourceServerResponseDto[]
+  objectives?: string
+  performance?: string
 }
 
 export interface ContentListServerResponseDto {
@@ -28,6 +30,8 @@ export interface CreateContentDto {
   description: string
   duration: string
   blocked: boolean
+  objectives?: string
+  performance?: string
   section_id: number
   resource: File
 }
@@ -38,6 +42,8 @@ export interface UpdateContentDto {
   duration?: string
   blocked?: boolean
   resource?: File
+  objectives?: string
+  performance?: string
 }
 
 // Lo que usa la UI
@@ -49,6 +55,8 @@ export interface ContentDto {
   duration: string
   url: string
   blocked: boolean // 0 = false, 1 = true
+  objectives?: string
+  performance?: string
 }
 
 export interface PaginatedContentResponse {
