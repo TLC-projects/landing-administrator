@@ -9,9 +9,9 @@ export function AppHeader() {
 
   /**
    * Generates an array of breadcrumb objects based on the current pathname.
-   * 
+   *
    * @returns {Array<{label: string; href?: string}>} An array of breadcrumb objects containing label and optional href properties.
-   * 
+   *
    * @description
    * - Starts with a "Inicio" (Home) breadcrumb pointing to "/"
    * - Splits the pathname by "/" and processes each segment
@@ -35,25 +35,20 @@ export function AppHeader() {
       currentPath += `/${segment}`;
       const isLast = index === segments.length - 1;
 
-      // Saltar el segmento "projects" ya que / es la lista de proyectos
-      if (segment === "projects") {
-        return;
-      }
-
-      // Personalizar labels según el segmento
       let label = segment;
-      
-      if (segment === "new") {
+
+      if (segment === "sections") {
+        label = "Secciones";
+      } else if (segment === "calendar") {
+        label = "Calendario";
+      } else if (segment === "new") {
         label = "Nuevo";
       } else if (segment === "edit") {
         label = "Editar";
       } else if (!isNaN(Number(segment))) {
-        // Si es un ID numérico, construir un label más descriptivo
-        if (segments[index - 1] === "projects") {
-          label = `Proyecto ${segment}`;
-        } else if (segments[index - 2] === "projects") {
+        if (segments[index - 1] === "sections") {
           label = `Sección ${segment}`;
-        } else if (segments[index - 3] === "projects") {
+        } else if (segments[index - 2] === "sections") {
           label = `Contenido ${segment}`;
         }
       }

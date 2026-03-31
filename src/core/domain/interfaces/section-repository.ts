@@ -4,6 +4,6 @@ import { PaginatedSectionResponse } from "@core/application/dto/section-dto";
 
 
 export interface SectionRepository {
-    getSectionsByProjectId(projectId: string, params: PaginationParams, search?: string): Promise<PaginatedSectionResponse>
+    getAllSections(params: PaginationParams, search?: string): Promise<PaginatedSectionResponse>
     getSectionById(id: string): Promise<Section | null>
 }

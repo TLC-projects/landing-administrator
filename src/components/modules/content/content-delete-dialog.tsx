@@ -19,14 +19,12 @@ interface ContentProps {
   isOpen: boolean;
   onClose: () => void;
   contentId: string;
-  projectId: string;
   sectionId: string;
 }
 export const ContentDeleteDialog = ({
   isOpen,
   onClose,
   contentId,
-  projectId,
   sectionId,
 }: ContentProps) => {
   const router = useRouter();
@@ -38,7 +36,7 @@ export const ContentDeleteDialog = ({
     setIsSubmitting(true);
     setError(null);
 
-    const result = await deleteContent(contentId, projectId, sectionId);
+    const result = await deleteContent(contentId,  sectionId);
 
     if (result?.error) {
       setError(result.error);
@@ -49,7 +47,7 @@ export const ContentDeleteDialog = ({
     toast.success("Contenido eliminado correctamente.");
     onClose();
 
-    router.push(`/projects/${projectId}/${sectionId}`);
+    router.push(`/sections/${sectionId}`);
   };
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

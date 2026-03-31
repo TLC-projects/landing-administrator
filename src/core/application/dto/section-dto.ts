@@ -3,7 +3,6 @@ import { Section } from "@core/domain/entities/Section";
 export interface SectionDto {
   id: string;
   name: string;
-  project_id: string;
 }
 
 export interface PaginatedSectionResponse {

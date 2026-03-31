@@ -1,5 +1,6 @@
 "use client";
 
+import { Calendar } from "@core/domain/entities/Calendar";
 import { useState } from "react";
 import {
   Button,
@@ -9,26 +10,30 @@ import {
   DropdownMenuTrigger,
   Separator,
 } from "@components/ui";
-import { Ban, Eye, MoreHorizontal, SquarePen } from "lucide-react";
-import Link from "next/link";
-import { ContentDeleteDialog } from "./content-delete-dialog";
-import { Content } from "./content-table";
+import { Ban, MoreHorizontal, SquarePen } from "lucide-react";
+import { CalendarDeleteDialog } from "./calendar-delete-dialog";
+import { CalendarEditDialog } from "../calendar-form";
 
-interface ContentTableActionsProps {
-  content: Content;
+interface CalendarTableActionsProps {
+  calendar: Calendar;
 }
 
-export const ContentTableActions = ({
-  content,
-}: ContentTableActionsProps) => {
+export const CalendarTableActions = ({
+  calendar,
+}: CalendarTableActionsProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+
   const [modals, setModals] = useState({
     edit: false,
     delete: false,
   });
 
   const handleToggleDeleteModal = () => {
-    setModals((prev) => ({ ...modals, delete: !prev.delete }));
+    setModals((prev) => ({ ...prev, delete: !prev.delete }));
+  };
+
+  const handleToggleEditModal = () => {
+    setModals((prev) => ({ ...prev, edit: !prev.edit }));
   };
   return (
     <>
@@ -40,28 +45,19 @@ export const ContentTableActions = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem asChild>
-            <Link
-              href={`/sections/${content.sectionId}/${content.id}`}
-              className="flex items-center gap-2"
-            >
-              <Eye className="h-4 w-4 " />
-              <span>Ver</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link
-              href={`/sections/${content.sectionId}/${content.id}/edit`}
-              className="flex items-center gap-2"
-            >
-              <SquarePen className="h-4 w-4 " />
-              <span>Editar</span>
-            </Link>
+          <DropdownMenuItem
+            onClick={() => {
+              handleToggleEditModal();
+              setIsDropdownOpen(false);
+            }}
+          >
+            <SquarePen className="h-4 w-4 " />
+            <span>Editar</span>
           </DropdownMenuItem>
           <Separator orientation="horizontal" className="h-px bg-border" />
           <DropdownMenuItem
             variant="destructive"
-            aria-label="Eliminar recurso"
+            aria-label="Eliminar evento"
             className="text-red-600"
             onClick={() => {
               handleToggleDeleteModal();
@@ -74,11 +70,20 @@ export const ContentTableActions = ({
         </DropdownMenuContent>
       </DropdownMenu>
       {modals.delete && (
-        <ContentDeleteDialog
+        <CalendarDeleteDialog
           isOpen={modals.delete}
           onClose={handleToggleDeleteModal}
-          contentId={content.id.toString()}
-          sectionId={content.sectionId.toString()}
+          calendarId={calendar.id}
+        />
+      )}
+      {modals.edit && (
+        <CalendarEditDialog
+          open={modals.edit}
+          onOpenChange={handleToggleEditModal}
+          entry={calendar}
+          onDeleted={() => handleToggleEditModal()}
+          onSaved={() => handleToggleEditModal()}
+          fromTable
         />
       )}
     </>

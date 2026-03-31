@@ -11,15 +11,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui";
-import { FunnelX, Plus } from "lucide-react";
+} from "@components/ui";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ContentTableColumns } from "./content-columns";
 import {
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getSortedRowModel,
   PaginationState,
   SortingState,
@@ -147,7 +146,7 @@ export const ContentTable: React.FC<ContentTableProps> = ({
             </div>
             <Button asChild>
               <Link
-                href={`/projects/${projectId}/${sectionId}/new`}
+                href={`/sections/${sectionId}/new`}
                 className="flex items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
@@ -173,7 +172,7 @@ export const ContentTable: React.FC<ContentTableProps> = ({
         <div className="flex" style={{ justifyContent: "flex-end" }}>
           <Button asChild>
             <Link
-              href={`/projects/${projectId}/${sectionId}/new`}
+              href={`/sections/${sectionId}/new`}
               className="flex items-center gap-2"
             >
               <Plus /> <span>Crear</span>

@@ -11,7 +11,6 @@ export async function createContent(formData: FormData) {
   const description = formData.get("description") as string;
   const isVisible = formData.get("isVisible") === "true";
   const image = formData.get("image") as File;
-  const projectId = formData.get("projectId") as string;
   const sectionId = formData.get("sectionId") as string;
 
   const objectives = formData.get("objective") as string;
@@ -38,7 +37,7 @@ export async function createContent(formData: FormData) {
     console.error("Error creating content:", error);
     return { error: "Error al crear el contenido" };
   }
-  revalidatePath(`/projects/${projectId}/${sectionId}`);
+  revalidatePath(`/sections/${sectionId}`);
 }
 
 export async function updateContent(contentId: string, formData: FormData) {
@@ -47,7 +46,6 @@ export async function updateContent(contentId: string, formData: FormData) {
   const description = formData.get("description") as string;
   const isVisible = formData.get("isVisible") === "true";
   const image = formData.get("image") as File;
-  const projectId = formData.get("projectId") as string;
   const sectionId = formData.get("sectionId") as string;
 
    const objectives = formData.get("objective") as string;
@@ -73,12 +71,11 @@ export async function updateContent(contentId: string, formData: FormData) {
     return { error: "Error al actualizar el contenido" };
   }
 
-  revalidatePath(`/projects/${projectId}/${sectionId}`);
+  revalidatePath(`/sections/${sectionId}`);
 }
 
 export async function deleteContent(
   contentId: string,
-  projectId: string,
   sectionId: string,
 ) {
   try {
@@ -89,5 +86,5 @@ export async function deleteContent(
     return { error: "Error al eliminar el contenido" };
   }
 
-  revalidatePath(`/projects/${projectId}/${sectionId}`);
+  revalidatePath(`/sections/${sectionId}`);
 }
