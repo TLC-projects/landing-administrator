@@ -21,7 +21,7 @@ import { useLocalState } from "./lib/use-local-state";
 
 interface CalendarEditDialogProps {
   open: boolean;
-  fromTable: boolean;
+  fromTable?: boolean;
   onOpenChange: (open: boolean) => void;
   entry: Calendar;
   onDeleted: (id: string) => void;
