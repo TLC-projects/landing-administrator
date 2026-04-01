@@ -1,7 +1,14 @@
 "use client";
 
 import { Calendar } from "@core/domain/entities/Calendar";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@components/ui";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@components/ui";
 import { CalendarTableColumns } from "./calendar-table-columns";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -15,6 +22,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { CalendarTablePagination } from "./calendar-table-pagination";
 
 interface CalendarTableProps {
   entries: Calendar[];
@@ -53,6 +61,7 @@ export function CalendarTable({ entries, pageInfo }: CalendarTableProps) {
     [searchParams, pathname],
   );
 
+  // Update the pagination state when pageInfo changes
   useEffect(() => {
     setPagination({
       pageIndex: pageInfo.page - 1, // React Table uses 0-based index
@@ -60,6 +69,7 @@ export function CalendarTable({ entries, pageInfo }: CalendarTableProps) {
     });
   }, [pageInfo.page, pageInfo.limit]);
 
+  // Update the URL when the pagination state changes
   useEffect(() => {
     const newPage = pagination.pageIndex + 1;
 
@@ -89,6 +99,7 @@ export function CalendarTable({ entries, pageInfo }: CalendarTableProps) {
       pagination,
     },
   });
+
   return (
     <div className="space-y-4">
       <div className="rounded-md border">
@@ -146,6 +157,7 @@ export function CalendarTable({ entries, pageInfo }: CalendarTableProps) {
           </TableBody>
         </Table>
       </div>
+      <CalendarTablePagination table={table} />
     </div>
   );
 }

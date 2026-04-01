@@ -46,8 +46,6 @@ export function CalendarContainer({
   initialSearch = "",
   pageInfo,
 }: CalendarContainerProps) {
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const today = new Date();
@@ -67,36 +65,64 @@ export function CalendarContainer({
 
   // --- Handlers ---
 
+  /**
+   * Goes to the previous month.
+   *
+   * If the current month is January, it will go to December of the previous year.
+   * If the current month is not January, it will simply decrease the month by 1.
+   */
   const prevMonth = () =>
     setCurrent((prev) => ({
       year: prev.month === 0 ? prev.year - 1 : prev.year,
       month: prev.month === 0 ? 11 : prev.month - 1,
     }));
 
+  /**
+   * Goes to the next month.
+   *
+   * If the current month is December, it will go to January of the next year.
+   * If the current month is not December, it will simply increase the month by 1.
+   */
   const nextMonth = () =>
     setCurrent((prev) => ({
       year: prev.month === 11 ? prev.year + 1 : prev.year,
       month: prev.month === 11 ? 0 : prev.month + 1,
     }));
 
+  /**
+   * Opens the new dialog and resets the editing entry and selected date.
+   */
   const openNewDialog = () => {
     setEditingEntry(undefined);
     setSelectedDate(undefined);
     setDialogOpen(true);
   };
 
+  /**
+   * Handles the edit entry button click by setting the editing entry to the given entry, selecting the date of the entry, and opening the dialog.
+   * @param {Calendar} entry - The entry to edit.
+   */
   const handleEditEntry = (entry: Calendar) => {
     setEditingEntry(entry);
     setSelectedDate(entry.date.slice(0, 10));
     setDialogOpen(true);
   };
 
+  /**
+   * Handles a day click in the calendar grid by selecting the date, resetting the editing entry, and opening the dialog.
+   * @param {string} dateStr - The date string of the day that was clicked.
+   */
   const handleDayClick = (dateStr: string) => {
     setSelectedDate(dateStr);
     setEditingEntry(undefined);
     setDialogOpen(true);
   };
 
+  /**
+   * Handles a saved entry by either updating an existing entry or adding a new one.
+   * Updates the entries state with the new/updated entry.
+   * @param {Calendar} entry - The saved entry.
+   */
   const handleSaved = (entry: Calendar) => {
     setEntries((prev) => {
       const exists = prev.find((e) => e.id === entry.id);
@@ -106,12 +132,18 @@ export function CalendarContainer({
     });
   };
 
+  /**
+   * Handles a deleted entry by removing it from the entries state.
+   * @param {string} id - The id of the entry to delete.
+   */
   const handleDeleted = (id: string) => {
     setEntries((prev) => prev.filter((e) => e.id !== id));
   };
 
   // --- Render ---
 
+
+  // Set the entries state when the initialEntries prop changes
   useEffect(() => {
     setEntries(initialEntries);
   }, [initialEntries]);
@@ -201,10 +233,7 @@ export function CalendarContainer({
               onEditEntry={handleEditEntry}
             />
           ) : (
-            <CalendarTable
-              entries={entries}
-              pageInfo={pageInfo}
-            />
+            <CalendarTable entries={entries} pageInfo={pageInfo} />
           )}
         </>
       )}

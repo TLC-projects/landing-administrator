@@ -47,6 +47,7 @@ export function CalendarEditDialog({
   const dateRef = useRef<HTMLInputElement>(null);
   const [blocked, setBlocked] = useLocalState(entry.blocked);
 
+  // Reset the form fields and blocked state when the dialog is opened or the entry changes
   useEffect(() => {
     if (open) {
       reset();
@@ -54,6 +55,7 @@ export function CalendarEditDialog({
     }
   }, [open, entry]);
 
+  // Show success or error messages based on the action state and call the appropriate callbacks
   useEffect(() => {
     if (!actionState.message) return;
     if (actionState.status === true) {
@@ -65,6 +67,10 @@ export function CalendarEditDialog({
     }
   }, [actionState.message, actionState.status]);
 
+  /**
+   * Submits the edit form and updates the calendar entry with the new values.
+   * After submitting, the dialog will be closed and the entry will be updated.
+   */
   const handleSubmit = () => {
     const formData = new FormData();
     formData.append("title", titleRef.current?.value ?? "");
@@ -73,6 +79,11 @@ export function CalendarEditDialog({
     startTransition(() => formAction(formData));
   };
 
+  /**
+   * Deletes the calendar entry and updates the parent component accordingly.
+   * After deleting, the dialog will be closed and the entry will be removed from the parent component.
+   * @returns {Promise<void>} A promise that resolves when the deletion is complete.
+   */
   const handleDelete = async () => {
     const result = await deleteCalendarAction(entry.id);
     if (result.status) {
@@ -113,10 +124,7 @@ export function CalendarEditDialog({
         </div>
         <DialogFooter className="gap-2">
           {fromTable ? (
-            <Button
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
               Cancelar
             </Button>
           ) : (

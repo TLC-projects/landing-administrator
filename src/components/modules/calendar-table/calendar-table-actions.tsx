@@ -28,13 +28,24 @@ export const CalendarTableActions = ({
     delete: false,
   });
 
+  /**
+   * Toggles the delete modal for the given calendar entry.
+   * If the delete modal is already open, it will be closed.
+   * If the delete modal is closed, it will be opened.
+   */
   const handleToggleDeleteModal = () => {
     setModals((prev) => ({ ...prev, delete: !prev.delete }));
   };
 
+  /**
+   * Toggles the edit modal for the given calendar entry.
+   * If the edit modal is already open, it will be closed.
+   * If the edit modal is closed, it will be opened.
+   */
   const handleToggleEditModal = () => {
     setModals((prev) => ({ ...prev, edit: !prev.edit }));
   };
+  
   return (
     <>
       <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>

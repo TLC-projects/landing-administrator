@@ -31,6 +31,7 @@ export function CalendarGrid({
   const firstDay = new Date(current.year, current.month, 1).getDay();
   const daysInMonth = new Date(current.year, current.month + 1, 0).getDate();
 
+  // Group entries by date for easier access when rendering the cells
   const entriesByDate = entries
     .filter((e) => {
       const d = new Date(e.date);

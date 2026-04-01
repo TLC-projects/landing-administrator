@@ -38,6 +38,7 @@ export function CalendarNewDialog({
   const dateRef = useRef<HTMLInputElement>(null);
   const [blocked, setBlocked] = useLocalState(false);
 
+  // Reset the form fields and blocked state when the dialog is opened
   useEffect(() => {
     if (open) {
       reset();
@@ -45,6 +46,7 @@ export function CalendarNewDialog({
     }
   }, [open]);
 
+  // Show success or error messages based on the action state and call the onSaved callback with the new entry
   useEffect(() => {
     if (!actionState.message) return;
     if (actionState.status === true) {
@@ -56,6 +58,11 @@ export function CalendarNewDialog({
     }
   }, [actionState.message, actionState.status]);
 
+  /**
+   * Submits the new event form and creates a new calendar entry with the provided values.
+   * Before submitting, it checks if the title and date fields are valid. If they are not, it reports their validity.
+   * After submitting, it starts a transition that calls formAction with the new form data.
+   */
   const handleSubmit = () => {
     if (
       !titleRef.current?.checkValidity() ||
@@ -66,6 +73,7 @@ export function CalendarNewDialog({
       return;
     }
 
+    // Create a new FormData object and append the title, date, and blocked status to it
     const formData = new FormData();
     formData.append("title", titleRef.current?.value ?? "");
     formData.append("date", dateRef.current?.value ?? defaultDate ?? "");

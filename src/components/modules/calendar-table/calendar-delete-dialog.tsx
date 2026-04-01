@@ -1,8 +1,13 @@
 "use client";
 
 import {
-  Dialog, DialogClose, DialogContent, DialogDescription,
-  DialogFooter, DialogHeader, DialogTitle,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@components/ui/dialog";
 import { Button } from "@components/ui";
 import { useState } from "react";
@@ -17,11 +22,19 @@ interface CalendarDeleteDialogProps {
 }
 
 export const CalendarDeleteDialog = ({
-  isOpen, onClose, calendarId,
+  isOpen,
+  onClose,
+  calendarId,
 }: CalendarDeleteDialogProps) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  /**
+   * Handles the deletion of a calendar.
+   * Shows a success or error message based on the result of the deletion action.
+   * Closes the dialog and refreshes the page after a successful deletion.
+   * @returns {Promise<void>} A promise that resolves when the deletion is complete.
+   */
   const handleDelete = async () => {
     setIsSubmitting(true);
     try {

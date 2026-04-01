@@ -39,6 +39,7 @@ export const CalendarFilter = () => {
 
   const blockedParam = searchParams.get("blocked");
 
+  // Determine the current blocked status based on the URL parameter
   const currentBlocked: StatusOption =
     blockedParam === "true"
       ? "blocked"
@@ -49,12 +50,16 @@ export const CalendarFilter = () => {
   const [selectedStatus, setSelectedStatus] =
     useState<StatusOption>(currentBlocked);
 
+  // Update the selectedStatus state when the URL parameter changes
   useEffect(() => {
     setSelectedStatus(currentBlocked);
   }, [currentBlocked]);
 
   const hasFilterApplied = selectedStatus !== null;
 
+  /**
+   * Apply the selected filters by updating the URL parameters and closing the popover
+   */
   const handleApplyFilters = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
 
@@ -69,6 +74,10 @@ export const CalendarFilter = () => {
     setOpen(false);
   }, [selectedStatus, searchParams, pathname, router]);
 
+  /**
+   * Clean the filters by removing the "blocked" and "page" parameters from the URL
+   * and closing the popover
+   */
   const cleanFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("blocked");
@@ -79,6 +88,7 @@ export const CalendarFilter = () => {
     setOpen(false);
   };
 
+  // Determine the label and icon to display on the filter button based on the selected status
   const getLabel = selectedStatus
     ? STATUS_OPTIONS[selectedStatus].label
     : "Filtrar";
