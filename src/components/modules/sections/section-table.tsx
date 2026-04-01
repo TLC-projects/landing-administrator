@@ -138,8 +138,8 @@ export const SectionTable: React.FC<SectionTableProps> = ({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getPaginationRowModel().rows?.length ? (
-              table.getPaginationRowModel().rows.map((row) => (
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}

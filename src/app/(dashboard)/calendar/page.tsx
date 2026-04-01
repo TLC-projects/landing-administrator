@@ -20,7 +20,7 @@ export default async function CalendarPage({
 }: CalendarPageProps) {
   const paramsSearch = await searchParams;
 
-  const pagination = PaginationParams.forContents(
+  const pagination = PaginationParams.forCalendar(
     paramsSearch?.page ? parseInt(paramsSearch.page) : undefined,
     paramsSearch?.limit ? parseInt(paramsSearch.limit) : undefined,
   );

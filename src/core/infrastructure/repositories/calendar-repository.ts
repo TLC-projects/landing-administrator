@@ -25,24 +25,31 @@ export class CalendarRepositoryImpl implements CalendarRepository {
     async getAllCalendars(params: PaginationParams, filters?: CalendarFilters): Promise<PaginatedCalendarEntityResponse | null> {
         try {
             let url = `${this.baseUrl}?page=${params.page}&limit=${params.limit}`;
+            let countUrl = `${this.baseUrl}?page=1&limit=1000`;
 
             if (filters) {
-                const params = new URLSearchParams();
-                if (filters.search) params.set("search", filters.search);
-                if (filters.blocked !== undefined) params.set("blocked", String(filters.blocked));
-                url += `&${params.toString()}`;
+                const queryParams = new URLSearchParams();
+                if (filters.search) queryParams.set("search", filters.search);
+                if (filters.blocked !== undefined) queryParams.set("blocked", String(filters.blocked));
+                const qs = queryParams.toString();
+                if (qs) {
+                    url += `&${qs}`;
+                    countUrl += `&${qs}`;
+                }
             }
 
-            const response = await this.httpClient.get(url);
-            if (!response || !Array.isArray(response.data)) {
-                return null;
-            }
+            const [response, countResponse] = await Promise.all([
+                this.httpClient.get(url),
+                this.httpClient.get(countUrl),
+            ]);
+
+            if (!response || !Array.isArray(response.data)) return null;
 
             const paginatedResponse: PaginatedCalendarEntityResponse = {
                 data: response.data,
-                page: response.page || params.page,
-                limit: response.limit || params.limit,
-                total: response.total || 0
+                page: response.page ?? params.page,
+                limit: response.limit ?? params.limit,
+                total: Array.isArray(countResponse?.data) ? countResponse.data.length : response.data.length,
             };
 
             return paginatedResponse;
