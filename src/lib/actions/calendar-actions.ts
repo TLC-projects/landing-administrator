@@ -25,23 +25,17 @@ export const createCalendarAction = async (
     if (!formData) return { status: null, message: "" };
 
     const calendar = {
-      title: formData.get("title") as string,
-      date: formData.get("date") as string,
+      title: formData.get("title")?.toString() ?? "",
+      date: formData.get("date")?.toString() ?? "",
       blocked: formData.get("blocked") === "on",
     };
 
     const service = await getCalendarService();
+    const created = await service.createNewCalendar(calendar);
 
-    // Verificar si ya existe un evento con ese título
-    const existing = await service.getAllCalendars(
-      { page: 1, limit: 1 },
-      { search: calendar.title }
-    );
-    if (existing && existing.data.some(e => e.title.toLowerCase() === calendar.title.toLowerCase())) {
+    if (!created) {
       return { message: "Ya existe un evento con ese nombre. Usa un título diferente.", status: false };
     }
-
-    const created = await service.createNewCalendar(calendar);
 
     return { message: "Evento creado exitosamente.", status: true, data: created ?? undefined };
   } catch (error) {
