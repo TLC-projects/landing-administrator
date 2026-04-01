@@ -5,16 +5,18 @@ import { Card, CardHeader, CardTitle, CardDescription, Button } from "@/src/comp
 interface ProjectCardProps {
   id: string;
   title: string;
+   href: string;
   description?: string;
+  icon? : React.ReactNode;
 }
 
-export function ProjectCard({ id, title, description }: ProjectCardProps) {
+export function ProjectCard({ id, title, description, href, icon }: ProjectCardProps) {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="flex-1">
         <div className="flex items-start gap-4 mb-4">
           <div className="rounded-lg bg-primary/10 p-3 shrink-0">
-            <Folder className="h-6 w-6 text-primary" />
+            {icon || <Folder className="h-6 w-6 text-primary" />}
           </div>
           <div className="flex-1 min-w-0">
             <CardTitle className="text-lg mb-2">{title}</CardTitle>
@@ -26,8 +28,8 @@ export function ProjectCard({ id, title, description }: ProjectCardProps) {
           </div>
         </div>
         <Button asChild variant="ghost" className="w-full justify-between mt-auto">
-          <Link href={`/projects/${id}`}>
-            Ver proyecto
+          <Link href={href}>
+            Ver módulo
             <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>

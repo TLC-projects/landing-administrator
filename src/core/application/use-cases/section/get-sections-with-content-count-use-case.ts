@@ -9,16 +9,12 @@ export class GetSectionsWithContentCountUseCase {
         private readonly contentRepository: IContentRepository
     ) {}
 
-    async execute(projectId: string, params: PaginationParams, search?: string): Promise<PaginatedSectionResponse> {
-        if (!projectId) {
-            throw new Error('El id del proyecto es requerido');
-        }
-
+    async execute(params: PaginationParams, search?: string): Promise<PaginatedSectionResponse> {
         if (params.page < 1 || params.limit < 1) {
             throw new Error('Los parámetros de paginación deben ser mayores a 0');
         }
 
-        const paginatedSections = await this.sectionRepository.getSectionsByProjectId(projectId, params, search);
+        const paginatedSections = await this.sectionRepository.getAllSections(params, search);
 
         const sectionsWithCount = await Promise.all(
             paginatedSections.data.map(async (section) => ({

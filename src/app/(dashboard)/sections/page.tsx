@@ -1,13 +1,10 @@
-import { FolderOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Shell, AppTitle } from "@components/layouts";
 import { SectionTable } from "@components/modules/sections";
-import { getProjectService } from "@core/infrastructure/config/project-dependency";
 import { getSectionService } from "@core/infrastructure/config/section-dependency";
 import { PaginationParams } from "@core/domain/value-objects/pagination";
-import { Metadata } from "next";
 
-interface ProjectPageProps {
-  params: Promise<{ projectId: string }>;
+interface SectionPageProps {
   searchParams: Promise<{
     page?: string;
     limit?: string;
@@ -15,15 +12,7 @@ interface ProjectPageProps {
   }>;
 }
 
-export default async function ProjectPage({
-  searchParams,
-  params,
-}: ProjectPageProps) {
-  const { projectId } = await params;
-
-  const projectService = await getProjectService();
-  const project = await projectService.getProjectById(projectId);
-
+export default async function SectionPage({ searchParams }: SectionPageProps) {
   const paramsSearch = await searchParams;
 
   // Parse pagination parameters from searchParams
@@ -34,7 +23,6 @@ export default async function ProjectPage({
 
   const sectionService = await getSectionService();
   const sections = await sectionService.getSectionsWithContentCount(
-    projectId,
     pagination,
     paramsSearch.search,
   );
@@ -42,16 +30,15 @@ export default async function ProjectPage({
   const sectionsWithCount = sections.data.map((section) => ({
     id: section.id,
     name: section.name,
-    project_id: section.project_id,
     contentNumber: section.content_number ?? 0,
   }));
 
   return (
     <Shell>
       <AppTitle
-        title={`Proyecto ${project?.name}`}
+        title={`Secciones`}
         description="Selecciona una sección para gestionar su contenido."
-        icon={FolderOpen}
+        icon={BookOpen}
       />
       <SectionTable
         sections={sectionsWithCount}
@@ -65,14 +52,7 @@ export default async function ProjectPage({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ projectId: string; sectionId: string }>;
-}) {
-  const { projectId } = await params;
-  return {
-    title: `Proyectos - Proyecto ${projectId} | Content Administrator`,
-    description: `Lista de contenidos del proyecto ${projectId}`,
-  };
-}
+export const metadata = {
+  title: "Secciones | Content Administrator",
+  description: "Selecciona una sección para gestionar su contenido.",
+};

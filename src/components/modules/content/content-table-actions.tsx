@@ -16,12 +16,10 @@ import { Content } from "./content-table";
 
 interface ContentTableActionsProps {
   content: Content;
-  projectId: string;
 }
 
 export const ContentTableActions = ({
   content,
-  projectId,
 }: ContentTableActionsProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [modals, setModals] = useState({
@@ -44,7 +42,7 @@ export const ContentTableActions = ({
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
             <Link
-              href={`/projects/${projectId}/${content.sectionId}/${content.id}`}
+              href={`/sections/${content.sectionId}/${content.id}`}
               className="flex items-center gap-2"
             >
               <Eye className="h-4 w-4 " />
@@ -53,7 +51,7 @@ export const ContentTableActions = ({
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link
-              href={`/projects/${projectId}/${content.sectionId}/${content.id}/edit`}
+              href={`/sections/${content.sectionId}/${content.id}/edit`}
               className="flex items-center gap-2"
             >
               <SquarePen className="h-4 w-4 " />
@@ -63,7 +61,7 @@ export const ContentTableActions = ({
           <Separator orientation="horizontal" className="h-px bg-border" />
           <DropdownMenuItem
             variant="destructive"
-            aria-label="No publicar recurso"
+            aria-label="Eliminar recurso"
             className="text-red-600"
             onClick={() => {
               handleToggleDeleteModal();
@@ -80,7 +78,6 @@ export const ContentTableActions = ({
           isOpen={modals.delete}
           onClose={handleToggleDeleteModal}
           contentId={content.id.toString()}
-          projectId={projectId}
           sectionId={content.sectionId.toString()}
         />
       )}

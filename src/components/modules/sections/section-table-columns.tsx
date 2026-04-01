@@ -45,7 +45,7 @@ export const SectionTableColumns = (): ColumnDef<Section>[] => [
       return (
         <Button asChild variant="outline" size="sm" className="hover:bg-primary hover:text-primary-foreground transition-colors">
           <Link
-            href={`/projects/${section.project_id}/${section.id}`}
+            href={`/sections/${section.id}`}
             className="flex items-center gap-2"
           >
             <Eye className="h-4 w-4" />

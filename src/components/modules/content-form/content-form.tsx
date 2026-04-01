@@ -79,7 +79,6 @@ export function ContentForm({
     setError(null);
 
     const formData = new FormData();
-    formData.append("projectId", projectId);
     formData.append("sectionId", sectionId);
     formData.append("title", title);
     formData.append("duration", duration);
@@ -113,11 +112,11 @@ export function ContentForm({
         : "Contenido creado correctamente",
     );
 
-    router.push(`/projects/${projectId}/${sectionId}`);
+    router.push(`/sections/${sectionId}`);
   };
 
   // URL de cancelacion/vuelta
-  const cancelUrl = `/projects/${projectId}/${sectionId}`;
+  const cancelUrl = `/sections/${sectionId}`;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8 max-w-4xl">

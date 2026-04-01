@@ -42,10 +42,8 @@ export class SectionRepositoryImpl implements SectionRepository {
      * @returns A promise that resolves to a paginated section response.
      * @throws Error If the request fails or if the project id is not provided.
      */
-    async getSectionsByProjectId(projectId: string, params: PaginationParams, search?: string): Promise<PaginatedSectionResponse> {
+    async getAllSections(params: PaginationParams, search?: string): Promise<PaginatedSectionResponse> {
         try {
-            if (!projectId) throw new Error('El id del proyecto es requerido');
-
             const queryParams = new URLSearchParams({
                 page: params.page.toString(),
                 limit: params.limit.toString()
@@ -55,7 +53,7 @@ export class SectionRepositoryImpl implements SectionRepository {
                 queryParams.set('search', search);
             }
 
-            const response = await this.httpClient.get(`${this.baseUrl}/project/${projectId}?${queryParams.toString()}`);
+            const response = await this.httpClient.get(`${this.baseUrl}?${queryParams.toString()}`);
 
             if (!response || !Array.isArray(response.data)) {
                 return {
