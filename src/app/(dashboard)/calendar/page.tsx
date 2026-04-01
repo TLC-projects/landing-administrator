@@ -45,8 +45,6 @@ export default async function CalendarPage({
     limit: data?.limit ?? pagination.limit,
   };
 
-  console.log("CalendarPage data:", data);
-
   return (
     <Shell>
       <AppTitle
