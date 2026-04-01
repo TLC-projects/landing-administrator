@@ -1,6 +1,5 @@
 "use client";
 
-import { Project } from "@/src/core/domain/entities/Project";
 import { ProjectCard } from "./project-card";
 import { Paginator } from "../pagination/pagination";
 
@@ -9,7 +8,7 @@ interface Module {
   title: string;
   href: string;
   description?: string;
-  icon? : React.ReactNode;
+  icon?: React.ReactNode;
 }
 
 interface ProjectListProps {
