@@ -4,14 +4,19 @@ import { getCalendarService } from "@core/infrastructure/config/calendar-depende
 import { Calendar } from "@core/domain/entities/Calendar";
 import { revalidatePath } from "next/cache";
 
-// calendar-actions.ts
-
 type CalendarActionResult = {
   message: string;
   status: boolean | null;
   data?: Calendar;
 };
 
+/**
+ * Creates a new calendar entry with the provided data.
+ * Before submitting, it checks if the title and date fields are valid. If they are not, it reports their validity.
+ * After submitting, it starts a transition that calls formAction with the new form data.
+ * @returns {Promise<CalendarActionResult>} A promise that resolves when the creation is complete.
+ * @throws {Error} If the request fails or if the calendar data is invalid.
+ */
 export const createCalendarAction = async (
   state: CalendarActionResult,
   formData: FormData | null
@@ -26,6 +31,16 @@ export const createCalendarAction = async (
     };
 
     const service = await getCalendarService();
+
+    // Verificar si ya existe un evento con ese título
+    const existing = await service.getAllCalendars(
+      { page: 1, limit: 1 },
+      { search: calendar.title }
+    );
+    if (existing && existing.data.some(e => e.title.toLowerCase() === calendar.title.toLowerCase())) {
+      return { message: "Ya existe un evento con ese nombre. Usa un título diferente.", status: false };
+    }
+
     const created = await service.createNewCalendar(calendar);
 
     return { message: "Evento creado exitosamente.", status: true, data: created ?? undefined };
@@ -35,11 +50,18 @@ export const createCalendarAction = async (
   }
 };
 
+/**
+ * Updates a calendar entry with the provided data.
+ * Before submitting, it checks if the title and date fields are valid. If they are not, it reports their validity.
+ * After submitting, it starts a transition that calls formAction with the new form data.
+ * @returns {Promise<CalendarActionResult>} A promise that resolves when the update is complete.
+ * @throws {Error} If the request fails or if the calendar data is invalid.
+ */
 export const updateCalendarAction = async (
   id: string,
   state: CalendarActionResult,
   formData: FormData
-): Promise<CalendarActionResult> => { 
+): Promise<CalendarActionResult> => {
   try {
 
     const newCalendar = {
@@ -49,17 +71,24 @@ export const updateCalendarAction = async (
     };
 
     const service = await getCalendarService();
-   const updatedCalendar =  await service.updateCalendar(id, newCalendar);
+    const updatedCalendar = await service.updateCalendar(id, newCalendar);
 
     revalidatePath("/calendar", "page");
 
-    return { message: "Evento actualizado exitosamente.", status: true, data: updatedCalendar ?? undefined }; 
+    return { message: "Evento actualizado exitosamente.", status: true, data: updatedCalendar ?? undefined };
   } catch (error) {
     console.error("Error updating calendar:", error);
     return { message: "Error al actualizar el evento.", status: false };
   }
 };
 
+/**
+ * Deletes a calendar entry by its ID.
+ * Before deleting, it checks if the calendar entry exists. If it does not, it reports its validity.
+ * After deleting, it starts a transition that calls formAction with the new form data.
+ * @returns {Promise<{message:string,status:boolean}>} A promise that resolves when the deletion is complete.
+ * @throws {Error} If the request fails or if the calendar data is invalid.
+ */
 export const deleteCalendarAction = async (id: string): Promise<{ message: string; status: boolean }> => {
   try {
     await (await getCalendarService()).deleteCalendar(id);

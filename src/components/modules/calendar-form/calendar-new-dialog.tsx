@@ -54,7 +54,8 @@ export function CalendarNewDialog({
       if (actionState.data) onSaved(actionState.data);
       onOpenChange(false);
     } else {
-      toast.error(actionState.message);
+      toast.error(actionState.message)
+      reset();
     }
   }, [actionState.message, actionState.status]);
 

@@ -13,6 +13,11 @@ export const PAGINATION_CONFIG = {
     DEFAULT_PAGE: 1,
     DEFAULT_LIMIT: 10,
     MAX_LIMIT: 50
+  },
+  CALENDAR: {
+    DEFAULT_PAGE: 1,
+    DEFAULT_LIMIT: 10,
+    MAX_LIMIT: 50
   }
 } as const;
 
@@ -56,6 +61,14 @@ export class PaginationParams {
 
     static forContents(page?: number, limit?: number): PaginationParams {
         const config = PAGINATION_CONFIG.CONTENTS;
+        const validPage = Math.max(page || config.DEFAULT_PAGE, 1);
+        const validLimit = Math.min(Math.max(limit || config.DEFAULT_LIMIT, 1), config.MAX_LIMIT);
+
+        return new PaginationParams(validPage, validLimit);
+    }
+
+    static forCalendar(page?: number, limit?: number): PaginationParams {
+        const config = PAGINATION_CONFIG.CALENDAR;
         const validPage = Math.max(page || config.DEFAULT_PAGE, 1);
         const validLimit = Math.min(Math.max(limit || config.DEFAULT_LIMIT, 1), config.MAX_LIMIT);
 

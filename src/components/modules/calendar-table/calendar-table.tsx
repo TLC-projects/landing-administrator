@@ -77,7 +77,7 @@ export function CalendarTable({ entries, pageInfo }: CalendarTableProps) {
       const newUrl = createQueryString(newPage);
       router.push(newUrl);
     }
-  }, [pagination.pageIndex]);
+  }, [pagination.pageIndex, pageInfo.page, createQueryString, router]);
 
   const columns = useMemo(() => CalendarTableColumns(), []);
 
@@ -85,7 +85,10 @@ export function CalendarTable({ entries, pageInfo }: CalendarTableProps) {
     data: entries,
     columns,
     rowCount: pageInfo.total,
-    pageCount: Math.ceil(pageInfo.total / pageInfo.limit),
+    pageCount:
+      pageInfo.total > 0 && pageInfo.limit > 0
+        ? Math.ceil(pageInfo.total / pageInfo.limit)
+        : 1,
     manualPagination: true,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
@@ -127,8 +130,8 @@ export function CalendarTable({ entries, pageInfo }: CalendarTableProps) {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getPaginationRowModel().rows?.length ? (
-              table.getPaginationRowModel().rows.map((row) => (
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
