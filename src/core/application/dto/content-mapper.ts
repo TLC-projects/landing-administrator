@@ -12,7 +12,8 @@ export function contentApiToEntity(api: ContentServerResponseDto): Content {
     api.blocked === 1 || api.blocked === true,
     api.resources ?? [],
     api.objectives,
-    api.performance
+    api.performance,
+    api.brochure_url
   )
 }
 
@@ -31,7 +32,8 @@ export function contentToViewModel(content: Content): ContentDto {
     url: content.getMainResourceUrl() ?? "", // URL del recurso principal
     blocked: content.isBlocked(),
     objectives: content.objectives,
-    performance: content.performance
+    performance: content.performance,
+    brochureUrl: content.brochureUrl // URL del brochure si existe
   }
 }
 
@@ -49,7 +51,8 @@ export function createContentDtoToFormData(dto: CreateContentDto): FormData {
   formData.append('section_id', String(dto.section_id))
   formData.append('objectives', dto.objectives ?? '')
   formData.append('performance', dto.performance ?? '')
-  if (dto.resource) formData.append('resources', dto.resource)
+  if (dto.file) formData.append('file', dto.file)
+  if (dto.brochure) formData.append('brochure', dto.brochure)
   return formData
 }
 
@@ -59,7 +62,8 @@ export function updateContentDtoToFormData(dto: UpdateContentDto): FormData {
   if (dto.description !== undefined) formData.append('description', dto.description)
   if (dto.duration !== undefined) formData.append('duration', dto.duration)
   if (dto.blocked !== undefined) formData.append('blocked', String(dto.blocked))
-  if (dto.resource) formData.append('resources', dto.resource)
+  if (dto.file) formData.append('file', dto.file)
+  if (dto.brochure) formData.append('brochure', dto.brochure)
   if (dto.objectives !== undefined) formData.append('objectives', dto.objectives)
   if (dto.performance !== undefined) formData.append('performance', dto.performance)
   return formData

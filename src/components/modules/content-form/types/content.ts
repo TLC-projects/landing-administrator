@@ -4,6 +4,7 @@ export interface Content {
     description: string;
     duration: string;
     imageUrl?: string;
+    brochureUrl?: string
     objectives?: string;
     performance?: string;
     isVisible: boolean;

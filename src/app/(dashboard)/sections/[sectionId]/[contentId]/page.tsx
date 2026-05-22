@@ -12,12 +12,15 @@ export default async function ContentPage({
   const contentService = await getContentService();
   const result = await contentService.getContentById(Number(contentId));
 
+  console.log("Fetched Content:", result);
+
   const content = result ? {
     id: result.id,
     title: result.title,
     duration: result.duration,
     description: result.description,
     imageUrl: result.url,
+    brochureUrl: result.brochureUrl,
     isVisible: !result.blocked,
     objectives: result.objectives,
     performance: result.performance,
