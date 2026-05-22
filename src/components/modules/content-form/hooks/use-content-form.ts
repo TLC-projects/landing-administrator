@@ -104,8 +104,6 @@ function getInitialState(mode: ContentFormModes, initialData: Content | null): F
     }
   }
 
-  console.log("Initial Data:", initialData?.brochureUrl, initialData?.imageUrl);
-
   return {
     title: initialData?.title || "",
     duration: initialData?.duration || "",
