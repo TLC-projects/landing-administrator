@@ -21,6 +21,7 @@ export default async function EditContentPage({
     isVisible: !result.blocked,
     objectives: result.objectives,
     performance: result.performance,
+    brochureUrl: result.brochureUrl,
     projectId,
     sectionId,
   } : null;

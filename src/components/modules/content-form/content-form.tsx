@@ -13,9 +13,11 @@ import {
   Target,
   ListCheck,
   Plus,
+  FileUp,
 } from "lucide-react";
 import { Switch, Input, Textarea, Button } from "@/src/components/ui";
 import { ImageUpload } from "./image-upload";
+import { FileUpload } from "./components/file-upload"; // Nuevo componente para brochure
 import { useContentForm } from "./hooks/use-content-form";
 import { createContent, updateContent } from "@lib/actions/content-actions";
 import type { Content, ContentFormModes } from "./types/content";
@@ -49,21 +51,29 @@ export function ContentForm({
     setDescription,
     imageFile,
     imagePreview,
+    brochureFile,
+    brochurePreview,
     isVisible,
     setIsVisible,
     objective,
     setObjective,
     performances,
     isDragging,
+    isBrochureDragging,
     isEditing,
     handleImageChange,
+    handleBrochureChange,
     handleDragOver,
     handleDragLeave,
     handleDrop,
+    handleBrochureDragOver,
+    handleBrochureDragLeave,
+    handleBrochureDrop,
     updatePerformance,
     addPerformance,
     removePerformance,
     removeImage,
+    removeBrochure,
     resetForm,
     toggleEditMode,
     cancelEdit,
@@ -78,6 +88,26 @@ export function ContentForm({
     setIsSubmitting(true);
     setError(null);
 
+    // Validar tamaño de archivos ANTES de enviar
+    const maxImageSize = 1 * 1024 * 1024; // 1MB
+    const maxBrochureSize = 8 * 1024 * 1024; // 8MB
+
+    if (imageFile && imageFile.size > maxImageSize) {
+      toast.error("Imagen muy grande", {
+        description: `La imagen debe ser menor a 1MB. Tamaño actual: ${(imageFile.size / 1024 / 1024).toFixed(2)}MB`,
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (brochureFile && brochureFile.size > maxBrochureSize) {
+      toast.error("Brochure muy grande", {
+        description: `El brochure debe ser menor a 8MB. Tamaño actual: ${(brochureFile.size / 1024 / 1024).toFixed(2)}MB`,
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("sectionId", sectionId);
     formData.append("title", title);
@@ -90,41 +120,62 @@ export function ContentForm({
       JSON.stringify(performances.filter(Boolean)),
     );
     if (imageFile) formData.append("image", imageFile);
+    if (brochureFile) formData.append("brochure", brochureFile);
 
     const isUpdate =
       mode === "edit" || (mode === "view" && isEditing && content?.id);
-    const result = isUpdate
-      ? await updateContent(content!.id, formData)
-      : await createContent(formData);
 
-    if (result?.error) {
-      setError(result.error);
-      toast.error(result.error);
+    try {
+      const result = isUpdate
+        ? await updateContent(content!.id, formData)
+        : await createContent(formData);
+
+      if (result?.error) {
+        setError(result.error);
+        toast.error(result.error);
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (mode === "create") resetForm();
+
+      toast.success(
+        isUpdate
+          ? "Contenido actualizado correctamente"
+          : "Contenido creado correctamente",
+      );
+
+      router.push(`/sections/${sectionId}`);
+    } catch (error) {
+      console.error("Error en handleSubmit:", error);
+
+      // Detectar error de tamaño del servidor
+      if (error instanceof Error && error.message.includes("Body exceeded")) {
+        toast.error("Archivos muy grandes", {
+          description:
+            "Los archivos exceden el límite permitido. Imagen: máx 1MB, Brochure: máx 1MB",
+        });
+      } else {
+        toast.error("Error al procesar", {
+          description:
+            "Hubo un problema al guardar el contenido. Intenta de nuevo.",
+        });
+      }
+
+      setError("Error al procesar el contenido");
       setIsSubmitting(false);
-      return; // ← detiene la ejecución aquí
     }
-
-    if (mode === "create") resetForm();
-
-    toast.success(
-      isUpdate
-        ? "Contenido actualizado correctamente"
-        : "Contenido creado correctamente",
-    );
-
-    router.push(`/sections/${sectionId}`);
   };
 
-  // URL de cancelacion/vuelta
   const cancelUrl = `/sections/${sectionId}`;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8 max-w-4xl">
-      {/* Header co boton de accion para modo view */}
+      {/* Header con botón de acción para modo view */}
       {mode === "view" && (
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-xl  tracking-tight">
+            <h3 className="text-xl tracking-tight">
               {isEditing ? "Editar contenido" : "Detalles del contenido"}
             </h3>
             <p className="text-sm text-muted-foreground">
@@ -288,7 +339,7 @@ export function ContentForm({
           )}
         </div>
 
-        {/* Perfomances */}
+        {/* Performances */}
         <div className="flex flex-col gap-2">
           <label
             htmlFor="performance"
@@ -348,6 +399,27 @@ export function ContentForm({
           onRemove={removeImage}
         />
 
+        {/* Brochure Upload (PDF o Imagen) */}
+        <div className="flex flex-col gap-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-foreground">
+            <FileUp className="size-3.5 text-primary" />
+            Brochure (Opcional)
+          </label>
+          <FileUpload
+            filePreview={brochurePreview}
+            file={brochureFile}
+            isDragging={isBrochureDragging}
+            isReadOnly={isViewMode}
+            onFileChange={handleBrochureChange}
+            onDragOver={handleBrochureDragOver}
+            onDragLeave={handleBrochureDragLeave}
+            onDrop={handleBrochureDrop}
+            onRemove={removeBrochure}
+            acceptedFormats=".pdf,.jpg,.jpeg,.png,.webp"
+            maxSizeMB={10}
+          />
+        </div>
+
         {/* Visibility */}
         <div className="flex items-center justify-between rounded-lg border border-border/60 bg-card px-5 py-4">
           <div className="flex items-center gap-3">
@@ -393,7 +465,6 @@ export function ContentForm({
       {/* Actions */}
       <div className="flex items-center justify-between border-t border-border/40 pt-6">
         {isViewMode ? (
-          // Modo view (solo lectura): botón "Volver" para ir a la lista
           <Button
             type="button"
             variant="ghost"
@@ -404,9 +475,7 @@ export function ContentForm({
           </Button>
         ) : (
           <>
-            {/* Botón Cancelar */}
             {mode === "view" && isEditing ? (
-              // En modo view con edición activa: "cancelar" restaura valores
               <Button
                 type="button"
                 variant="ghost"
@@ -417,7 +486,6 @@ export function ContentForm({
                 Cancelar
               </Button>
             ) : (
-              // En modos create/edit: cancelar es un link
               <Button
                 type="button"
                 variant="ghost"
@@ -428,7 +496,6 @@ export function ContentForm({
               </Button>
             )}
 
-            {/* Botón Submit TODO: enviar por API cuando se guarda o edita*/}
             <Button
               type="submit"
               disabled={isSubmitting || (mode === "create" && !imageFile)}

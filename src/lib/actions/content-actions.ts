@@ -3,35 +3,34 @@
 import { getContentService } from "@/src/core/infrastructure/config/content-dependency";
 import { revalidatePath } from "next/cache";
 
-
-
 export async function createContent(formData: FormData) {
   const title = formData.get("title") as string;
   const duration = formData.get("duration") as string;
   const description = formData.get("description") as string;
   const isVisible = formData.get("isVisible") === "true";
   const image = formData.get("image") as File;
+  const brochure = formData.get("brochure") as File; // Agregar brochure
   const sectionId = formData.get("sectionId") as string;
 
   const objectives = formData.get("objective") as string;
-  const performances = formData.get('performances') as string;
+  const performances = formData.get("performances") as string;
 
-  
   if (!title || !duration || !description) {
     return { error: "Todos los campos son requeridos" };
   }
 
   try {
     const contentService = await getContentService();
-     await contentService.createContent({
+    await contentService.createContent({
       title,
       description,
       duration,
       blocked: !isVisible,
       section_id: Number(sectionId),
-      resource: image instanceof File && image.size > 0 ? image : new File([], ''),
+      file: image instanceof File && image.size > 0 ? image : new File([], ""), // Cambiar 'resource' por 'file'
+      brochure: brochure instanceof File && brochure.size > 0 ? brochure : undefined, // Agregar brochure
       objectives,
-      performance: performances
+      performance: performances,
     });
   } catch (error) {
     console.error("Error creating content:", error);
@@ -46,10 +45,11 @@ export async function updateContent(contentId: string, formData: FormData) {
   const description = formData.get("description") as string;
   const isVisible = formData.get("isVisible") === "true";
   const image = formData.get("image") as File;
+  const brochure = formData.get("brochure") as File; // Agregar brochure
   const sectionId = formData.get("sectionId") as string;
 
-   const objectives = formData.get("objective") as string;
-  const performances = formData.get('performances') as string;
+  const objectives = formData.get("objective") as string;
+  const performances = formData.get("performances") as string;
 
   if (!title || !duration || !description) {
     return { error: "Todos los campos son requeridos" };
@@ -62,9 +62,10 @@ export async function updateContent(contentId: string, formData: FormData) {
       description,
       duration,
       blocked: !isVisible,
-      resource: image instanceof File && image.size > 0 ? image : undefined,
+      file: image instanceof File && image.size > 0 ? image : undefined, // Cambiar 'resource' por 'file'
+      brochure: brochure instanceof File && brochure.size > 0 ? brochure : undefined, // Agregar brochure
       objectives,
-      performance: performances
+      performance: performances,
     });
   } catch (error) {
     console.error("Error updating content:", error);
@@ -74,10 +75,7 @@ export async function updateContent(contentId: string, formData: FormData) {
   revalidatePath(`/sections/${sectionId}`);
 }
 
-export async function deleteContent(
-  contentId: string,
-  sectionId: string,
-) {
+export async function deleteContent(contentId: string, sectionId: string) {
   try {
     const contentService = await getContentService();
     await contentService.deleteContent(Number(contentId));

@@ -16,6 +16,7 @@ export class Content {
     public readonly resources: ContentResource[],
     public readonly objectives?: string,
     public readonly performance?: string,
+    public readonly brochureUrl?: string
   ) {}
 
   isBlocked(): boolean {
@@ -35,11 +36,11 @@ export class Content {
   }
 
   block(): Content {
-    return new Content(this.id, this.sectionId, this.title, this.description, this.duration, true, this.resources)
+    return new Content(this.id, this.sectionId, this.title, this.description, this.duration, true, this.resources, this.objectives, this.performance, this.brochureUrl)
   }
 
   unblock(): Content {
-    return new Content(this.id, this.sectionId, this.title, this.description, this.duration, false, this.resources)
+    return new Content(this.id, this.sectionId, this.title, this.description, this.duration, false, this.resources, this.objectives, this.performance, this.brochureUrl)
   }
   
 }
