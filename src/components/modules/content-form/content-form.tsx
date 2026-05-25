@@ -119,8 +119,15 @@ export function ContentForm({
       "performances",
       JSON.stringify(performances.filter(Boolean)),
     );
-    if (imageFile) formData.append("image", imageFile);
-    if (brochureFile) formData.append("brochure", brochureFile);
+
+    // SOLO agregar si el archivo existe Y tiene contenido
+    if (imageFile && imageFile.size > 0) {
+      formData.append("image", imageFile);
+    }
+
+    if (brochureFile && brochureFile.size > 0) {
+      formData.append("brochure", brochureFile);
+    }
 
     const isUpdate =
       mode === "edit" || (mode === "view" && isEditing && content?.id);
@@ -153,7 +160,7 @@ export function ContentForm({
       if (error instanceof Error && error.message.includes("Body exceeded")) {
         toast.error("Archivos muy grandes", {
           description:
-            "Los archivos exceden el límite permitido. Imagen: máx 1MB, Brochure: máx 1MB",
+            "Los archivos exceden el límite permitido. Imagen: máx 1MB, Brochure: máx 8MB",
         });
       } else {
         toast.error("Error al procesar", {

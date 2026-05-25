@@ -12,7 +12,7 @@ export interface ContentServerResponseDto {
   description: string
   duration: string
   blocked: number | boolean // 0 | 1 | true | false
-  resources: ContentResourceServerResponseDto[]
+  resources?: ContentResourceServerResponseDto[]
   objectives?: string
   performance?: string
   brochure_url?: string // URL del brochure si existe
@@ -34,7 +34,7 @@ export interface CreateContentDto {
   objectives?: string
   performance?: string
   section_id: number
-  file: File // Archivo principal (video, audio, documento, etc.)
+  resource: File // Archivo principal (video, audio, documento, etc.)
   brochure?: File // Archivo brochure (PDF, documento, etc.)
 }
 
@@ -45,7 +45,7 @@ export interface UpdateContentDto {
   blocked?: boolean
   objectives?: string
   performance?: string
-  file?: File // Archivo principal opcional para actualizar
+  resource?: File // Archivo principal opcional para actualizar
   brochure?: File // Brochure opcional para actualizar
 }
 
@@ -56,7 +56,7 @@ export interface ContentDto {
   title: string
   description: string
   duration: string
-  url: string // URL del archivo principal
+  url?: string // URL del archivo principal
   blocked: boolean // 0 = false, 1 = true
   objectives?: string
   performance?: string

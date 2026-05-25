@@ -29,7 +29,7 @@ export function contentToViewModel(content: Content): ContentDto {
     title: content.title,
     description: content.description,
     duration: content.duration,
-    url: content.getMainResourceUrl() ?? "", // URL del recurso principal
+    url: content.getMainResourceUrl() ?? undefined, // URL del recurso principal
     blocked: content.isBlocked(),
     objectives: content.objectives,
     performance: content.performance,
@@ -51,20 +51,30 @@ export function createContentDtoToFormData(dto: CreateContentDto): FormData {
   formData.append('section_id', String(dto.section_id))
   formData.append('objectives', dto.objectives ?? '')
   formData.append('performance', dto.performance ?? '')
-  if (dto.file) formData.append('file', dto.file)
+ if (dto.resource) formData.append('resources', dto.resource)
   if (dto.brochure) formData.append('brochure', dto.brochure)
   return formData
 }
 
 export function updateContentDtoToFormData(dto: UpdateContentDto): FormData {
   const formData = new FormData()
+  
   if (dto.title !== undefined) formData.append('title', dto.title)
   if (dto.description !== undefined) formData.append('description', dto.description)
   if (dto.duration !== undefined) formData.append('duration', dto.duration)
   if (dto.blocked !== undefined) formData.append('blocked', String(dto.blocked))
-  if (dto.file) formData.append('file', dto.file)
-  if (dto.brochure) formData.append('brochure', dto.brochure)
   if (dto.objectives !== undefined) formData.append('objectives', dto.objectives)
   if (dto.performance !== undefined) formData.append('performance', dto.performance)
+  
+  // SOLO agregar resources si existe Y tiene contenido
+  if (dto.resource !== undefined && dto.resource instanceof File && dto.resource.size > 0) {
+    formData.append('resources', dto.resource)
+  }
+  
+  // SOLO agregar brochure si existe Y tiene contenido
+  if (dto.brochure !== undefined && dto.brochure instanceof File && dto.brochure.size > 0) {
+    formData.append('brochure', dto.brochure)
+  }
+  
   return formData
 }

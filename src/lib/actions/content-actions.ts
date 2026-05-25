@@ -19,6 +19,11 @@ export async function createContent(formData: FormData) {
     return { error: "Todos los campos son requeridos" };
   }
 
+  // Validar que haya imagen en modo creación
+  if (!image || image.size === 0) {
+    return { error: "La imagen es requerida" };
+  }
+
   try {
     const contentService = await getContentService();
     await contentService.createContent({
@@ -27,7 +32,7 @@ export async function createContent(formData: FormData) {
       duration,
       blocked: !isVisible,
       section_id: Number(sectionId),
-      file: image instanceof File && image.size > 0 ? image : new File([], ""), // Cambiar 'resource' por 'file'
+      resource: image instanceof File && image.size > 0 ? image : new File([], ""), // Cambiar 'resource' por 'file'
       brochure: brochure instanceof File && brochure.size > 0 ? brochure : undefined, // Agregar brochure
       objectives,
       performance: performances,
@@ -45,7 +50,7 @@ export async function updateContent(contentId: string, formData: FormData) {
   const description = formData.get("description") as string;
   const isVisible = formData.get("isVisible") === "true";
   const image = formData.get("image") as File;
-  const brochure = formData.get("brochure") as File; // Agregar brochure
+  const brochure = formData.get("brochure") as File;
   const sectionId = formData.get("sectionId") as string;
 
   const objectives = formData.get("objective") as string;
@@ -57,16 +62,28 @@ export async function updateContent(contentId: string, formData: FormData) {
 
   try {
     const contentService = await getContentService();
-    await contentService.updateContent(Number(contentId), {
+
+    const updateData: any = {
       title,
       description,
       duration,
       blocked: !isVisible,
-      file: image instanceof File && image.size > 0 ? image : undefined, // Cambiar 'resource' por 'file'
-      brochure: brochure instanceof File && brochure.size > 0 ? brochure : undefined, // Agregar brochure
       objectives,
       performance: performances,
-    });
+    };
+
+    // Solo agregar resource si hay nueva imagen
+    if (image instanceof File && image.size > 0) {
+      updateData.resource = image;
+    }
+    // Si no hay nueva imagen, NO agregar el campo (mantener existente)
+
+    // Solo agregar brochure si hay nuevo brochure
+    if (brochure instanceof File && brochure.size > 0) {
+      updateData.brochure = brochure;
+    }
+    // Si no hay nuevo brochure, NO agregar el campo (mantener existente)
+    await contentService.updateContent(Number(contentId), updateData);
   } catch (error) {
     console.error("Error updating content:", error);
     return { error: "Error al actualizar el contenido" };
