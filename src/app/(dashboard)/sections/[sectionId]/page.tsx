@@ -3,6 +3,16 @@ import { ContentTable } from "@/src/components/modules/content";
 import { getContentService } from "@core/infrastructure/config/content-dependency";
 import { PaginationParams } from "@core/domain/value-objects/pagination";
 
+// TODO: Temporal fix
+type Content = {
+  id: string;
+  sectionId: string;
+  duration: string;
+  url: string;
+  title: string;
+  blocked: boolean;
+};
+
 export default async function ContentsListPage({
   params,
   searchParams,
@@ -47,7 +57,7 @@ export default async function ContentsListPage({
         description="Lista de contenidos, puedes administrar tus contenidos."
       />
       <ContentTable
-        content={result.data}
+        content={result.data as Content[]} // TODO: Temporal fix, mapear a ContentDTO
         projectId={projectId}
         sectionId={sectionId}
         hasActiveFilters={hasActiveFilters}
