@@ -110,10 +110,10 @@ function getInitialState(mode: ContentFormModes, initialData: Content | null): F
     description: initialData?.description || "",
     objective: initialData?.objectives || "",
     performances,
-    imageFile: null,
+    imageFile: null, // ✅ Correcto - siempre null al cargar
     imagePreview: initialData?.imageUrl || null,
-    brochureFile: null,
-    brochurePreview: initialData?.brochureUrl || null,
+    brochureFile: null, // ✅ Debe ser null - NO crear File desde URL
+    brochurePreview: initialData?.brochureUrl || null, // ✅ Solo la URL
     isVisible: initialData?.isVisible ?? true,
     isDragging: false,
     isBrochureDragging: false,
