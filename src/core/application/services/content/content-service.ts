@@ -1,14 +1,7 @@
-import { GetContentsBySectionUseCase } from "@core/application/use-cases/content/get-contents-by-section.use-case"
-import { GetContentByIdUseCase } from "@core/application/use-cases/content/get-content-by-id.use-case"
-import { GetContentCountBySectionUseCase } from "@core/application/use-cases/content/get-content-count-by-section.use-case"
-import { CreateContentUseCase } from "@core/application/use-cases/content/create-content.use-case"
-import { UpdateContentUseCase } from "@core/application/use-cases/content/update-content.use-case"
-import { DeleteContentUseCase } from "@core/application/use-cases/content/delete-content.use-case"
-import { ContentDto, PaginatedContentResponse, CreateContentDto, UpdateContentDto } from "@core/application/dto/content-dto"
-import { contentToViewModel } from "@core/application/dto/content-mapper"
+import { ContentDto, contentToViewModel, CreateContentDto, PaginatedContentResponse, UpdateContentDto } from "@core/application/dto/content"
+import { CreateContentUseCase, DeleteContentUseCase, GetContentByIdUseCase, GetContentCountBySectionUseCase, GetContentsBySectionUseCase, UpdateContentUseCase } from "@core/application/use-cases/content"
 import { IContentRepository } from "@core/domain/interfaces/content-repository"
 import { PaginationParams } from "@core/domain/value-objects/pagination"
-
 export class ContentService {
   private getContentsBySectionUseCase: GetContentsBySectionUseCase
   private getContentByIdUseCase: GetContentByIdUseCase

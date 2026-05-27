@@ -1,5 +1,5 @@
 
-import { Session } from "@core/domain/entities/Session"
+import { Session } from "@/src/core/domain/entities/session"
 import { SessionRepository } from "@core/domain/interfaces/session-repository"
 import { CookieStorage } from "../datasources/cookie-storage/cookie-storage"
 import { decrypt, encrypt } from "@/src/lib/auth/jwt"

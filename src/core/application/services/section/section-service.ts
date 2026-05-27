@@ -1,11 +1,9 @@
-import { SectionRepository } from "@core/domain/interfaces/section-repository";
+import { PaginatedSectionResponse } from "@core/application/dto/section";
+import { GetAllSectionsUseCase, GetSectionByIdUseCase, GetSectionsWithContentCountUseCase } from "@core/application/use-cases/section";
+import { Section } from "@core/domain/entities/section";
 import { IContentRepository } from "@core/domain/interfaces/content-repository";
-import { GetSectionByIdUseCase } from "@core/application/use-cases/section/get-section-by-id-use-case";
-import { GetAllSectionsUseCase } from "@/src/core/application/use-cases/section/get-all-sections";
-import { GetSectionsWithContentCountUseCase } from "@core/application/use-cases/section/get-sections-with-content-count-use-case";
-import { Section } from "@core/domain/entities/Section";
+import { SectionRepository } from "@core/domain/interfaces/section-repository";
 import { PaginationParams } from "@core/domain/value-objects/pagination";
-import { PaginatedSectionResponse } from "@core/application/dto/section-dto";
 
 export class SectionService {
     private getSectionByIdUseCase: GetSectionByIdUseCase;

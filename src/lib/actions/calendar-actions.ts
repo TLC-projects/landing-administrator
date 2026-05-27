@@ -1,7 +1,7 @@
 "use server";
 
 import { getCalendarService } from "@core/infrastructure/config/calendar-dependency";
-import { Calendar } from "@core/domain/entities/Calendar";
+import { Calendar } from "@/src/core/domain/entities/calendar";
 import { revalidatePath } from "next/cache";
 
 type CalendarActionResult = {

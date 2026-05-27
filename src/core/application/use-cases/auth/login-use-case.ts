@@ -1,6 +1,6 @@
+import { AuthResultDto, LoginCredentialsDto } from "@core/application/dto/auth";
 import { AuthRepository } from "@core/domain/interfaces/auth-repository";
 import { SessionRepository } from "@core/domain/interfaces/session-repository";
-import { AuthResultDto, LoginCredentialsDto } from "@core/application/dto/auth-dto";
 
 export class LoginUseCase {
     constructor(

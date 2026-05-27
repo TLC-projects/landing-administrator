@@ -1,4 +1,4 @@
-import { Content } from "@core/domain/entities/Content"
+import { Content } from "@/src/core/domain/entities/content"
 import { ContentServerResponseDto, ContentDto, CreateContentDto, UpdateContentDto } from "./content-dto"
 
 // API → Entity (Infrastructure layer)

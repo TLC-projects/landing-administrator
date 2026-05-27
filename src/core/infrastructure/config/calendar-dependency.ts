@@ -1,6 +1,6 @@
+import { CalendarService } from "@core/application/services/calendar/calendar-service";
 import { HttpClientFactory } from "@core/infrastructure/factories/http-client-factory";
 import { CalendarRepositoryImpl } from "@core/infrastructure/repositories/calendar-repository";
-import { CalendarService } from "@core/application/services/calendar/calendar-service";
 
 export async function getCalendarDependencies() {
     const httpClient = await HttpClientFactory.getInstance().createHttpClient();

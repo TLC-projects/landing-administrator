@@ -1,7 +1,7 @@
 import { SectionRepository } from "@core/domain/interfaces/section-repository";
-import { PaginatedSectionResponse, SectionServerResponseDto } from "@core/application/dto/section-dto";
+import { PaginatedSectionResponse, SectionServerResponseDto } from "@/src/core/application/dto/section/section-dto";
 import { HttpRepository } from "@core/domain/interfaces/http-repository";
-import { Section } from "@core/domain/entities/Section";
+import { Section } from "@/src/core/domain/entities/section";
 import { PaginationParams } from "@core/domain/value-objects/pagination";
 
 export class SectionRepositoryImpl implements SectionRepository {

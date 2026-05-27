@@ -1,4 +1,4 @@
-import { ContentResourceServerResponseDto } from "../../application/dto/content-dto"
+import { ContentResourceServerResponseDto } from "@core/application/dto/content/content-dto"
 
 export interface ContentResource {
   id: number
@@ -19,7 +19,7 @@ export class Content {
     public readonly objectives?: string,
     public readonly performance?: string,
     public readonly brochureUrl?: string
-  ) {}
+  ) { }
 
   isBlocked(): boolean {
     return this._blocked
@@ -33,7 +33,7 @@ export class Content {
     return this.resources.length > 0
   }
 
-   getMainResourceUrl(): string | null {
+  getMainResourceUrl(): string | null {
     // Devuelve la URL del primer recurso si existe
     return this.resources && this.resources.length > 0 ? this.resources[0].url : null
   }
@@ -45,5 +45,5 @@ export class Content {
   unblock(): Content {
     return new Content(this.id, this.sectionId, this.title, this.description, this.duration, false, this.resources, this.objectives, this.performance, this.brochureUrl)
   }
-  
+
 }

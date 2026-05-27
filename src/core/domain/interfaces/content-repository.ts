@@ -1,5 +1,5 @@
-import { Content } from "@core/domain/entities/Content"
-import { CreateContentDto, UpdateContentDto } from "@core/application/dto/content-dto"
+import { CreateContentDto, UpdateContentDto } from "@core/application/dto/content/content-dto"
+import { Content } from "@core/domain/entities/content"
 import { PaginationParams } from "@core/domain/value-objects/pagination"
 
 export interface PaginatedContentEntityResponse {

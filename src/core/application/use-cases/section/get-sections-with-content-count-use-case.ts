@@ -1,13 +1,13 @@
-import { SectionRepository } from "@core/domain/interfaces/section-repository";
+import { PaginatedSectionResponse } from "@core/application/dto/section";
 import { IContentRepository } from "@core/domain/interfaces/content-repository";
+import { SectionRepository } from "@core/domain/interfaces/section-repository";
 import { PaginationParams } from "@core/domain/value-objects/pagination";
-import { PaginatedSectionResponse } from "@core/application/dto/section-dto";
 
 export class GetSectionsWithContentCountUseCase {
     constructor(
         private readonly sectionRepository: SectionRepository,
         private readonly contentRepository: IContentRepository
-    ) {}
+    ) { }
 
     async execute(params: PaginationParams, search?: string): Promise<PaginatedSectionResponse> {
         if (params.page < 1 || params.limit < 1) {

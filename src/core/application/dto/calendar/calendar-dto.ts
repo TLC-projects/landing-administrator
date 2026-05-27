@@ -1,10 +1,10 @@
-import { Calendar } from "@core/domain/entities/Calendar";
+import { Calendar } from "@/src/core/domain/entities/calendar";
 
 export interface CalendarDto {
-    id: string;
-    title: string;
-    date: string;
-    blocked?: boolean;
+  id: string;
+  title: string;
+  date: string;
+  blocked?: boolean;
 }
 
 export interface PaginatedCalendarEntityResponse {

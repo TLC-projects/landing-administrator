@@ -1,10 +1,9 @@
+import { contentsToViewModel,PaginatedContentResponse } from "@core/application/dto/content"
 import { IContentRepository } from "@core/domain/interfaces/content-repository"
-import { PaginatedContentResponse } from "@core/application/dto/content-dto"
-import { contentsToViewModel } from "@core/application/dto/content-mapper"
 import { PaginationParams } from "@core/domain/value-objects/pagination"
 
 export class GetContentsBySectionUseCase {
-  constructor(private readonly contentRepo: IContentRepository) {}
+  constructor(private readonly contentRepo: IContentRepository) { }
 
   async execute(sectionId: number, params?: PaginationParams, search?: string, blocked?: boolean): Promise<PaginatedContentResponse | null> {
     try {

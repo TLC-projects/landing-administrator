@@ -1,6 +1,6 @@
-import { UserRepository } from "@core/domain/interfaces/user-repository";
-import { GetCurrentUserUseCase } from "@core/application/use-cases/user/get-current-user-use-case";
+import { GetCurrentUserUseCase } from "@core/application/use-cases/user";
 import { SessionRepository } from "@core/domain/interfaces/session-repository";
+import { UserRepository } from "@core/domain/interfaces/user-repository";
 
 export class UserService {
     private getCurrentUserUseCase: GetCurrentUserUseCase;

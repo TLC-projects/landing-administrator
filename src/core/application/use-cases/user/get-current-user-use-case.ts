@@ -1,4 +1,4 @@
-import { User } from "@core/domain/entities/User";
+import { User } from "@/src/core/domain/entities/user";
 import { SessionRepository } from "@core/domain/interfaces/session-repository";
 import { UserRepository } from "@core/domain/interfaces/user-repository";
 

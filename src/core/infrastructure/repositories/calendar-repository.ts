@@ -1,9 +1,8 @@
 import { CalendarRepository } from "@core/domain/interfaces/calendar-repository";
-import { CalendarDto, CalendarServerResponseDto, PaginatedCalendarEntityResponse } from "@core/application/dto/calendar-dto";
+import { CalendarDto, CalendarServerResponseDto, PaginatedCalendarEntityResponse } from "@core/application/dto/calendar/calendar-dto";
 import { HttpRepository } from "@core/domain/interfaces/http-repository";
-import { Calendar, CalendarFilters } from "@core/domain/entities/Calendar";
+import { Calendar, CalendarFilters } from "@/src/core/domain/entities/calendar";
 import { PaginationParams } from "@core/domain/value-objects/pagination";
-import { revalidatePath } from "next/cache";
 
 export class CalendarRepositoryImpl implements CalendarRepository {
     private baseUrl: string;

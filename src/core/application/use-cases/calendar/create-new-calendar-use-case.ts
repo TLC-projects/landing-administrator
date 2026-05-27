@@ -1,4 +1,4 @@
-import { Calendar } from "@core/domain/entities/Calendar";
+import { Calendar } from "@/src/core/domain/entities/calendar";
 import { CalendarRepository } from "@core/domain/interfaces/calendar-repository";
 
 export class CreateNewCalendarUseCase {

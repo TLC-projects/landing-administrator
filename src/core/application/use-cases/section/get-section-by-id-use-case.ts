@@ -1,5 +1,5 @@
 
-import { Section } from "@core/domain/entities/Section";
+import { Section } from "@/src/core/domain/entities/section";
 import { SectionRepository } from "@core/domain/interfaces/section-repository";
 
 export class GetSectionByIdUseCase {

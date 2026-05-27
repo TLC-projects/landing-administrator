@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useEffect, useRef } from "react";
-import { Calendar } from "@core/domain/entities/Calendar";
+import { Calendar } from "@/src/core/domain/entities/calendar";
 import {
   Dialog,
   DialogContent,

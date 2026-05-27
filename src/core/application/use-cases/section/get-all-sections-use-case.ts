@@ -1,6 +1,6 @@
-import { PaginationParams } from "@/src/core/domain/value-objects/pagination";
+import { PaginatedSectionResponse } from "@core/application/dto/section";
 import { SectionRepository } from "@core/domain/interfaces/section-repository";
-import { PaginatedSectionResponse } from "@core/application/dto/section-dto";
+import { PaginationParams } from "@core/domain/value-objects/pagination";
 
 export class GetAllSectionsUseCase {
     constructor(private sectionRepository: SectionRepository) { }

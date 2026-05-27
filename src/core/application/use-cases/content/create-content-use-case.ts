@@ -1,6 +1,6 @@
 import { IContentRepository } from "@core/domain/interfaces/content-repository"
-import { Content } from "@core/domain/entities/Content"
-import { CreateContentDto } from "@core/application/dto/content-dto"
+import { Content } from "@/src/core/domain/entities/content"
+import { CreateContentDto } from "@core/application/dto/content"
 
 export class CreateContentUseCase {
   constructor(private readonly contentRepo: IContentRepository) {}

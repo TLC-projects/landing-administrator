@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Plus, ChevronLeft, ChevronRight, FunnelX } from "lucide-react";
 import { Button, Card, CardContent, SearchBar } from "@/src/components/ui";
-import { Calendar } from "@core/domain/entities/Calendar";
+import { Calendar } from "@/src/core/domain/entities/calendar";
 import { CalendarFilter } from "./calendar-filter";
 import { CalendarViewToggle } from "./calendar-view-toggle";
 import { CalendarNewDialog } from "../calendar-form/calendar-new-dialog";

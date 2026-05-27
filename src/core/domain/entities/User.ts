@@ -4,7 +4,7 @@ export class User {
     public readonly id: string,
     public readonly fullName: string,
     public readonly email: string
-  ) {}
+  ) { }
 
   getId() {
     return this.id;

@@ -1,6 +1,6 @@
-import { Section } from "@core/domain/entities/Section";
+import { PaginatedSectionResponse } from "@core/application/dto/section";
+import { Section } from "@core/domain/entities/section";
 import { PaginationParams } from "@core/domain/value-objects/pagination";
-import { PaginatedSectionResponse } from "@core/application/dto/section-dto";
 
 
 export interface SectionRepository {

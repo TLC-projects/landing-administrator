@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar } from "@core/domain/entities/Calendar";
+import { Calendar } from "@/src/core/domain/entities/calendar";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge, Button } from "@components/ui";
 import { ArrowUpDown, Eye, EyeOff, Pencil, Trash2 } from "lucide-react";

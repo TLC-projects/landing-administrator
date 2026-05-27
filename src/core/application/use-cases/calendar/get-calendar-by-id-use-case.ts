@@ -1,8 +1,8 @@
+import { Calendar } from "@/src/core/domain/entities/calendar";
 import { CalendarRepository } from "@core/domain/interfaces/calendar-repository";
-import { Calendar } from "@/src/core/domain/entities/Calendar";
 
 export class GetCalendarByIdUseCase {
-    constructor(private readonly calendarRepo: CalendarRepository) {}
+    constructor(private readonly calendarRepo: CalendarRepository) { }
 
     async execute(id: string): Promise<Calendar | null> {
         try {

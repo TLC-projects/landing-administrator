@@ -1,4 +1,4 @@
-import { Section } from "@core/domain/entities/Section";
+import { Section } from "@/src/core/domain/entities/section";
 
 export interface SectionDto {
   id: string;

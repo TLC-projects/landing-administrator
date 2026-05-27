@@ -1,11 +1,11 @@
+import { ContentService } from "@core/application/services/content/content-service";
 import { HttpClientFactory } from "@core/infrastructure/factories/http-client-factory";
 import { ContentRepositoryImpl } from "@core/infrastructure/repositories/content-repository";
-import { ContentService } from "@core/application/services/content/content-service";
 
 export async function getContentDependencies() {
-    const httpClient = await HttpClientFactory.getInstance().createHttpClient();
-    const contentRepository = new ContentRepositoryImpl(httpClient);
-    return new ContentService(contentRepository);
+  const httpClient = await HttpClientFactory.getInstance().createHttpClient();
+  const contentRepository = new ContentRepositoryImpl(httpClient);
+  return new ContentService(contentRepository);
 }
 
 // Singleton instancia de ContentService

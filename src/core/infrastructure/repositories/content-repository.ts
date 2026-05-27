@@ -1,7 +1,7 @@
-import { Content } from "@core/domain/entities/Content"
+import { Content } from "@/src/core/domain/entities/content"
 import { IContentRepository, PaginatedContentEntityResponse } from "@core/domain/interfaces/content-repository"
-import { ContentListServerResponseDto, ContentServerResponseDto, CreateContentDto, UpdateContentDto } from "@core/application/dto/content-dto"
-import { contentApiToEntity, contentsApiToEntity, createContentDtoToFormData, updateContentDtoToFormData } from "@core/application/dto/content-mapper"
+import { ContentListServerResponseDto, ContentServerResponseDto, CreateContentDto, UpdateContentDto } from "@core/application/dto/content/content-dto"
+import { contentApiToEntity, contentsApiToEntity, createContentDtoToFormData, updateContentDtoToFormData } from "@core/application/dto/content/content-mapper"
 import { HttpRepository } from "@core/domain/interfaces/http-repository"
 import { PaginationParams } from "@core/domain/value-objects/pagination"
 

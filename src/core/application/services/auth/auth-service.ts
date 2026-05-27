@@ -1,10 +1,7 @@
+import { AuthResultDto, LoginCredentialsDto } from "@core/application/dto/auth";
+import { LoginUseCase, LoginWithTokenUseCase, LogoutUseCase } from "@core/application/use-cases/auth";
 import { AuthRepository } from "@core/domain/interfaces/auth-repository";
 import { SessionRepository } from "@core/domain/interfaces/session-repository";
-import { LoginUseCase } from "@core/application/use-cases/auth/login-use-case";
-import { LogoutUseCase } from "@core/application/use-cases/auth/logout-use-case";
-import { AuthResultDto, LoginCredentialsDto } from "@core/application/dto/auth-dto";
-import { LoginWithTokenUseCase } from "@core/application/use-cases/auth/login-with-token-use-case";
-
 export class AuthService {
   private loginUseCase: LoginUseCase;
   private loginWithTokenUseCase: LoginWithTokenUseCase;

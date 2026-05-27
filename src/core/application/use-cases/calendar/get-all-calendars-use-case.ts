@@ -1,7 +1,7 @@
-import { PaginationParams } from "@core/domain/value-objects/pagination";
+import { PaginatedCalendarEntityResponse } from "@core/application/dto/calendar";
+import { CalendarFilters } from "@/src/core/domain/entities/calendar";
 import { CalendarRepository } from "@core/domain/interfaces/calendar-repository";
-import { PaginatedCalendarEntityResponse } from "@core/application/dto/calendar-dto";
-import { CalendarFilters } from "@/src/core/domain/entities/Calendar";
+import { PaginationParams } from "@core/domain/value-objects/pagination";
 
 export class GetAllCalendarsUseCase {
     constructor(private readonly calendarRepository: CalendarRepository) { }

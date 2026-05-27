@@ -1,5 +1,5 @@
-import { Auth } from "@core/domain/entities/Auth";
-import { AuthResultDto, AuthUserDto } from "./auth-dto";
+import { Auth } from "@/src/core/domain/entities/auth";
+import { AuthResultDto, AuthUserDto } from "./auth-response-dto";
 
 export class AuthMapper {
 

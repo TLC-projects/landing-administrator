@@ -6,26 +6,26 @@ import { BasicFetchClient } from "../datasources/fetch/fetch-basic";
 import { SessionRepositoryImpl } from "../repositories/session-repository";
 
 export enum DataSourceType {
-    HTTP = 'http',
-    BASIC_HTTP = 'basic_http'
+  HTTP = 'http',
+  BASIC_HTTP = 'basic_http'
 }
 
 export class HttpClientFactory {
-    private static instance: HttpClientFactory;
-    private baseApiUrl: string;
+  private static instance: HttpClientFactory;
+  private baseApiUrl: string;
 
-    private constructor(baseApiUrl: string) {
-        this.baseApiUrl = baseApiUrl;
+  private constructor(baseApiUrl: string) {
+    this.baseApiUrl = baseApiUrl;
+  }
+
+  public static getInstance(): HttpClientFactory {
+    if (!HttpClientFactory.instance) {
+      HttpClientFactory.instance = new HttpClientFactory(process.env.API_BASE_URL || 'https://demos.booksandbooksdigital.com.co/content-manager/back/api');
     }
+    return HttpClientFactory.instance;
+  }
 
-    public static getInstance() : HttpClientFactory {
-        if (!HttpClientFactory.instance) {
-            HttpClientFactory.instance = new HttpClientFactory(process.env.API_BASE_URL || 'https://demos.booksandbooksdigital.com.co/content-manager/back/api');
-        }
-        return HttpClientFactory.instance;
-    }
-
-     public async createHttpClient<T = any>(type: DataSourceType = DataSourceType.HTTP): Promise<HttpRepository<T>> {
+  public async createHttpClient<T = any>(type: DataSourceType = DataSourceType.HTTP): Promise<HttpRepository<T>> {
     switch (type) {
       case DataSourceType.HTTP: {
         const sessionRespository = new SessionRepositoryImpl(new CookieStorage());

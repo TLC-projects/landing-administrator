@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar } from "@core/domain/entities/Calendar";
+import { Calendar } from "@/src/core/domain/entities/calendar";
 import { useState } from "react";
 import {
   Button,
