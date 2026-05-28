@@ -1,46 +1,64 @@
-"use server";
+'use server';
 
-import { getCalendarService } from "@core/infrastructure/config/calendar-dependency";
-import { Calendar } from "@/src/core/domain/entities/calendar";
-import { revalidatePath } from "next/cache";
+import { revalidatePath } from 'next/cache';
+import { getCalendarService } from '@core/infrastructure/config/calendar-dependency';
 
-type CalendarActionResult = {
-  message: string;
-  status: boolean | null;
-  data?: Calendar;
-};
+import { Calendar } from '@/src/core/domain/entities/calendar';
+
+import { AppError, HttpError } from '../errors';
+
+import { ActionResult } from './types/types';
 
 /**
  * Creates a new calendar entry with the provided data.
  * Before submitting, it checks if the title and date fields are valid. If they are not, it reports their validity.
  * After submitting, it starts a transition that calls formAction with the new form data.
- * @returns {Promise<CalendarActionResult>} A promise that resolves when the creation is complete.
- * @throws {Error} If the request fails or if the calendar data is invalid.
+ *
+ * @return {Promise<ActionResult>} A promise that resolves when the creation is complete.
  */
 export const createCalendarAction = async (
-  state: CalendarActionResult,
-  formData: FormData | null
-): Promise<CalendarActionResult> => {
+  state: { message: string; status: null | boolean },
+  formData: FormData
+): Promise<ActionResult<Calendar | null>> => {
   try {
-    if (!formData) return { status: null, message: "" };
-
+    // Create a new calendar object with the title, date, and blocked status from the form data
     const calendar = {
-      title: formData.get("title")?.toString() ?? "",
-      date: formData.get("date")?.toString() ?? "",
-      blocked: formData.get("blocked") === "on",
+      title: formData.get('title')?.toString() ?? '',
+      date: formData.get('date')?.toString() ?? '',
+      blocked: formData.get('blocked') === 'on'
     };
 
+    // Get the calendar service and call the createNewCalendar method with the new calendar object. If the creation is successful, it returns a success message and status.
+    // If the creation fails, it returns an error message and status.
     const service = await getCalendarService();
     const created = await service.createNewCalendar(calendar);
 
     if (!created) {
-      return { message: "Ya existe un evento con ese nombre. Usa un título diferente.", status: false };
+      return {
+        message: 'Ya existe un evento con ese nombre. Usa un título diferente.',
+        status: false
+      };
     }
 
-    return { message: "Evento creado exitosamente.", status: true, data: created ?? undefined };
+    return {
+      message: 'Evento creado exitosamente.',
+      status: true,
+      data: created
+    };
   } catch (error) {
-    console.error("Error creating calendar:", error);
-    return { message: "Error al crear el evento.", status: false };
+    console.error('Error creating calendar:', error);
+
+    if (error instanceof HttpError) {
+      console.error('AppError:', error.cause, 'Code:', error.code, 'Message:', error.message);
+      if (error.isServerError) throw error;
+      return { status: false, message: error.message, code: error.code, httpStatus: error.status };
+    }
+    if (error instanceof AppError) {
+      console.error('AppError:', error.cause, 'Code:', error.code, 'Message:', error.message);
+      return { status: false, message: error.message, code: error.code };
+    }
+
+    throw error;
   }
 };
 
@@ -48,31 +66,50 @@ export const createCalendarAction = async (
  * Updates a calendar entry with the provided data.
  * Before submitting, it checks if the title and date fields are valid. If they are not, it reports their validity.
  * After submitting, it starts a transition that calls formAction with the new form data.
- * @returns {Promise<CalendarActionResult>} A promise that resolves when the update is complete.
- * @throws {Error} If the request fails or if the calendar data is invalid.
+ *
+ * @return {Promise<ActionResult>} A promise that resolves when the update is complete.
  */
 export const updateCalendarAction = async (
-  id: string,
-  state: CalendarActionResult,
+  state: { message: string; status: null | boolean },
   formData: FormData
-): Promise<CalendarActionResult> => {
+): Promise<ActionResult<Calendar | null>> => {
   try {
+    const id = formData.get('id') as string;
+    if (!id || typeof id !== 'string') throw new AppError('ID inválido');
 
-    const newCalendar = {
-      title: formData.get("title") as string,
-      date: formData.get("date") as string,
-      blocked: formData.get("blocked") === "on",
+    // Create a new calendar object with the title, date, and blocked status from the form data
+    const calendar = {
+      title: formData.get('title') as string,
+      date: formData.get('date') as string,
+      blocked: formData.get('blocked') === 'on'
     };
 
+    // Get the calendar service and call the updateCalendar method with the calendar ID and the new calendar object.
+    // If the update is successful, it returns a success message and status.
     const service = await getCalendarService();
-    const updatedCalendar = await service.updateCalendar(id, newCalendar);
+    const updatedCalendar = await service.updateCalendar(id, calendar);
 
-    revalidatePath("/calendar", "page");
+    revalidatePath('/calendar', 'page');
 
-    return { message: "Evento actualizado exitosamente.", status: true, data: updatedCalendar ?? undefined };
+    return {
+      message: 'Evento actualizado exitosamente.',
+      status: true,
+      data: updatedCalendar ?? undefined
+    };
   } catch (error) {
-    console.error("Error updating calendar:", error);
-    return { message: "Error al actualizar el evento.", status: false };
+    console.error('Error updating calendar:', error);
+
+    if (error instanceof HttpError) {
+      console.error('AppError:', error.cause, 'Code:', error.code, 'Message:', error.message);
+      if (error.isServerError) throw error;
+      return { status: false, message: error.message, code: error.code, httpStatus: error.status };
+    }
+    if (error instanceof AppError) {
+      console.error('AppError:', error.cause, 'Code:', error.code, 'Message:', error.message);
+      return { status: false, message: error.message, code: error.code };
+    }
+
+    throw error;
   }
 };
 
@@ -83,15 +120,32 @@ export const updateCalendarAction = async (
  * @returns {Promise<{message:string,status:boolean}>} A promise that resolves when the deletion is complete.
  * @throws {Error} If the request fails or if the calendar data is invalid.
  */
-export const deleteCalendarAction = async (id: string): Promise<{ message: string; status: boolean }> => {
+export const deleteCalendarAction = async (id: string): Promise<ActionResult> => {
   try {
-    await (await getCalendarService()).deleteCalendar(id);
+    if (!id || typeof id !== 'string') throw new AppError('ID inválido');
 
-    revalidatePath("/(dashboard)/calendar");
+    const service = await getCalendarService();
+    await service.deleteCalendar(id);
 
-    return { message: 'Evento eliminado exitosamente.', status: true };
+    revalidatePath('/(dashboard)/calendar');
+
+    return {
+      message: 'Evento eliminado exitosamente.',
+      status: true
+    };
   } catch (error) {
-    console.error("Error deleting calendar:", error);
-    return { message: 'Error al eliminar el evento.', status: false };
+    console.error('Error deleting calendar:', error);
+
+    if (error instanceof HttpError) {
+      console.error('AppError:', error.cause, 'Code:', error.code, 'Message:', error.message);
+      if (error.isServerError) throw error;
+      return { status: false, message: error.message, code: error.code, httpStatus: error.status };
+    }
+    if (error instanceof AppError) {
+      console.error('AppError:', error.cause, 'Code:', error.code, 'Message:', error.message);
+      return { status: false, message: error.message, code: error.code };
+    }
+
+    throw error;
   }
-}
+};

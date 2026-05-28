@@ -1,10 +1,15 @@
-import { PaginationParams } from "@core/domain/value-objects/pagination";
-import { getCalendarService } from "@core/infrastructure/config/calendar-dependency";
-import { AppTitle, Shell } from "@components/layouts";
-import { CalendarDays } from "lucide-react";
-import {
-  CalendarContainer,
-} from "@components/modules/calendar";
+import { CalendarDays } from 'lucide-react';
+import { AppTitle, Shell } from '@components/layouts';
+import { CalendarContainer } from '@components/modules/calendar';
+import { PaginationParams } from '@core/domain/value-objects/pagination';
+import { getCalendarService } from '@core/infrastructure/config/calendar-dependency';
+
+import { CalendarFilters } from '@/src/core/domain/entities/calendar';
+
+export const metadata = {
+  title: 'Calendario | Content Administrator',
+  description: 'Programa y visualiza fechas clave de tus programas.'
+};
 
 interface CalendarPageProps {
   searchParams: Promise<{
@@ -15,54 +20,44 @@ interface CalendarPageProps {
   }>;
 }
 
-export default async function CalendarPage({
-  searchParams,
-}: CalendarPageProps) {
-  const paramsSearch = await searchParams;
+export default async function CalendarPage({ searchParams }: CalendarPageProps) {
+  const params = await searchParams;
 
+  // Parse pagination parameters from searchParams
   const pagination = PaginationParams.forCalendar(
-    paramsSearch?.page ? parseInt(paramsSearch.page) : undefined,
-    paramsSearch?.limit ? parseInt(paramsSearch.limit) : undefined,
+    params?.page ? parseInt(params.page) : undefined,
+    params?.limit ? parseInt(params.limit) : undefined
   );
 
   const calendarService = await getCalendarService();
 
-  const filters = {
-    search: paramsSearch.search,
-    blocked:
-      paramsSearch.blocked === "true"
-        ? true
-        : paramsSearch.blocked === "false"
-          ? false
-          : undefined,
-  };
+  // Prepare filters based on searchParams
+  const filters: CalendarFilters = {};
+  if (params?.search) filters.search = params.search;
+  if (params?.blocked !== undefined)
+    filters.blocked = params.blocked === 'true' ? true : params.blocked === 'false' ? false : undefined;
 
-  const data = await calendarService.getAllCalendars(pagination, filters);
+  const calendar = await calendarService.getAllCalendars(pagination, filters);
 
   const pageInfo = {
-    total: data?.total ?? 0,
-    page: data?.page ?? 1,
-    limit: data?.limit ?? pagination.limit,
+    total: calendar.total,
+    page: calendar.page,
+    limit: calendar.limit
   };
 
   return (
     <Shell>
       <AppTitle
-        title={`Calendario`}
+        title="Calendario"
         description="Programa y visualiza fechas clave de tus programas."
         icon={CalendarDays}
       />
       <CalendarContainer
-        entries={data?.data ?? []}
-        initialSearch={paramsSearch.search ?? ""}
+        entries={calendar.data}
+        initialSearch={params.search ?? ''}
         initialBlocked={filters.blocked}
         pageInfo={pageInfo}
       />
     </Shell>
   );
 }
-
-export const metadata = {
-  title: "Calendario | Content Administrator",
-  description: "Programa y visualiza fechas clave de tus programas.",
-};

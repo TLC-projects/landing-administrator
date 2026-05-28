@@ -1,4 +1,5 @@
-import { Auth } from "@/src/core/domain/entities/auth";
+import { Auth } from "@core/domain/entities/auth";
+
 import { AuthResultDto, AuthUserDto } from "./auth-response-dto";
 
 export class AuthMapper {
@@ -26,8 +27,8 @@ export class AuthMapper {
 
     }
 
-    static toAuth(data: any, token: string ): Auth {
-    return new Auth( data.id, data.name, data.lastName, data.email, token);
-  }
+    static toAuth(data: any, token: string): Auth {
+        return new Auth(data.id, data.name, data.lastName, data.email, token);
+    }
 
 }

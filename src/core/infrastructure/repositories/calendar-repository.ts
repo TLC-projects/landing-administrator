@@ -1,151 +1,126 @@
-import { CalendarRepository } from "@core/domain/interfaces/calendar-repository";
-import { CalendarDto, CalendarServerResponseDto, PaginatedCalendarEntityResponse } from "@core/application/dto/calendar/calendar-dto";
-import { HttpRepository } from "@core/domain/interfaces/http-repository";
-import { Calendar, CalendarFilters } from "@/src/core/domain/entities/calendar";
-import { PaginationParams } from "@core/domain/value-objects/pagination";
+import { CalendarMapper, CreateCalendarDto, UpdateCalendarDto } from '@core/application/dto/calendar';
+import {
+  CalendarDto,
+  CalendarServerResponseDto,
+  PaginatedCalendarResponse
+} from '@core/application/dto/calendar/calendar-response-dto';
+import { Calendar, CalendarFilters } from '@core/domain/entities/calendar';
+import { CalendarRepository } from '@core/domain/interfaces/calendar-repository';
+import { HttpRepository } from '@core/domain/interfaces/http-repository';
+import { PaginationParams } from '@core/domain/value-objects/pagination';
+import { AppError, unwrap } from '@lib/errors';
 
 export class CalendarRepositoryImpl implements CalendarRepository {
-    private baseUrl: string;
-    private httpClient: HttpRepository<CalendarServerResponseDto>;
+  private baseUrl: string;
+  private httpClient: HttpRepository<CalendarServerResponseDto>;
 
-    constructor(httpClient: HttpRepository<CalendarServerResponseDto>) {
-        this.baseUrl = 'calendar';
-        this.httpClient = httpClient;
+  constructor(httpClient: HttpRepository<CalendarServerResponseDto>) {
+    this.baseUrl = 'calendar';
+    this.httpClient = httpClient;
+  }
+
+  /**
+   * Retrieves a list of calendars based on the given pagination parameters.
+   *
+   * @param {PaginationParams} params The pagination parameters to use for the request.
+   * @param {CalendarFilters} filters The search filter to use for the request.
+   * @returns {Promise<PaginatedCalendarResponse | null>} A promise that resolves to a paginated calendar response.
+   * @throws {Error} If the request fails or if the pagination parameters are invalid.
+   */
+  async getAllCalendars(params: PaginationParams, filters?: CalendarFilters): Promise<PaginatedCalendarResponse> {
+    const queryParams = new URLSearchParams({
+      page: params.page.toString(),
+      limit: params.limit.toString()
+    });
+
+    if (filters) {
+      if (filters.search) queryParams.append('search', filters.search);
+      if (filters.blocked !== undefined) queryParams.append('blocked', String(filters.blocked));
     }
 
-    /**
-     * Retrieves a list of calendars based on the given pagination parameters.
-     *
-     * @param {PaginationParams} params The pagination parameters to use for the request.
-     * @param {CalendarFilters} filters The search filter to use for the request.
-     * @returns {Promise<PaginatedCalendarEntityResponse | null>} A promise that resolves to a paginated calendar response.
-     * @throws {Error} If the request fails or if the pagination parameters are invalid.
-     */
-    async getAllCalendars(params: PaginationParams, filters?: CalendarFilters): Promise<PaginatedCalendarEntityResponse | null> {
-        try {
-            let url = `${this.baseUrl}?page=${params.page}&limit=${params.limit}`;
-            let countUrl = `${this.baseUrl}?page=1&limit=1000`;
+    const response = unwrap(await this.httpClient.get(`${this.baseUrl}?${queryParams.toString()}`));
 
-            if (filters) {
-                const queryParams = new URLSearchParams();
-                if (filters.search) queryParams.set("search", filters.search);
-                if (filters.blocked !== undefined) queryParams.set("blocked", String(filters.blocked));
-                const qs = queryParams.toString();
-                if (qs) {
-                    url += `&${qs}`;
-                    countUrl += `&${qs}`;
-                }
-            }
-
-            const [response, countResponse] = await Promise.all([
-                this.httpClient.get(url),
-                this.httpClient.get(countUrl),
-            ]);
-
-            if (!response || !Array.isArray(response.data)) return null;
-
-            const paginatedResponse: PaginatedCalendarEntityResponse = {
-                data: response.data,
-                page: response.page ?? params.page,
-                limit: response.limit ?? params.limit,
-                total: Array.isArray(countResponse?.data) ? countResponse.data.length : response.data.length,
-            };
-
-            return paginatedResponse;
-
-        } catch (error) {
-            console.error(`Error in GET ${this.baseUrl}:`, error);
-            throw error instanceof Error ? error : new Error('Error in GET');
-        }
+    if (!response || !Array.isArray(response.data)) {
+      return {
+        data: [],
+        total: 0,
+        page: params.page,
+        limit: params.limit
+      };
     }
 
-    /**
-     *  Retrieves a calendar by its ID.
-     * @param id  The ID of the calendar to retrieve.
-     * @returns  A promise that resolves to the calendar with the specified ID, or null if not found.
-     * @throws  An error if the request fails or if the ID is invalid.
-     */
-    async getCalendarById(id: string): Promise<Calendar | null> {
-        try {
-            const response = await this.httpClient.get(`${this.baseUrl}/${id}`);
+    // Map the response data to Calendar entities using the CalendarMapper
+    const calendar = response.data.map((event) => CalendarMapper.toCalendar(event));
 
-            if (!response || !response.data) {
-                return null;
-            }
+    return {
+      data: calendar,
+      total: response.total || 0,
+      page: response.page || params.page,
+      limit: response.limit || params.limit
+    };
+  }
 
-            return response.data as CalendarDto;
-        } catch (error) {
-            console.error(`Error in GET ${this.baseUrl}/${id}:`, error);
-            throw error instanceof Error ? error : new Error('Error in GET');
-        }
-    }
+  /**
+   * Retrieves a calendar by its ID.
+   * @param id  The ID of the calendar to retrieve.
+   * @returns  A promise that resolves to the calendar with the specified ID, or null if not found.
+   * @throws  An error if the request fails or if the ID is invalid.
+   */
+  async getCalendarById(id: string): Promise<Calendar | null> {
+    const response = unwrap(await this.httpClient.get(`${this.baseUrl}/${id}`));
+    if (!response || !response.data) return null;
 
-    /**
-     *  Creates a new calendar with the provided data.
-     * @param calendarData  The data for the new calendar, excluding the ID.
-     * @returns  A promise that resolves to the created calendar, or null if creation fails.
-     * @throws  An error if the request fails or if the calendar data is invalid.
-     */
-    async createNewCalendar(calendarData: Omit<Calendar, 'id'>): Promise<Calendar | null> {
-        try {
-            const formData = new FormData();
-            formData.append('title', calendarData.title);
-            formData.append('date', calendarData.date);
-            formData.append('blocked', String(calendarData.blocked));
+    return CalendarMapper.toCalendar(response.data as CalendarDto);
+  }
 
-            const response = await this.httpClient.post(`${this.baseUrl}`, formData);
-            if (!response || !response.data) {
-                return null;
-            }
+  /**
+   * Creates a new calendar with the provided data.
+   * @param calendarData  The data for the new calendar, excluding the ID.
+   * @returns  A promise that resolves when the creation is complete.
+   */
+  async createNewCalendar(calendar: CreateCalendarDto): Promise<Calendar | null> {
+    const { title, date, blocked } = calendar;
 
-            return response.data as CalendarDto;
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('date', date);
+    formData.append('blocked', String(blocked));
 
-        } catch (error) {
-            console.error(`Error in POST ${this.baseUrl}:`, error);
-            throw error instanceof Error ? error : new Error('Error in POST');
-        }
-    }
+    const response = unwrap(await this.httpClient.post(this.baseUrl, formData));
 
-    /**
-     *  Updates an existing calendar with the provided data.
-     * @param id  The ID of the calendar to update.
-     * @param calendarData  The data to update the calendar with, excluding the ID. Only provided fields will be updated.
-     * @returns  A promise that resolves when the update is complete.
-     * @throws  An error if the request fails, if the ID is invalid, or if the calendar data is invalid.
-     */
-    async updateCalendar(id: string, calendarData: Partial<Omit<Calendar, 'id'>>): Promise<Calendar | null> {
-        try {
-            const formData = new FormData();
+    if (!response || !response.data) return null;
 
-            if (calendarData.title) formData.append('title', calendarData.title);
-            if (calendarData.date) formData.append('date', calendarData.date);
-            if (calendarData.blocked !== undefined) formData.append('blocked', String(calendarData.blocked));
+    return CalendarMapper.toCalendar(response.data as CalendarDto);
+  }
 
-            const response = await this.httpClient.put(`${this.baseUrl}/${id}`, formData);
+  /**
+   *  Updates an existing calendar with the provided data.
+   * @param id  The ID of the calendar to update.
+   * @param calendar The data to update the calendar with, excluding the ID.
+   * @return  A promise that resolves when the update is complete.
+   */
+  async updateCalendar(id: string, calendar: UpdateCalendarDto): Promise<Calendar | null> {
+    const formData = new FormData();
 
-            if (!response || !response.data) {
-                return null;
-            }
-            return response.data as CalendarDto;
-        } catch (error) {
-            console.error(`Error in PUT ${this.baseUrl}/${id}:`, error);
-            throw error instanceof Error ? error : new Error('Error in PUT');
-        }
-    }
+    if (calendar.title) formData.append('title', calendar.title);
+    if (calendar.date) formData.append('date', calendar.date);
+    if (calendar.blocked !== undefined) formData.append('blocked', String(calendar.blocked));
 
-    /**
-     *  Deletes a calendar by its ID.
-     * @param id  The ID of the calendar to delete.
-     * @returns  A promise that resolves to true if the calendar was successfully deleted, or false if deletion fails.
-     * @throws  An error if the request fails or if the ID is invalid.
-     */
-    async deleteCalendar(id: string): Promise<boolean> {
-        try {
-            await this.httpClient.delete(`${this.baseUrl}/${id}`);
-            return true;
-        } catch (error) {
-            console.error(`Error in DELETE ${this.baseUrl}/${id}:`, error);
-            throw error instanceof Error ? error : new Error('Error in DELETE');
-        }
-    }
+    const response = unwrap(await this.httpClient.put(`${this.baseUrl}/${id}`, formData));
+
+    if (!response || !response.data) return null;
+
+    return CalendarMapper.toCalendar(response.data as CalendarDto);
+  }
+
+  /**
+   *  Deletes a calendar by its ID.
+   * @param id  The ID of the calendar to delete.
+   * @returns  A promise that resolves when the deletion is complete.
+   * @throws  An error if the request fails or if the ID is invalid.
+   */
+  async deleteCalendar(id: string): Promise<void> {
+    if (!id) throw new AppError('Invalid calendar ID', 'INVALID_ID');
+    unwrap(await this.httpClient.delete(`${this.baseUrl}/${id}`));
+  }
 }

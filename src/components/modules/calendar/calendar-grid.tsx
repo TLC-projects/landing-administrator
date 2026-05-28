@@ -1,16 +1,17 @@
-"use client";
+'use client';
 
-import { Calendar } from "@/src/core/domain/entities/calendar";
-import { CalendarDayCell } from "./calendar-day-cell";
+import { Calendar } from '@core/domain/entities/calendar';
+
+import { CalendarDayCell } from './calendar-day-cell';
 
 const DAYS = [
-  { short: "D", long: "Dom" },
-  { short: "L", long: "Lun" },
-  { short: "M", long: "Mar" },
-  { short: "X", long: "Mié" },
-  { short: "J", long: "Jue" },
-  { short: "V", long: "Vie" },
-  { short: "S", long: "Sáb" },
+  { short: 'D', long: 'Dom' },
+  { short: 'L', long: 'Lun' },
+  { short: 'M', long: 'Mar' },
+  { short: 'X', long: 'Mié' },
+  { short: 'J', long: 'Jue' },
+  { short: 'V', long: 'Vie' },
+  { short: 'S', long: 'Sáb' }
 ];
 
 interface CalendarGridProps {
@@ -20,12 +21,7 @@ interface CalendarGridProps {
   onEditEntry: (entry: Calendar) => void;
 }
 
-export function CalendarGrid({
-  entries,
-  current,
-  onDayClick,
-  onEditEntry,
-}: CalendarGridProps) {
+export function CalendarGrid({ entries, current, onDayClick, onEditEntry }: CalendarGridProps) {
   const today = new Date();
 
   const firstDay = new Date(current.year, current.month, 1).getDay();
@@ -52,11 +48,9 @@ export function CalendarGrid({
 
   const dayCells = Array.from({ length: daysInMonth }, (_, i) => {
     const day = i + 1;
-    const dateStr = `${current.year}-${String(current.month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    const dateStr = `${current.year}-${String(current.month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const isToday =
-      day === today.getDate() &&
-      current.month === today.getMonth() &&
-      current.year === today.getFullYear();
+      day === today.getDate() && current.month === today.getMonth() && current.year === today.getFullYear();
     return (
       <CalendarDayCell
         key={dateStr}
@@ -74,10 +68,7 @@ export function CalendarGrid({
     <div className="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 overflow-hidden">
       <div className="grid grid-cols-7 border-b border-neutral-200 dark:border-neutral-700">
         {DAYS.map((d) => (
-          <div
-            key={d.long}
-            className="py-2 text-center text-xs font-medium ..."
-          >
+          <div key={d.long} className="py-2 text-center text-xs font-medium ...">
             <span className="md:hidden">{d.short}</span>
             <span className="hidden md:inline">{d.long}</span>
           </div>

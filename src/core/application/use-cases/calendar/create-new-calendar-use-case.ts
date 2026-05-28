@@ -1,15 +1,18 @@
-import { Calendar } from "@/src/core/domain/entities/calendar";
-import { CalendarRepository } from "@core/domain/interfaces/calendar-repository";
+import { CreateCalendarDto } from '@core/application/dto/calendar';
+import { Calendar } from '@core/domain/entities/calendar';
+import { CalendarRepository } from '@core/domain/interfaces/calendar-repository';
+import { AppError } from '@lib/errors';
 
+/**
+ * Create Calendar (Use Case)
+ * This use case is responsible for creating a new calendar entry in the system. 
+ * It validates the input data and interacts with the CalendarRepository to persist the new calendar.
+ */
 export class CreateNewCalendarUseCase {
-    constructor(private readonly calendarRepository: CalendarRepository) { }
+  constructor(private readonly calendarRepository: CalendarRepository) {}
 
-    async execute(calendar: Omit<Calendar, 'id'>): Promise<Calendar | null> {
-        try {
-            return await this.calendarRepository.createNewCalendar(calendar);
-        } catch (error) {
-            console.error("Error creating new calendar:", error);
-            throw new Error("Failed to create new calendar");
-        }
-    }
+  async execute(calendar: CreateCalendarDto): Promise<Calendar | null> {
+    if (!calendar) throw new AppError('Calendar data is required', 'MISSING_PARAMS');
+    return await this.calendarRepository.createNewCalendar(calendar);
+  }
 }
