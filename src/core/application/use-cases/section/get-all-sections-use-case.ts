@@ -1,21 +1,22 @@
-import { PaginatedSectionResponse } from "@core/application/dto/section";
-import { SectionRepository } from "@core/domain/interfaces/section-repository";
-import { PaginationParams } from "@core/domain/value-objects/pagination";
+import { PaginatedSectionResponse } from '@core/application/dto/section';
+import { SectionFilters } from '@core/domain/entities/section';
+import { SectionRepository } from '@core/domain/interfaces/section-repository';
+import { PaginationParams } from '@core/domain/value-objects/pagination';
+import { AppError } from '@lib/errors';
 
+/**
+ * GetAllSectionsUseCase (Use Case)
+ * This use case is responsible for retrieving a paginated list of sections based on the provided pagination parameters and optional filters.
+ * It validates the input parameters and interacts with the SectionRepository to fetch the data.
+ */
 export class GetAllSectionsUseCase {
-    constructor(private sectionRepository: SectionRepository) { }
+  constructor(private sectionRepository: SectionRepository) {}
 
-    async execute(params: PaginationParams, search?: string): Promise<PaginatedSectionResponse> {
-        try {
-            if (params.page < 1 || params.limit < 1) {
-                throw new Error('Los parámetros de paginación deben ser mayores a 0');
-            }
-
-            const paginatedResources = await this.sectionRepository.getAllSections(params, search);
-            return paginatedResources;
-        } catch (error) {
-            console.log('Error to get sections paginated', error);
-            throw error instanceof Error ? error : new Error('Error to get sections paginated');
-        }
+  async execute(params: PaginationParams, filters?: SectionFilters): Promise<PaginatedSectionResponse> {
+    if (params.page < 1 || params.limit < 1) {
+      throw new AppError('Page and limit must be greater than 0', 'INVALID_PAGINATION_PARAMS');
     }
+
+    return await this.sectionRepository.getAllSections(params, filters);
+  }
 }

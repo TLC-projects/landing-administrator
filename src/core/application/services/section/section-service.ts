@@ -1,6 +1,6 @@
 import { PaginatedSectionResponse } from "@core/application/dto/section";
 import { GetAllSectionsUseCase, GetSectionByIdUseCase, GetSectionsWithContentCountUseCase } from "@core/application/use-cases/section";
-import { Section } from "@core/domain/entities/section";
+import { Section, SectionFilters } from "@core/domain/entities/section";
 import { IContentRepository } from "@core/domain/interfaces/content-repository";
 import { SectionRepository } from "@core/domain/interfaces/section-repository";
 import { PaginationParams } from "@core/domain/value-objects/pagination";
@@ -20,11 +20,11 @@ export class SectionService {
         return await this.getSectionByIdUseCase.execute(id);
     }
 
-    async getSectionsByProjectId(params: PaginationParams, search?: string): Promise<PaginatedSectionResponse> {
-        return await this.getAllSectionsUseCase.execute(params, search);
+    async getSectionsByProjectId(params: PaginationParams, filters?: SectionFilters): Promise<PaginatedSectionResponse> {
+        return await this.getAllSectionsUseCase.execute(params, filters);
     }
 
-    async getSectionsWithContentCount(params: PaginationParams, search?: string): Promise<PaginatedSectionResponse> {
-        return await this.getSectionsWithContentCountUseCase.execute(params, search);
+    async getSectionsWithContentCount(params: PaginationParams, filters?: SectionFilters): Promise<PaginatedSectionResponse> {
+        return await this.getSectionsWithContentCountUseCase.execute(params, filters);
     }
 }
