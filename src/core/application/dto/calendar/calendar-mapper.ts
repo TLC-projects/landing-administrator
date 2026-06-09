@@ -9,7 +9,7 @@ export class CalendarMapper {
 
   static toCalendar(event: CalendarDto): Calendar {
     return {
-      id: event.id,
+      id: event.id.toString(),
       title: event.title,
       date: event.date,
       blocked: event.blocked === 1

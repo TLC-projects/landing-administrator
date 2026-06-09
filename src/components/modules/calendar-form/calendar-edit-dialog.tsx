@@ -70,6 +70,7 @@ export function CalendarEditDialog({
    */
   const handleSubmit = () => {
     const formData = new FormData();
+    formData.append('id', entry.id);
     formData.append('title', titleRef.current?.value ?? '');
     formData.append('date', dateRef.current?.value ?? '');
     formData.append('blocked', blocked ? 'on' : 'off');
