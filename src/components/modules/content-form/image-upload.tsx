@@ -1,7 +1,7 @@
 "use client"
 
-import { useRef, type ChangeEvent } from "react"
-import { Upload, ImageIcon, X } from "lucide-react"
+import { type ChangeEvent,useRef } from "react"
+import { ImageIcon, Upload, X } from "lucide-react"
 import Image from "next/image"
 
 interface ImageUploadProps {

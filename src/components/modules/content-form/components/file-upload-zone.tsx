@@ -1,7 +1,7 @@
 "use client";
 
-import { FileUp } from "lucide-react";
 import { type ChangeEvent, type RefObject } from "react";
+import { FileUp } from "lucide-react";
 
 interface FileUploadZoneProps {
   isDragging: boolean;

@@ -1,43 +1,40 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import {
+  ChevronLeft,
   Clock,
-  FileText,
+  Edit,
   Eye,
   EyeOff,
-  Save,
-  Edit,
-  X,
-  ChevronLeft,
-  Target,
+  FileText,
+  FileUp,
   ListCheck,
   Plus,
-  FileUp,
-} from "lucide-react";
-import { Switch, Input, Textarea, Button } from "@/src/components/ui";
-import { ImageUpload } from "./image-upload";
-import { FileUpload } from "./components/file-upload"; // Nuevo componente para brochure
-import { useContentForm } from "./hooks/use-content-form";
-import { createContent, updateContent } from "@lib/actions/content-actions";
-import type { Content, ContentFormModes } from "./types/content";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+  Save,
+  Target,
+  X
+} from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { Content } from '@core/domain/entities/content';
+import { createContent, updateContent } from '@lib/actions/content-actions';
+
+import { Button, Input, Switch, Textarea } from '@/src/components/ui';
+
+import { FileUpload } from './components/file-upload';
+import { useContentForm } from './hooks/use-content-form';
+import type { ContentFormModes } from './types/content';
+import { ImageUpload } from './image-upload';
 
 interface ContentFormProps {
-  projectId: string;
   sectionId: string;
   mode?: ContentFormModes;
   content?: Content | null;
 }
 
-export function ContentForm({
-  projectId,
-  sectionId,
-  mode = "create",
-  content = null,
-}: ContentFormProps) {
+export function ContentForm({ sectionId, mode = 'create', content = null }: ContentFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -76,12 +73,12 @@ export function ContentForm({
     removeBrochure,
     resetForm,
     toggleEditMode,
-    cancelEdit,
+    cancelEdit
   } = useContentForm({ mode, initialData: content });
 
   const charLimit = 1000;
   const charPercent = Math.min((description.length / charLimit) * 100, 100);
-  const isViewMode = mode === "view" && !isEditing;
+  const isViewMode = mode === 'view' && !isEditing;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -93,83 +90,68 @@ export function ContentForm({
     const maxBrochureSize = 8 * 1024 * 1024; // 8MB
 
     if (imageFile && imageFile.size > maxImageSize) {
-      toast.error("Imagen muy grande", {
-        description: `La imagen debe ser menor a 1MB. Tamaño actual: ${(imageFile.size / 1024 / 1024).toFixed(2)}MB`,
+      toast.error('Imagen muy grande', {
+        description: `La imagen debe ser menor a 1MB. Tamaño actual: ${(imageFile.size / 1024 / 1024).toFixed(2)}MB`
       });
       setIsSubmitting(false);
       return;
     }
 
     if (brochureFile && brochureFile.size > maxBrochureSize) {
-      toast.error("Brochure muy grande", {
-        description: `El brochure debe ser menor a 8MB. Tamaño actual: ${(brochureFile.size / 1024 / 1024).toFixed(2)}MB`,
+      toast.error('Brochure muy grande', {
+        description: `El brochure debe ser menor a 8MB. Tamaño actual: ${(brochureFile.size / 1024 / 1024).toFixed(2)}MB`
       });
       setIsSubmitting(false);
       return;
     }
 
     const formData = new FormData();
-    formData.append("sectionId", sectionId);
-    formData.append("title", title);
-    formData.append("duration", duration);
-    formData.append("description", description);
-    formData.append("isVisible", String(isVisible));
-    formData.append("objective", objective);
-    formData.append(
-      "performances",
-      JSON.stringify(performances.filter(Boolean)),
-    );
+    formData.append('sectionId', sectionId);
+    formData.append('title', title);
+    formData.append('duration', duration);
+    formData.append('description', description);
+    formData.append('isVisible', String(isVisible));
+    formData.append('objective', objective);
+    formData.append('performances', JSON.stringify(performances.filter(Boolean)));
 
     // SOLO agregar si el archivo existe Y tiene contenido
     if (imageFile && imageFile.size > 0) {
-      formData.append("image", imageFile);
+      formData.append('image', imageFile);
     }
 
     if (brochureFile && brochureFile.size > 0) {
-      formData.append("brochure", brochureFile);
+      formData.append('brochure', brochureFile);
     }
 
-    const isUpdate =
-      mode === "edit" || (mode === "view" && isEditing && content?.id);
+    const isUpdate = mode === 'edit' || (mode === 'view' && isEditing && content?.id);
 
     try {
-      const result = isUpdate
-        ? await updateContent(content!.id, formData)
-        : await createContent(formData);
-
-      if (result?.error) {
-        setError(result.error);
-        toast.error(result.error);
-        setIsSubmitting(false);
-        return;
+      if (isUpdate) {
+        await updateContent(content!.id, formData);
+      } else {
+        await createContent(formData);
       }
 
-      if (mode === "create") resetForm();
+      if (mode === 'create') resetForm();
 
-      toast.success(
-        isUpdate
-          ? "Contenido actualizado correctamente"
-          : "Contenido creado correctamente",
-      );
+      toast.success(isUpdate ? 'Contenido actualizado correctamente' : 'Contenido creado correctamente');
 
       router.push(`/sections/${sectionId}`);
     } catch (error) {
-      console.error("Error en handleSubmit:", error);
+      console.error('Error en handleSubmit:', error);
 
       // Detectar error de tamaño del servidor
-      if (error instanceof Error && error.message.includes("Body exceeded")) {
-        toast.error("Archivos muy grandes", {
-          description:
-            "Los archivos exceden el límite permitido. Imagen: máx 1MB, Brochure: máx 8MB",
+      if (error instanceof Error && error.message.includes('Body exceeded')) {
+        toast.error('Archivos muy grandes', {
+          description: 'Los archivos exceden el límite permitido. Imagen: máx 1MB, Brochure: máx 8MB'
         });
       } else {
-        toast.error("Error al procesar", {
-          description:
-            "Hubo un problema al guardar el contenido. Intenta de nuevo.",
+        toast.error('Error al procesar', {
+          description: 'Hubo un problema al guardar el contenido. Intenta de nuevo.'
         });
       }
 
-      setError("Error al procesar el contenido");
+      setError('Error al procesar el contenido');
       setIsSubmitting(false);
     }
   };
@@ -179,25 +161,16 @@ export function ContentForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8 max-w-4xl">
       {/* Header con botón de acción para modo view */}
-      {mode === "view" && (
+      {mode === 'view' && (
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-xl tracking-tight">
-              {isEditing ? "Editar contenido" : "Detalles del contenido"}
-            </h3>
+            <h3 className="text-xl tracking-tight">{isEditing ? 'Editar contenido' : 'Detalles del contenido'}</h3>
             <p className="text-sm text-muted-foreground">
-              {isEditing
-                ? "Modifica los campos necesarios"
-                : "Visualiza la información del contenido"}
+              {isEditing ? 'Modifica los campos necesarios' : 'Visualiza la información del contenido'}
             </p>
           </div>
           {!isEditing && (
-            <Button
-              type="button"
-              onClick={toggleEditMode}
-              variant="outline"
-              className="gap-2"
-            >
+            <Button type="button" onClick={toggleEditMode} variant="outline" className="gap-2">
               <Edit className="size-4" />
               Editar
             </Button>
@@ -215,10 +188,7 @@ export function ContentForm({
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           {/* Title */}
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="title"
-              className="flex items-center gap-2 text-sm font-medium text-foreground"
-            >
+            <label htmlFor="title" className="flex items-center gap-2 text-sm font-medium text-foreground">
               <FileText className="size-3.5 text-primary" />
               Título del contenido
             </label>
@@ -236,10 +206,7 @@ export function ContentForm({
 
           {/* Duration */}
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="duration"
-              className="flex items-center gap-2 text-sm font-medium text-foreground"
-            >
+            <label htmlFor="duration" className="flex items-center gap-2 text-sm font-medium text-foreground">
               <Clock className="size-3.5 text-primary" />
               Duración
             </label>
@@ -258,10 +225,7 @@ export function ContentForm({
 
         {/* Description */}
         <div className="flex flex-col gap-2">
-          <label
-            htmlFor="description"
-            className="text-sm font-medium text-foreground"
-          >
+          <label htmlFor="description" className="text-sm font-medium text-foreground">
             Descripción
           </label>
           <Textarea
@@ -282,18 +246,10 @@ export function ContentForm({
           {!isViewMode && (
             <div className="flex items-center justify-between">
               <div className="h-1 w-24 overflow-hidden rounded-full bg-border">
-                <div
-                  className="h-full rounded-full bg-primary transition-all"
-                  style={{ width: `${charPercent}%` }}
-                />
+                <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${charPercent}%` }} />
               </div>
               <span
-                className={`text-xs ${
-                  description.length >= charLimit
-                    ? "text-destructive"
-                    : "text-muted-foreground"
-                }`}
-              >
+                className={`text-xs ${description.length >= charLimit ? 'text-destructive' : 'text-muted-foreground'}`}>
                 {description.length}/{charLimit}
               </span>
             </div>
@@ -302,10 +258,7 @@ export function ContentForm({
 
         {/* Objectives */}
         <div className="flex flex-col gap-2">
-          <label
-            htmlFor="objective"
-            className="flex items-center gap-2 text-sm font-medium text-foreground"
-          >
+          <label htmlFor="objective" className="flex items-center gap-2 text-sm font-medium text-foreground">
             <Target className="size-3.5 text-primary" />
             Objetivo
           </label>
@@ -329,17 +282,12 @@ export function ContentForm({
                 <div
                   className="h-full rounded-full bg-primary transition-all"
                   style={{
-                    width: `${Math.min((objective.length / charLimit) * 100, 100)}%`,
+                    width: `${Math.min((objective.length / charLimit) * 100, 100)}%`
                   }}
                 />
               </div>
               <span
-                className={`text-xs ${
-                  objective.length >= charLimit
-                    ? "text-destructive"
-                    : "text-muted-foreground"
-                }`}
-              >
+                className={`text-xs ${objective.length >= charLimit ? 'text-destructive' : 'text-muted-foreground'}`}>
                 {objective.length}/{charLimit}
               </span>
             </div>
@@ -348,10 +296,7 @@ export function ContentForm({
 
         {/* Performances */}
         <div className="flex flex-col gap-2">
-          <label
-            htmlFor="performance"
-            className="flex items-center gap-2 text-sm font-medium text-foreground"
-          >
+          <label htmlFor="performance" className="flex items-center gap-2 text-sm font-medium text-foreground">
             <ListCheck className="size-3.5 text-primary" />
             Lista de Desempeños
           </label>
@@ -372,8 +317,7 @@ export function ContentForm({
                     variant="ghost"
                     size="icon"
                     onClick={() => removePerformance(index)}
-                    className="shrink-0 text-muted-foreground hover:text-destructive"
-                  >
+                    className="shrink-0 text-muted-foreground hover:text-destructive">
                     <X className="size-4" />
                   </Button>
                 )}
@@ -384,8 +328,7 @@ export function ContentForm({
                 type="button"
                 variant="outline"
                 onClick={addPerformance}
-                className="mt-1 w-full gap-2 border-dashed"
-              >
+                className="mt-1 w-full gap-2 border-dashed">
                 <Plus className="size-4" />
                 Agregar desempeño
               </Button>
@@ -438,33 +381,19 @@ export function ContentForm({
               )}
             </div>
             <div className="flex flex-col">
-              <label
-                htmlFor="visibility"
-                className="text-sm font-medium text-foreground"
-              >
+              <label htmlFor="visibility" className="text-sm font-medium text-foreground">
                 Visibilidad del contenido
               </label>
               <span className="text-xs text-muted-foreground">
-                {isVisible
-                  ? "El contenido será visible"
-                  : "El contenido estará oculto"}
+                {isVisible ? 'El contenido será visible' : 'El contenido estará oculto'}
               </span>
             </div>
           </div>
           <div className="flex items-center gap-2.5">
-            <span
-              className={`text-xs font-medium ${
-                isVisible ? "text-primary" : "text-muted-foreground"
-              }`}
-            >
-              {isVisible ? "Activo" : "Inactivo"}
+            <span className={`text-xs font-medium ${isVisible ? 'text-primary' : 'text-muted-foreground'}`}>
+              {isVisible ? 'Activo' : 'Inactivo'}
             </span>
-            <Switch
-              id="visibility"
-              checked={isVisible}
-              onCheckedChange={setIsVisible}
-              disabled={isViewMode}
-            />
+            <Switch id="visibility" checked={isVisible} onCheckedChange={setIsVisible} disabled={isViewMode} />
           </div>
         </div>
       </div>
@@ -472,48 +401,30 @@ export function ContentForm({
       {/* Actions */}
       <div className="flex items-center justify-between border-t border-border/40 pt-6">
         {isViewMode ? (
-          <Button
-            type="button"
-            variant="ghost"
-            className="gap-2 text-muted-foreground hover:text-foreground"
-          >
+          <Button type="button" variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
             <ChevronLeft className="size-4" />
             <Link href={cancelUrl}>Volver</Link>
           </Button>
         ) : (
           <>
-            {mode === "view" && isEditing ? (
+            {mode === 'view' && isEditing ? (
               <Button
                 type="button"
                 variant="ghost"
                 onClick={cancelEdit}
-                className="gap-2 text-muted-foreground hover:text-foreground"
-              >
+                className="gap-2 text-muted-foreground hover:text-foreground">
                 <X className="size-4" />
                 Cancelar
               </Button>
             ) : (
-              <Button
-                type="button"
-                variant="ghost"
-                className="text-muted-foreground hover:text-foreground"
-                asChild
-              >
+              <Button type="button" variant="ghost" className="text-muted-foreground hover:text-foreground" asChild>
                 <Link href={cancelUrl}>Cancelar</Link>
               </Button>
             )}
 
-            <Button
-              type="submit"
-              disabled={isSubmitting || (mode === "create" && !imageFile)}
-              className="gap-2 px-6"
-            >
+            <Button type="submit" disabled={isSubmitting || (mode === 'create' && !imageFile)} className="gap-2 px-6">
               <Save className="size-4" />
-              {isSubmitting
-                ? "Guardando..."
-                : mode === "create"
-                  ? "Crear contenido"
-                  : "Guardar cambios"}
+              {isSubmitting ? 'Guardando...' : mode === 'create' ? 'Crear contenido' : 'Guardar cambios'}
             </Button>
           </>
         )}

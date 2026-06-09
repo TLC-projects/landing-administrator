@@ -1,6 +1,9 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { Button } from '@components/ui';
 import {
   Dialog,
   DialogClose,
@@ -8,12 +11,9 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-} from "@components/ui/dialog";
-import { Button } from "@components/ui";
-import { deleteContent } from "@lib/actions/content-actions";
-import { useState } from "react";
-import { toast } from "sonner";
+  DialogTitle
+} from '@components/ui/dialog';
+import { deleteContent } from '@lib/actions/content-actions';
 
 interface ContentProps {
   isOpen: boolean;
@@ -21,44 +21,30 @@ interface ContentProps {
   contentId: string;
   sectionId: string;
 }
-export const ContentDeleteDialog = ({
-  isOpen,
-  onClose,
-  contentId,
-  sectionId,
-}: ContentProps) => {
+
+export const ContentDeleteDialog = ({ isOpen, onClose, contentId, sectionId }: ContentProps) => {
   const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleDelete = async () => {
     setIsSubmitting(true);
-    setError(null);
 
-    const result = await deleteContent(contentId,  sectionId);
+    await deleteContent(contentId, sectionId);
 
-    if (result?.error) {
-      setError(result.error);
-      toast.error(error);
-      setIsSubmitting(false);
-    }
-
-    toast.success("Contenido eliminado correctamente.");
+    toast.success('Contenido eliminado correctamente.');
     onClose();
 
     router.push(`/sections/${sectionId}`);
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            ¿Estás seguro que deseas eliminar este contenido?
-          </DialogTitle>
+          <DialogTitle>¿Estás seguro que deseas eliminar este contenido?</DialogTitle>
           <DialogDescription>
-            Esta acción no se puede deshacer. Esto eliminará de forma permanente
-            el contenido.
+            Esta acción no se puede deshacer. Esto eliminará de forma permanente el contenido.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -68,7 +54,7 @@ export const ContentDeleteDialog = ({
             </Button>
           </DialogClose>
           <Button type="button" onClick={handleDelete}>
-            {isSubmitting ? "Eliminando..." : "Eliminar"}
+            {isSubmitting ? 'Eliminando...' : 'Eliminar'}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,35 +1,35 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
+import { Ban, Eye, MoreHorizontal, SquarePen } from 'lucide-react';
+import Link from 'next/link';
 import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  Separator,
-} from "@components/ui";
-import { Ban, Eye, MoreHorizontal, SquarePen } from "lucide-react";
-import Link from "next/link";
-import { ContentDeleteDialog } from "./content-delete-dialog";
-import { Content } from "./content-table";
+  Separator
+} from '@components/ui';
+import { Content } from '@core/domain/entities/content';
+
+import { ContentDeleteDialog } from './content-delete-dialog';
 
 interface ContentTableActionsProps {
   content: Content;
 }
 
-export const ContentTableActions = ({
-  content,
-}: ContentTableActionsProps) => {
+export const ContentTableActions = ({ content }: ContentTableActionsProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [modals, setModals] = useState({
     edit: false,
-    delete: false,
+    delete: false
   });
 
   const handleToggleDeleteModal = () => {
     setModals((prev) => ({ ...modals, delete: !prev.delete }));
   };
+
   return (
     <>
       <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
@@ -41,19 +41,13 @@ export const ContentTableActions = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
-            <Link
-              href={`/sections/${content.sectionId}/${content.id}`}
-              className="flex items-center gap-2"
-            >
+            <Link href={`/sections/${content.sectionId}/${content.id}`} className="flex items-center gap-2">
               <Eye className="h-4 w-4 " />
               <span>Ver</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link
-              href={`/sections/${content.sectionId}/${content.id}/edit`}
-              className="flex items-center gap-2"
-            >
+            <Link href={`/sections/${content.sectionId}/${content.id}/edit`} className="flex items-center gap-2">
               <SquarePen className="h-4 w-4 " />
               <span>Editar</span>
             </Link>
@@ -66,8 +60,7 @@ export const ContentTableActions = ({
             onClick={() => {
               handleToggleDeleteModal();
               setIsDropdownOpen(false);
-            }}
-          >
+            }}>
             <Ban className="h-4 w-4 text-gray-500" />
             <span>Eliminar</span>
           </DropdownMenuItem>

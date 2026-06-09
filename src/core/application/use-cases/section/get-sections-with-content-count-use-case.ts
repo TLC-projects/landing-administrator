@@ -1,6 +1,6 @@
 import { PaginatedSectionResponse } from '@core/application/dto/section';
 import { SectionFilters } from '@core/domain/entities/section';
-import { IContentRepository } from '@core/domain/interfaces/content-repository';
+import { ContentRepository } from '@core/domain/interfaces/content-repository';
 import { SectionRepository } from '@core/domain/interfaces/section-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 import { AppError } from '@lib/errors';
@@ -8,7 +8,7 @@ import { AppError } from '@lib/errors';
 export class GetSectionsWithContentCountUseCase {
   constructor(
     private readonly sectionRepository: SectionRepository,
-    private readonly contentRepository: IContentRepository
+    private readonly contentRepository: ContentRepository
   ) {}
 
   async execute(params: PaginationParams, filters?: SectionFilters): Promise<PaginatedSectionResponse> {
@@ -24,7 +24,7 @@ export class GetSectionsWithContentCountUseCase {
     const sectionsWithCount = await Promise.all(
       paginatedSections.data.map(async (section) => ({
         ...section,
-        content_number: await this.contentRepository.getCountBySectionId(Number(section.id))
+        content_number: await this.contentRepository.getCountBySectionId(section.id)
       }))
     );
 

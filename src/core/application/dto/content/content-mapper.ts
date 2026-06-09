@@ -1,80 +1,30 @@
-import { Content } from "@/src/core/domain/entities/content"
-import { ContentServerResponseDto, ContentDto, CreateContentDto, UpdateContentDto } from "./content-dto"
+import { Content } from '@core/domain/entities/content';
 
-// API → Entity (Infrastructure layer)
-export function contentApiToEntity(api: ContentServerResponseDto): Content {
-  return new Content(
-    api.id,
-    api.section_id,
-    api.title,
-    api.description,
-    api.duration,
-    api.blocked === 1 || api.blocked === true,
-    api.resources ?? [],
-    api.objectives,
-    api.performance,
-    api.brochure_url
-  )
-}
+import { ContentDto, ContentResourcesDto } from './content-response-dto';
 
-export function contentsApiToEntity(api: ContentServerResponseDto[]): Content[] {
-  return api.map(contentApiToEntity)
-}
-
-// Entidad -> ViewModel (Application capa)
-export function contentToViewModel(content: Content): ContentDto {
-  return {
-    id: String(content.id),
-    sectionId: String(content.sectionId),
-    title: content.title,
-    description: content.description,
-    duration: content.duration,
-    url: content.getMainResourceUrl() ?? undefined, // URL del recurso principal
-    blocked: content.isBlocked(),
-    objectives: content.objectives,
-    performance: content.performance,
-    brochureUrl: content.brochureUrl // URL del brochure si existe
+export class ContentMapper {
+  static toContent(dto: ContentDto): Content {
+    return {
+      id: dto.id.toString(),
+      sectionId: dto.section_id.toString(),
+      title: dto.title,
+      description: dto.description,
+      duration: dto.duration,
+      isVisible: dto.blocked === 1, // Convert 0/1 to boolean
+      resources: dto.resources
+        ? dto.resources.map((resource: ContentResourcesDto) => ({
+            id: resource.id.toString(),
+            url: resource.url,
+            contentId: resource.content_id.toString()
+          }))
+        : [],
+      objectives: dto.objectives,
+      performance: dto.performance,
+      brochureUrl: dto.brochureUrl
+    };
   }
-}
 
-export function contentsToViewModel(contents: Content[]): ContentDto[] {
-  return contents.map(contentToViewModel)
-}
-
-// Domain DTO ->FormData (Infrastructure capa — para enviar al servidor)
-export function createContentDtoToFormData(dto: CreateContentDto): FormData {
-  const formData = new FormData()
-  formData.append('title', dto.title)
-  formData.append('description', dto.description)
-  formData.append('duration', dto.duration)
-  formData.append('blocked', String(dto.blocked))
-  formData.append('section_id', String(dto.section_id))
-  formData.append('objectives', dto.objectives ?? '')
-  formData.append('performance', dto.performance ?? '')
- if (dto.resource) formData.append('resources', dto.resource)
-  if (dto.brochure) formData.append('brochure', dto.brochure)
-  return formData
-}
-
-export function updateContentDtoToFormData(dto: UpdateContentDto): FormData {
-  const formData = new FormData()
-  
-  if (dto.title !== undefined) formData.append('title', dto.title)
-  if (dto.description !== undefined) formData.append('description', dto.description)
-  if (dto.duration !== undefined) formData.append('duration', dto.duration)
-  if (dto.blocked !== undefined) formData.append('blocked', String(dto.blocked))
-  if (dto.objectives !== undefined) formData.append('objectives', dto.objectives)
-  if (dto.performance !== undefined) formData.append('performance', dto.performance)
-  
-  // SOLO agregar resources si existe Y tiene contenido
-  if (dto.resource !== undefined && dto.resource instanceof File && dto.resource.size > 0) {
-    formData.append('resources', dto.resource)
+  static toContents(dtos: ContentDto[]): Content[] {
+    return dtos.map((dto) => this.toContent(dto));
   }
-  
-  // SOLO agregar brochure si existe Y tiene contenido
-  if (dto.brochure !== undefined && dto.brochure instanceof File && dto.brochure.size > 0) {
-    formData.append('brochure', dto.brochure)
-  }
-  
-  return formData
 }
