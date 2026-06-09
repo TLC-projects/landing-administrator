@@ -1,19 +1,19 @@
-import { NextResponse } from "next/server";
-import nodamailer from "nodemailer";
+import { NextResponse } from 'next/server';
+import nodamailer from 'nodemailer';
 
 export async function POST(req: Request) {
-    const { email } = await req.json();
+  const { email } = await req.json();
 
-    try {
-        const transporter = nodamailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASSWORD,
-            },
-        });
+  try {
+    const transporter = nodamailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    });
 
-        const message = `
+    const message = `
             <div style="background:#f5f7fb;padding:40px 20px;font-family:Arial,Helvetica,sans-serif;">
             
                 <div style="max-width:600px;margin:auto;background:white;border-radius:12px;padding:40px;box-shadow:0 10px 25px rgba(0,0,0,0.08);">
@@ -78,19 +78,19 @@ export async function POST(req: Request) {
             </div>
             `;
 
-        await transporter.sendMail({
-            from: {
-                name: "Books & Books Digital | Content Admin",
-                address: process.env.EMAIL_USER as string,
-            },
-            to: "programador@booksandbooksdigital.com.co",
-            subject: "Solicitud de recuperación de contraseña",
-            html: message,
-        });
+    await transporter.sendMail({
+      from: {
+        name: 'Books & Books Digital | Content Admin',
+        address: process.env.EMAIL_USER as string
+      },
+      to: 'programador@booksandbooksdigital.com.co',
+      subject: 'Solicitud de recuperación de contraseña',
+      html: message
+    });
 
-        return NextResponse.json({ success: true });
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({ error: "No se pudo enviar el correo" }, { status: 500 });
-    }
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: 'No se pudo enviar el correo' }, { status: 500 });
+  }
 }

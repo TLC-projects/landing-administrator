@@ -1,12 +1,12 @@
-import { Metadata } from "next";
-import { Library } from "lucide-react";
-import { Shell, AppTitle } from "@components/layouts";
-import { ProjectList } from "@components/modules/project";
-import { dashboardModules } from "@lib/dashboard-modules";
+import { Library } from 'lucide-react';
+import { Metadata } from 'next';
+import { AppTitle, Shell } from '@components/layouts';
+import { ProjectList } from '@components/modules/project';
+import { dashboardModules } from '@lib/dashboard-modules';
 
 export const metadata: Metadata = {
-  title: "Inicio | Content Administrator",
-  description: "Panel de administración de contenidos",
+  title: 'Inicio | Content Administrator',
+  description: 'Panel de administración de contenidos'
 };
 
 export default async function ProjectsPage() {
@@ -17,9 +17,7 @@ export default async function ProjectsPage() {
         description="Bienvenido al panel de administración. Desde aquí puedes gestionar todos los módulos de la plataforma de contenidos."
         icon={Library}
       />
-      <ProjectList
-        modules={dashboardModules}
-      />
+      <ProjectList modules={dashboardModules} />
     </Shell>
   );
 }

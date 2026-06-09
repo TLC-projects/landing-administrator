@@ -1,8 +1,10 @@
 
-import { Session } from "@/src/core/domain/entities/session"
 import { SessionRepository } from "@core/domain/interfaces/session-repository"
-import { CookieStorage } from "../datasources/cookie-storage/cookie-storage"
+
+import { Session } from "@/src/core/domain/entities/session"
 import { decrypt, encrypt } from "@/src/lib/auth/jwt"
+
+import { CookieStorage } from "../datasources/cookie-storage/cookie-storage"
 
 export class SessionRepositoryImpl implements SessionRepository {
   constructor(private cookieStorage: CookieStorage) { }
