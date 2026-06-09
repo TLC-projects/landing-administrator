@@ -8,8 +8,7 @@ import { Section, SectionFilters } from '@core/domain/entities/section';
 import { HttpRepository } from '@core/domain/interfaces/http-repository';
 import { SectionRepository } from '@core/domain/interfaces/section-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
-
-import { AppError, unwrap } from '@/src/lib/errors';
+import { AppError, unwrap } from '@lib/errors';
 
 export class SectionRepositoryImpl implements SectionRepository {
   private baseUrl: string;

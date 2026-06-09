@@ -1,7 +1,7 @@
-import { SectionService } from "@core/application/services/section/section-service";
-import { HttpClientFactory } from "@core/infrastructure/factories/http-client-factory";
-import { ContentRepositoryImpl } from "@core/infrastructure/repositories/content-repository";
-import { SectionRepositoryImpl } from "@core/infrastructure/repositories/section-repository";
+import { SectionService } from '@core/application/services/section/section-service';
+import { HttpClientFactory } from '@core/infrastructure/factories/http-client-factory';
+import { ContentRepositoryImpl } from '@core/infrastructure/repositories/content-repository';
+import { SectionRepositoryImpl } from '@core/infrastructure/repositories/section-repository';
 
 export async function getSectionDependencies() {
   const httpClient = await HttpClientFactory.getInstance().createHttpClient();

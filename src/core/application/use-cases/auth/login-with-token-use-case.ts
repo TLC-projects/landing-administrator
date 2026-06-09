@@ -1,12 +1,12 @@
-import { AuthResultDto, TokenCredentialsDto } from "@core/application/dto/auth";
-import { AuthRepository } from "@core/domain/interfaces/auth-repository";
-import { SessionRepository } from "@core/domain/interfaces/session-repository";
+import { AuthResultDto, TokenCredentialsDto } from '@core/application/dto/auth';
+import { AuthRepository } from '@core/domain/interfaces/auth-repository';
+import { SessionRepository } from '@core/domain/interfaces/session-repository';
 
 export class LoginWithTokenUseCase {
   constructor(
     private authRepository: AuthRepository,
     private sessionRepository: SessionRepository
-  ) { }
+  ) {}
 
   async execute(credentials: TokenCredentialsDto): Promise<AuthResultDto> {
     try {
@@ -38,5 +38,4 @@ export class LoginWithTokenUseCase {
       };
     }
   }
-
 }

@@ -1,12 +1,15 @@
-import { CreateContentDto, PaginatedContentResponse, UpdateContentDto } from '@core/application/dto/content';
+import {
+  ContentDto,
+  CreateContentDto,
+  PaginatedContentResponse,
+  UpdateContentDto
+} from '@core/application/dto/content';
 import { ContentMapper } from '@core/application/dto/content/content-mapper';
 import { Content, ContentFilters } from '@core/domain/entities/content';
 import { ContentRepository } from '@core/domain/interfaces/content-repository';
 import { HttpRepository } from '@core/domain/interfaces/http-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 import { AppError, unwrap } from '@lib/errors';
-
-import { ContentDto } from '../../application/dto/content';
 
 export class ContentRepositoryImpl implements ContentRepository {
   private baseUrl: string;

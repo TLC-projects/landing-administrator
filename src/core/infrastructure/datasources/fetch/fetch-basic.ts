@@ -1,5 +1,5 @@
 import { HttpRepository } from '@core/domain/interfaces/http-repository';
-import { fail, HttpError, NetworkError, ok,Result } from '@lib/errors';
+import { fail, HttpError, NetworkError, ok, Result } from '@lib/errors';
 export class BasicFetchClient<T = any> implements HttpRepository<T> {
   private baseApiUrl: string;
 
@@ -30,12 +30,12 @@ export class BasicFetchClient<T = any> implements HttpRepository<T> {
     if (response.status === 204) return ok(null);
     return ok(await response.json());
   }
- 
+
   /**
    * Method to perform a POST request to the specified URL with the provided data and optional fetch options.
    * It checks if the data is an instance of FormData to determine how to set the body and headers.
    * If the response is not ok, it throws an HttpError with the status code and message.
-   * 
+   *
    * @param url The endpoint URL (relative to the base API URL) to which the POST request is sent.
    * @param data The data to be sent in the body of the POST request, can be an object or FormData.
    * @param options Optional RequestInit object to customize the fetch request (headers, etc.).
@@ -70,7 +70,7 @@ export class BasicFetchClient<T = any> implements HttpRepository<T> {
    * Method to perform a PUT request to the specified URL with the provided data and optional fetch options.
    * It sends the data as JSON and sets the appropriate Content-Type header.
    * If the response is not ok, it throws an HttpError with the status code and message.
-   * 
+   *
    * @param url The endpoint URL (relative to the base API URL) to which the PUT request is sent.
    * @param data The data to be sent in the body of the PUT request, should be an object that will be JSON-stringified.
    * @param options Optional RequestInit object to customize the fetch request (headers, etc.).
@@ -102,7 +102,7 @@ export class BasicFetchClient<T = any> implements HttpRepository<T> {
   /**
    * Method to perform a DELETE request to the specified URL with optional fetch options.
    * If the response is not ok, it throws an HttpError with the status code and message.
-   * 
+   *
    * @param url The endpoint URL (relative to the base API URL) to which the DELETE request is sent.
    * @param options Optional RequestInit object to customize the fetch request (headers, etc.).
    * @returns True if the deletion was successful (response status is ok).
@@ -125,10 +125,10 @@ export class BasicFetchClient<T = any> implements HttpRepository<T> {
   /**
    * Method to perform a fetch request with authentication. It determines the HTTP method from the options and calls the corresponding method (get, post, put, delete).
    * If the method is not implemented, it throws an error.
-   * 
+   *
    * @param url The endpoint URL (relative to the base API URL) to which the request is sent.
    * @param options Optional RequestInit object to customize the fetch request (method, headers, body, etc.). The method defaults to GET if not specified.
-   * @returns The parsed JSON response from the server or null if no content is returned. 
+   * @returns The parsed JSON response from the server or null if no content is returned.
    */
   async fetchWithAuth(url: string, options?: RequestInit): Promise<any> {
     const method = options?.method || 'GET';

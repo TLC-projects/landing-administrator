@@ -1,3 +1,1 @@
-
-
-export * from './get-current-user-use-case'
+export * from './get-current-user-use-case';

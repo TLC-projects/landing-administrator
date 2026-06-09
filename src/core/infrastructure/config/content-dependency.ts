@@ -1,6 +1,6 @@
-import { ContentService } from "@core/application/services/content/content-service";
-import { HttpClientFactory } from "@core/infrastructure/factories/http-client-factory";
-import { ContentRepositoryImpl } from "@core/infrastructure/repositories/content-repository";
+import { ContentService } from '@core/application/services/content/content-service';
+import { HttpClientFactory } from '@core/infrastructure/factories/http-client-factory';
+import { ContentRepositoryImpl } from '@core/infrastructure/repositories/content-repository';
 
 export async function getContentDependencies() {
   const httpClient = await HttpClientFactory.getInstance().createHttpClient();

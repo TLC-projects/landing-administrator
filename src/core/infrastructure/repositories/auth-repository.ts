@@ -1,19 +1,15 @@
-import { AuthRepository } from "@core/domain/interfaces/auth-repository";
-import { HttpRepository } from "@core/domain/interfaces/http-repository";
-import {
-  AuthServerResponseDto,
-  AuthUserDto,
-  LoginCredentialsDto,
-} from "@/src/core/application/dto/auth/auth-response-dto";
-import { Auth } from "../../domain/entities/auth";
-import { AuthMapper } from "../../application/dto/auth/auth-mapper";
+import { AuthMapper, AuthServerResponseDto, AuthUserDto, LoginCredentialsDto } from '@core/application/dto/auth';
+import { Auth } from '@core/domain/entities/auth';
+import { AuthRepository } from '@core/domain/interfaces/auth-repository';
+import { HttpRepository } from '@core/domain/interfaces/http-repository';
+import { unwrap } from '@lib/errors';
 
 export class AuthRepositoryImpl implements AuthRepository {
   private baseUrl: string;
   private httpClient: HttpRepository<AuthServerResponseDto>;
 
   constructor(httpClient: HttpRepository<AuthUserDto>) {
-    this.baseUrl = "auth";
+    this.baseUrl = 'auth';
     this.httpClient = httpClient;
   }
 
@@ -22,14 +18,10 @@ export class AuthRepositoryImpl implements AuthRepository {
    * @param {LoginCredentialsDto} credentials - The user credentials to authenticate.
    * @returns {Promise<Auth | null>} - A promise that resolves with the authenticated user or null if authentication fails.
    */
-  async authenticate({
-    email,
-    password,
-  }: LoginCredentialsDto): Promise<Auth | null> {
+  async authenticate({ email, password }: LoginCredentialsDto): Promise<Auth | null> {
     try {
-      const response = await this.httpClient.post<AuthServerResponseDto>(
-        `${this.baseUrl}/login`,
-        { email, password },
+      const response = unwrap(
+        await this.httpClient.post<AuthServerResponseDto>(`${this.baseUrl}/login`, { email, password })
       );
 
       if (!response) return null;
@@ -37,7 +29,7 @@ export class AuthRepositoryImpl implements AuthRepository {
       const token = response.data;
 
       if (!token) {
-        console.error("Login failed: No token received");
+        console.error('Login failed: No token received');
         return null;
       }
       // Now with the obtained token, make a request to get the user data
@@ -58,11 +50,13 @@ export class AuthRepositoryImpl implements AuthRepository {
   async authenticateWithToken(token: string): Promise<Auth | null> {
     try {
       // Make the authentication request with token
-      const response = await this.httpClient.get(`${this.baseUrl}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const response = unwrap(
+        await this.httpClient.get(`${this.baseUrl}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+      );
 
       if (!response) return null;
       const data = response.data;
@@ -75,7 +69,6 @@ export class AuthRepositoryImpl implements AuthRepository {
 
       const auth = AuthMapper.toAuth(data, token);
       return auth;
-
     } catch (error) {
       console.error(`Error in GET ${this.baseUrl}:`, error);
       return null;

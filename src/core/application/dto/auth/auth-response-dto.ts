@@ -1,27 +1,27 @@
 export interface LoginCredentialsDto {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 export interface TokenCredentialsDto {
-  data: string
+  data: string;
 }
 
 export interface AuthUserDto {
-  id: string
-  name: string,
-  lastName: string,
-  email: string
-  password?: string
+  id: string;
+  name: string;
+  lastName: string;
+  email: string;
+  password?: string;
 }
 
 export interface AuthServerResponseDto {
-  data?: string
-  user?: AuthUserDto
+  data?: string;
+  user?: AuthUserDto;
 }
 
 export interface AuthResultDto {
-  success: boolean
-  message?: string
-  user?: AuthUserDto
+  success: boolean;
+  message?: string;
+  user?: AuthUserDto;
 }

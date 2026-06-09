@@ -1,9 +1,8 @@
-import { UserService } from "@core/application/services/user/user-service";
-import { CookieStorage } from "@core/infrastructure/datasources/cookie-storage/cookie-storage";
-import { HttpClientFactory } from "@core/infrastructure/factories/http-client-factory";
-import { SessionRepositoryImpl } from "@core/infrastructure/repositories/session-repository";
-import { UserRepositoryImpl } from "@core/infrastructure/repositories/user-repository";
-
+import { UserService } from '@core/application/services/user/user-service';
+import { CookieStorage } from '@core/infrastructure/datasources/cookie-storage/cookie-storage';
+import { HttpClientFactory } from '@core/infrastructure/factories/http-client-factory';
+import { SessionRepositoryImpl } from '@core/infrastructure/repositories/session-repository';
+import { UserRepositoryImpl } from '@core/infrastructure/repositories/user-repository';
 
 export async function initializeUserService() {
   const httpClient = await HttpClientFactory.getInstance().createHttpClient();

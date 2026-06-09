@@ -1,18 +1,12 @@
-import { User } from "@/src/core/domain/entities/user";
-import { UserResultDto } from "./user-dto";
+import { User } from '@/src/core/domain/entities/user';
+
+import { UserResultDto } from './user-dto';
 
 export class UserMapper {
-
   static toUser(data: UserResultDto): User {
-
     const fullName = `${data.name} ${data.lastName}`;
 
-    return new User(
-      data.id,
-      fullName,
-      data.email
-    );
-
+    return new User(data.id, fullName, data.email);
   }
 
   static toResponse(user: User) {
@@ -22,5 +16,4 @@ export class UserMapper {
       email: user.getEmail()
     };
   }
-
 }
