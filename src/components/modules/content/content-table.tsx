@@ -120,7 +120,7 @@ export const ContentTable: React.FC<ContentTableProps> = ({ content = [], sectio
             <Button asChild>
               <Link href={`/sections/${sectionId}/new`} className="flex items-center gap-2">
                 <Plus className="h-4 w-4" />
-                <span>Crear primer recurso</span>
+                <span>Crear primer contenido</span>
               </Link>
             </Button>
           </CardContent>
@@ -140,7 +140,7 @@ export const ContentTable: React.FC<ContentTableProps> = ({ content = [], sectio
           <Button asChild>
             <Link href={`/sections/${sectionId}/new`} className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
-              <span>Crear recurso</span>
+              <span>Crear contenido</span>
             </Link>
           </Button>
         </div>

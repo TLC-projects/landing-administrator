@@ -19,7 +19,7 @@ export default async function NewContentPage({ params }: NewContentPageProps) {
   return (
     <Shell>
       <AppTitle
-        title="Crear Nuevo Contenido"
+        title="Crear contenido"
         description="Completa la información del contenido que deseas agregar a esta sección."
       />
       <div className="mt-6">

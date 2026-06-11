@@ -27,7 +27,7 @@ export default async function EditContentPage({ params }: EditContentPageProps) 
 
   return (
     <Shell>
-      <AppTitle title="Editar Contenido" description="Modifica los campos necesarios para actualizar el contenido." />
+      <AppTitle title="Editar contenido" description="Modifica los campos necesarios para actualizar el contenido." />
       <div className="mt-6">
         <ContentForm sectionId={sectionId} mode="edit" content={content} />
       </div>

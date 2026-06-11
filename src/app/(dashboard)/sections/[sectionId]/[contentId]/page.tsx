@@ -29,7 +29,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
   return (
     <Shell>
       <AppTitle
-        title={`Contenido ${contentId}`}
+        title={content?.title ?? `Contenido ${contentId}`}
         description={`Visualiza la información del contenido y edítalo si necesitas realizar cambios.`}
       />
       <div className="space-y-2">
