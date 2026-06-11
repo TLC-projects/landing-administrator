@@ -23,7 +23,7 @@ export interface ContentDto {
   resources?: ContentResourcesDto[];
   objectives?: string;
   performance?: string;
-  brochureUrl?: string; // URL del brochure si existe
+  brochure_url?: string; // URL del brochure si existe
 }
 
 export interface ContentListServerResponseDto {

@@ -110,7 +110,7 @@ export function ContentForm({ sectionId, mode = 'create', content = null }: Cont
     formData.append('title', title);
     formData.append('duration', duration);
     formData.append('description', description);
-    formData.append('isVisible', String(isVisible));
+    formData.append('isVisible', isVisible ? 'true' : 'false'); // Asegurar que se envíe como string
     formData.append('objective', objective);
     formData.append('performances', JSON.stringify(performances.filter(Boolean)));
 
@@ -375,9 +375,9 @@ export function ContentForm({ sectionId, mode = 'create', content = null }: Cont
           <div className="flex items-center gap-3">
             <div className="flex size-9 items-center justify-center rounded-lg bg-accent">
               {isVisible ? (
-                <Eye className="size-4 text-primary" />
-              ) : (
                 <EyeOff className="size-4 text-muted-foreground" />
+              ) : (
+                <Eye className="size-4 text-primary" />
               )}
             </div>
             <div className="flex flex-col">
@@ -385,13 +385,13 @@ export function ContentForm({ sectionId, mode = 'create', content = null }: Cont
                 Visibilidad del contenido
               </label>
               <span className="text-xs text-muted-foreground">
-                {isVisible ? 'El contenido será visible' : 'El contenido estará oculto'}
+                {isVisible ? 'El contenido estará oculto' : 'El contenido será visible'}
               </span>
             </div>
           </div>
           <div className="flex items-center gap-2.5">
             <span className={`text-xs font-medium ${isVisible ? 'text-primary' : 'text-muted-foreground'}`}>
-              {isVisible ? 'Activo' : 'Inactivo'}
+              {isVisible ? 'Inactivo' : 'Activo'}
             </span>
             <Switch id="visibility" checked={isVisible} onCheckedChange={setIsVisible} disabled={isViewMode} />
           </div>

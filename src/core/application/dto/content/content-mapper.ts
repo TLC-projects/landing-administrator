@@ -20,7 +20,7 @@ export class ContentMapper {
         : [],
       objectives: dto.objectives,
       performance: dto.performance,
-      brochureUrl: dto.brochureUrl
+      brochureUrl: dto.brochure_url
     };
   }
 

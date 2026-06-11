@@ -67,13 +67,13 @@ export const updateContent = async (contentId: string, formData: FormData): Prom
     const title = formData.get('title') as string;
     const duration = formData.get('duration') as string;
     const description = formData.get('description') as string;
-    const isVisible = formData.get('isVisible') === 'true';
+    const isVisible = formData.get('isVisible') as string;
     const image = formData.get('image') as File;
     const brochure = formData.get('brochure') as File;
     const sectionId = formData.get('sectionId') as string;
 
     const objectives = formData.get('objective') as string;
-    const performances = formData.get('performances') as string;
+    const performance = formData.get('performances') as string;
 
     if (!title || !duration || !description) {
       throw new AppError('Todos los campos son requeridos');
@@ -83,9 +83,9 @@ export const updateContent = async (contentId: string, formData: FormData): Prom
       title,
       description,
       duration,
-      blocked: !isVisible,
+      blocked: isVisible === 'true' ? true : false, // Convertir string a boolean
       objectives,
-      performance: performances
+      performance
     };
 
     // Solo agregar resource si hay nueva imagen
