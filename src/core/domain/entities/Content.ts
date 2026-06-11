@@ -15,7 +15,7 @@ export interface Content {
   title: string;
   description: string;
   duration: string;
-  isVisible: boolean;
+  blocked: boolean;
   resources: ContentResource[];
   objectives?: string;
   performance?: string;

@@ -136,10 +136,11 @@ export const ContentTable: React.FC<ContentTableProps> = ({ content = [], sectio
         <ContentFilter />
       </div>
       <div className="space-y-2">
-        <div className="flex" style={{ justifyContent: 'flex-end' }}>
+        <div className="flex justify-end">
           <Button asChild>
             <Link href={`/sections/${sectionId}/new`} className="flex items-center gap-2">
-              <Plus /> <span>Crear</span>
+              <Plus className="h-4 w-4" />
+              <span>Crear recurso</span>
             </Link>
           </Button>
         </div>

@@ -52,6 +52,9 @@ export class CalendarRepositoryImpl implements CalendarRepository {
     // Map the response data to Calendar entities using the CalendarMapper
     const calendar = response.data.map((event) => CalendarMapper.toCalendar(event));
 
+        console.log('🍎 getCalendarById response:', calendar); // Agrega este log para depurar la respuesta
+
+
     return {
       data: calendar,
       total: response.total || 0,

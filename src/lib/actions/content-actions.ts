@@ -14,7 +14,7 @@ export async function createContent(formData: FormData) {
     const title = formData.get('title') as string;
     const duration = formData.get('duration') as string;
     const description = formData.get('description') as string;
-    const isVisible = formData.get('isVisible') === 'true';
+    const blocked = formData.get('blocked') as string;
     const image = formData.get('image') as File;
     const brochure = formData.get('brochure') as File; // Agregar brochure
     const sectionId = formData.get('sectionId') as string;
@@ -36,7 +36,7 @@ export async function createContent(formData: FormData) {
       title,
       description,
       duration,
-      blocked: !isVisible,
+      blocked: blocked === 'true' ? true : false, // Convertir string a boolean
       section_id: Number(sectionId),
       resource: image instanceof File && image.size > 0 ? image : new File([], ''), // Cambiar 'resource' por 'file'
       brochure: brochure instanceof File && brochure.size > 0 ? brochure : undefined, // Agregar brochure
@@ -67,7 +67,7 @@ export const updateContent = async (contentId: string, formData: FormData): Prom
     const title = formData.get('title') as string;
     const duration = formData.get('duration') as string;
     const description = formData.get('description') as string;
-    const isVisible = formData.get('isVisible') as string;
+    const blocked = formData.get('blocked') as string;
     const image = formData.get('image') as File;
     const brochure = formData.get('brochure') as File;
     const sectionId = formData.get('sectionId') as string;
@@ -84,7 +84,7 @@ export const updateContent = async (contentId: string, formData: FormData): Prom
       title,
       description,
       duration,
-      blocked: isVisible === 'true' ? true : false, // Convertir string a boolean
+      blocked: blocked === 'true' ? true : false, // Convertir string a boolean
       objectives,
       performance,
     };

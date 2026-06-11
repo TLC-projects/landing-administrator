@@ -31,12 +31,12 @@ export const ContentTableColumns = (): ColumnDef<Content>[] => [
     header: 'Estado',
     cell: ({ row }) => {
       const content = row.original;
-      const blocked = content.isVisible ? 'Oculto' : 'Visible';
-      const backgroundColor = content.isVisible ? '#DDDDDD' : '#DBFCE7';
-      const color = content.isVisible ? '#121212' : 'green';
+      const blocked = content.blocked ? 'Oculto' : 'Visible';
+      const backgroundColor = content.blocked ? '#DDDDDD' : '#DBFCE7';
+      const color = content.blocked ? '#121212' : 'green';
       return (
         <Badge className={`capitalize border-0`} style={{ backgroundColor: backgroundColor, color: color }}>
-          <span>{content.isVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}</span>
+          <span>{content.blocked ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}</span>
           {blocked}
         </Badge>
       );

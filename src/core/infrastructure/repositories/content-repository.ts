@@ -57,6 +57,9 @@ export class ContentRepositoryImpl implements ContentRepository {
     // Map the response data to Content entities using the ContentMapper
     const content = response.data.map((item: ContentDto) => ContentMapper.toContent(item));
 
+          console.log('🍎 getContentById response:', content); // Agrega este log para depurar la respuesta
+
+
     return {
       data: content,
       total: response.total || response.data.length || 0,
@@ -75,6 +78,7 @@ export class ContentRepositoryImpl implements ContentRepository {
   async getContentById(id: string): Promise<Content | null> {
     const response = unwrap(await this.httpClient.get(`${this.baseUrl}/${id}`));
     if (!response || !response.data) return null;
+
 
     return ContentMapper.toContent(response.data as ContentDto);
   }

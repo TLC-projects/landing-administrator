@@ -1,31 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  ChevronLeft,
-  Clock,
-  Edit,
-  Eye,
-  EyeOff,
-  FileText,
-  FileUp,
-  ListCheck,
-  Plus,
-  Save,
-  Target,
-  X
-} from 'lucide-react';
+import { ChevronLeft, Clock, Edit, FileText, FileUp, ListCheck, Plus, Save, Target, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Content } from '@core/domain/entities/content';
 import { createContent, updateContent } from '@lib/actions/content-actions';
 
-import { Button, Input, Switch, Textarea } from '@/src/components/ui';
+import { Button, Input, Textarea } from '@/src/components/ui';
 
 import { FileUpload } from './components/file-upload';
 import { useContentForm } from './hooks/use-content-form';
 import type { ContentFormModes } from './types/content';
+import { BlockedToogle } from './blocked-toggle';
 import { ImageUpload } from './image-upload';
 
 interface ContentFormProps {
@@ -50,8 +38,8 @@ export function ContentForm({ sectionId, mode = 'create', content = null }: Cont
     imagePreview,
     brochureFile,
     brochurePreview,
-    isVisible,
-    setIsVisible,
+    blocked,
+    setIsBlocked,
     objective,
     setObjective,
     performances,
@@ -110,7 +98,7 @@ export function ContentForm({ sectionId, mode = 'create', content = null }: Cont
     formData.append('title', title);
     formData.append('duration', duration);
     formData.append('description', description);
-    formData.append('isVisible', isVisible ? 'true' : 'false'); // Asegurar que se envíe como string
+    formData.append('blocked', blocked ? 'true' : 'false'); // Asegurar que se envíe como string
     formData.append('objective', objective);
     formData.append('performances', JSON.stringify(performances.filter(Boolean)));
 
@@ -374,31 +362,7 @@ export function ContentForm({ sectionId, mode = 'create', content = null }: Cont
         </div>
 
         {/* Visibility */}
-        <div className="flex items-center justify-between rounded-lg border border-border/60 bg-card px-5 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-lg bg-accent">
-              {isVisible ? (
-                <EyeOff className="size-4 text-muted-foreground" />
-              ) : (
-                <Eye className="size-4 text-primary" />
-              )}
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="visibility" className="text-sm font-medium text-foreground">
-                Visibilidad del contenido
-              </label>
-              <span className="text-xs text-muted-foreground">
-                {isVisible ? 'El contenido estará oculto' : 'El contenido será visible'}
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2.5">
-            <span className={`text-xs font-medium ${isVisible ? 'text-primary' : 'text-muted-foreground'}`}>
-              {isVisible ? 'Inactivo' : 'Activo'}
-            </span>
-            <Switch id="visibility" checked={isVisible} onCheckedChange={setIsVisible} disabled={isViewMode} />
-          </div>
-        </div>
+        <BlockedToogle blocked={blocked} setIsBlocked={setIsBlocked} isViewMode={isViewMode} />
       </div>
 
       {/* Actions */}

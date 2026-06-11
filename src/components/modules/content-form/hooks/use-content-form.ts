@@ -21,7 +21,7 @@ interface FormState {
   imagePreview: string | null;
   brochureFile: File | null;
   brochurePreview: string | null;
-  isVisible: boolean;
+  blocked: boolean;
   isDragging: boolean;
   isBrochureDragging: boolean;
   isEditing: boolean;
@@ -73,7 +73,7 @@ function formReducer(state: FormState, action: FormAction): FormState {
     case 'SET_BROCHURE':
       return { ...state, brochureFile: action.payload.file, brochurePreview: action.payload.preview };
     case 'SET_VISIBILITY':
-      return { ...state, isVisible: action.payload };
+      return { ...state, blocked: action.payload };
     case 'SET_DRAGGING':
       return { ...state, isDragging: action.payload };
     case 'SET_BROCHURE_DRAGGING':
@@ -115,7 +115,7 @@ function getInitialState(mode: ContentFormModes, initialData: Content | null): F
     imagePreview: initialData?.resources[0].url || null,
     brochureFile: null, // ✅ Debe ser null - NO crear File desde URL
     brochurePreview: initialData?.brochureUrl || null, // ✅ Solo la URL
-    isVisible: initialData?.isVisible ?? true,
+    blocked: initialData?.blocked ?? false,
     isDragging: false,
     isBrochureDragging: false,
     isEditing: mode === 'create' || mode === 'edit'
@@ -277,7 +277,7 @@ export function useContentForm({ mode = 'create', initialData = null }: UseConte
     imagePreview: state.imagePreview,
     brochureFile: state.brochureFile,
     brochurePreview: state.brochurePreview,
-    isVisible: state.isVisible,
+    blocked: state.blocked,
     isDragging: state.isDragging,
     isBrochureDragging: state.isBrochureDragging,
     isEditing: state.isEditing,
@@ -289,7 +289,7 @@ export function useContentForm({ mode = 'create', initialData = null }: UseConte
     setDuration: (value: string) => dispatch({ type: 'SET_DURATION', payload: value }),
     setDescription: (value: string) => dispatch({ type: 'SET_DESCRIPTION', payload: value }),
     setObjective: (value: string) => dispatch({ type: 'SET_OBJECTIVE', payload: value }),
-    setIsVisible: (value: boolean) => dispatch({ type: 'SET_VISIBILITY', payload: value }),
+    setIsBlocked: (value: boolean) => dispatch({ type: 'SET_VISIBILITY', payload: value }),
     addPerformance: () => dispatch({ type: 'ADD_PERFORMANCE' }),
     updatePerformance: (index: number, value: string) =>
       dispatch({ type: 'UPDATE_PERFORMANCE', payload: { index, value } }),

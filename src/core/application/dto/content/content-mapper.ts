@@ -10,7 +10,7 @@ export class ContentMapper {
       title: dto.title,
       description: dto.description,
       duration: dto.duration,
-      isVisible: dto.blocked === 1, // Convert 0/1 to boolean
+      blocked: dto.blocked === 1, // Convert 0/1 to boolean
       resources: dto.resources
         ? dto.resources.map((resource: ContentResourcesDto) => ({
             id: resource.id.toString(),
