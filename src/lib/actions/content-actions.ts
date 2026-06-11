@@ -9,6 +9,12 @@ import { AppError, HttpError } from '../errors';
 
 import { ActionResult } from './types/types';
 
+/**
+ * Create a new content item using the provided form data. Validates required fields and handles file uploads for the main resource and brochure.
+ * After successful creation, it revalidates the path to update the content list.
+ * @param formData The form data containing the content details, including title, description, duration, blocked status, section ID, objectives, performance, resource file, and brochure file.
+ * @returns A promise that resolves when the content creation is complete, or an error message if validation fails or if there is an error during the creation process.
+ */
 export async function createContent(formData: FormData) {
   try {
     const title = formData.get('title') as string;
@@ -62,6 +68,13 @@ export async function createContent(formData: FormData) {
   }
 }
 
+/**
+ * Update an existing content item with the provided content ID and form data. Validates required fields and handles file uploads for the main resource and brochure.
+ * After successful update, it revalidates the path to update the content list.
+ * @param contentId The ID of the content item to update.
+ * @param formData The form data containing the updated content details, including title, description, duration, blocked status, section ID, objectives, performance, resource file, brochure file, and brochure URL.
+ * @returns A promise that resolves when the content update is complete, or an error message if validation fails or if there is an error during the update process.
+ */
 export const updateContent = async (contentId: string, formData: FormData): Promise<ActionResult> => {
   try {
     const title = formData.get('title') as string;
@@ -86,7 +99,7 @@ export const updateContent = async (contentId: string, formData: FormData): Prom
       duration,
       blocked: blocked === 'true' ? true : false, // Convertir string a boolean
       objectives,
-      performance,
+      performance
     };
 
     // Solo agregar resource si hay nueva imagen
@@ -99,7 +112,7 @@ export const updateContent = async (contentId: string, formData: FormData): Prom
       updateData.brochure = brochure;
     } else {
       // Si no hay nuevo brochure pero existe uno previo, mantener la URL existente
-      updateData.brochureUrl = brochureUrl
+      updateData.brochureUrl = brochureUrl;
     }
 
     const contentService = await getContentService();
@@ -130,6 +143,12 @@ export const updateContent = async (contentId: string, formData: FormData): Prom
   }
 };
 
+/**
+ * Delete a content item with the provided content ID and section ID. After successful deletion, it revalidates the path to update the content list.
+ * @param contentId The ID of the content item to delete.
+ * @param sectionId The ID of the section to which the content item belongs, used for revalidating the path after deletion.
+ * @returns A promise that resolves when the content deletion is complete, or an error message if there is an error during the deletion process.
+ */
 export const deleteContent = async (contentId: string, sectionId: string): Promise<ActionResult> => {
   try {
     if (!contentId || typeof contentId !== 'string') throw new AppError('ID de contenido inválido');

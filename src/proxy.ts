@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { decrypt } from "./lib/auth/jwt";
-import { withBasePath } from "./lib/with-base-path";
 import { getStrippedPath } from "./lib/get-stripped-path";
+import { withBasePath } from "./lib/with-base-path";
 
 // Constants
 const AUTH_COOKIES = {

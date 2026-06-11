@@ -5,6 +5,10 @@ import { SectionRepository } from '@core/domain/interfaces/section-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 import { AppError } from '@lib/errors';
 
+/**
+ * Get sections with content count (Use Case)
+ * This use case retrieves a paginated list of sections along with the count of content items associated with each section. It validates pagination parameters and applies optional filters for searching sections by name and filtering by blocked state.
+ */
 export class GetSectionsWithContentCountUseCase {
   constructor(
     private readonly sectionRepository: SectionRepository,

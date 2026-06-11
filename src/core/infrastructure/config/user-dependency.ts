@@ -4,10 +4,12 @@ import { HttpClientFactory } from '@core/infrastructure/factories/http-client-fa
 import { SessionRepositoryImpl } from '@core/infrastructure/repositories/session-repository';
 import { UserRepositoryImpl } from '@core/infrastructure/repositories/user-repository';
 
+// User Service Initialization
 export async function initializeUserService() {
+  // Create an HTTP cliente instance using the factory
   const httpClient = await HttpClientFactory.getInstance().createHttpClient();
 
-  // Create repositories with the HTTP client and base URL
+  // Create repository with the HTTP client
   const userRepository = new UserRepositoryImpl(httpClient);
 
   // Use CookieStorage for session management
