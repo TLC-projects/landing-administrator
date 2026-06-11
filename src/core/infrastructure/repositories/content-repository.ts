@@ -131,6 +131,7 @@ export class ContentRepositoryImpl implements ContentRepository {
     if (dto?.blocked !== undefined) formData.append('blocked', String(dto.blocked));
     if (dto?.objectives) formData.append('objectives', dto.objectives);
     if (dto?.performance) formData.append('performance', dto.performance);
+    if (dto?.brochureUrl) formData.append('brochure_url', dto.brochureUrl); // Agregar URL del brochure existente para mantener si no se sube uno nuevo
 
     // Only add resource if it's a valid File object and has content
     if (dto.resource !== undefined && dto.resource instanceof File && dto.resource.size > 0) {

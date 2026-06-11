@@ -121,6 +121,9 @@ export function ContentForm({ sectionId, mode = 'create', content = null }: Cont
 
     if (brochureFile && brochureFile.size > 0) {
       formData.append('brochure', brochureFile);
+      formData.append('brochureUrl', ''); // Agregar campo para indicar que se reemplaza el brochure existente
+    } else if (mode === 'edit' && content?.brochureUrl) {
+      formData.append('brochureUrl', content.brochureUrl); // Mantener brochure existente si no se sube uno nuevo
     }
 
     const isUpdate = mode === 'edit' || (mode === 'view' && isEditing && content?.id);

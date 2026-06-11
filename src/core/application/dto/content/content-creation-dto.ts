@@ -19,4 +19,5 @@ export interface UpdateContentDto {
   performance?: string;
   resource?: File; // Archivo principal opcional para actualizar
   brochure?: File; // Brochure opcional para actualizar
+  brochureUrl?: string; // URL del brochure existente para mantener si no se sube uno nuevo
 }

@@ -71,6 +71,7 @@ export const updateContent = async (contentId: string, formData: FormData): Prom
     const image = formData.get('image') as File;
     const brochure = formData.get('brochure') as File;
     const sectionId = formData.get('sectionId') as string;
+    const brochureUrl = formData.get('brochureUrl') as string; // Obtener URL del brochure existente
 
     const objectives = formData.get('objective') as string;
     const performance = formData.get('performances') as string;
@@ -85,18 +86,20 @@ export const updateContent = async (contentId: string, formData: FormData): Prom
       duration,
       blocked: isVisible === 'true' ? true : false, // Convertir string a boolean
       objectives,
-      performance
+      performance,
     };
 
     // Solo agregar resource si hay nueva imagen
     if (image instanceof File && image.size > 0) {
       updateData.resource = image;
     }
-    // Si no hay nueva imagen, NO agregar el campo (mantener existente)
 
     // Solo agregar brochure si hay nuevo brochure
     if (brochure instanceof File && brochure.size > 0) {
       updateData.brochure = brochure;
+    } else {
+      // Si no hay nuevo brochure pero existe uno previo, mantener la URL existente
+      updateData.brochureUrl = brochureUrl
     }
 
     const contentService = await getContentService();
