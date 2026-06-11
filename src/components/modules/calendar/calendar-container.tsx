@@ -154,7 +154,9 @@ export function CalendarContainer({ entries: initialEntries, initialSearch = '',
       </div>
 
       <div className="flex justify-end">
-        <CalendarViewToggle view={view} onChange={setView} />
+        <Button onClick={openNewDialog}>
+          <Plus className="h-4 w-4 mr-1" /> Nuevo evento
+        </Button>
       </div>
 
       {/* Estado vacío — sin datos en DB */}
@@ -196,9 +198,7 @@ export function CalendarContainer({ entries: initialEntries, initialSearch = '',
               <div />
             )}
             <div className="flex items-center gap-2">
-              <Button onClick={openNewDialog}>
-                <Plus className="h-4 w-4 mr-1" /> Nuevo evento
-              </Button>
+              <CalendarViewToggle view={view} onChange={setView} />
             </div>
           </div>
 
