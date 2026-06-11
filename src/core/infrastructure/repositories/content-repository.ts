@@ -57,9 +57,6 @@ export class ContentRepositoryImpl implements ContentRepository {
     // Map the response data to Content entities using the ContentMapper
     const content = response.data.map((item: ContentDto) => ContentMapper.toContent(item));
 
-          console.log('🍎 getContentById response:', content); // Agrega este log para depurar la respuesta
-
-
     return {
       data: content,
       total: response.total || response.data.length || 0,
