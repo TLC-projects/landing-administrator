@@ -1,6 +1,7 @@
 "use client";
 
-import { Calendar } from "@core/domain/entities/Calendar";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -9,8 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@components/ui";
-import { CalendarTableColumns } from "./calendar-table-columns";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ColumnFiltersState,
   flexRender,
@@ -21,7 +20,10 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+import { Calendar } from "@/src/core/domain/entities/calendar";
+
+import { CalendarTableColumns } from "./calendar-table-columns";
 import { CalendarTablePagination } from "./calendar-table-pagination";
 
 interface CalendarTableProps {

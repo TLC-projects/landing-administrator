@@ -1,5 +1,9 @@
-"use client";
+'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { Button } from '@components/ui';
 import {
   Dialog,
   DialogClose,
@@ -7,13 +11,10 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-} from "@components/ui/dialog";
-import { Button } from "@components/ui";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { deleteCalendarAction } from "@/src/lib/actions/calendar-actions";
+  DialogTitle
+} from '@components/ui/dialog';
+
+import { deleteCalendarAction } from '@/src/lib/actions/calendar-actions';
 
 interface CalendarDeleteDialogProps {
   isOpen: boolean;
@@ -21,11 +22,7 @@ interface CalendarDeleteDialogProps {
   calendarId: string;
 }
 
-export const CalendarDeleteDialog = ({
-  isOpen,
-  onClose,
-  calendarId,
-}: CalendarDeleteDialogProps) => {
+export const CalendarDeleteDialog = ({ isOpen, onClose, calendarId }: CalendarDeleteDialogProps) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -55,12 +52,9 @@ export const CalendarDeleteDialog = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            ¿Estás seguro que deseas eliminar este evento del calendario?
-          </DialogTitle>
+          <DialogTitle>¿Estás seguro que deseas eliminar este evento del calendario?</DialogTitle>
           <DialogDescription>
-            Esta acción no se puede deshacer. Esto eliminará de forma permanente
-            el evento.
+            Esta acción no se puede deshacer. Esto eliminará de forma permanente el evento.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -69,13 +63,8 @@ export const CalendarDeleteDialog = ({
               Cancelar
             </Button>
           </DialogClose>
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Eliminando..." : "Eliminar"}
+          <Button type="button" variant="destructive" onClick={handleDelete} disabled={isSubmitting}>
+            {isSubmitting ? 'Eliminando...' : 'Eliminar'}
           </Button>
         </DialogFooter>
       </DialogContent>

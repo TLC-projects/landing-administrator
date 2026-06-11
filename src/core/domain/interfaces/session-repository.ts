@@ -1,8 +1,8 @@
-import { Session } from "../entities/Session"
+import { Session } from '@core/domain/entities/session';
 
 export interface SessionRepository {
-  createSession(session: Session): Promise<void>
-  getSession(): Promise<Session | null>
-  updateSession(session: Session): Promise<void>
-  removeSession(): Promise<void>
+  createSession(session: Session): Promise<void>;
+  getSession(): Promise<Session | null>;
+  updateSession(session: Session): Promise<void>;
+  removeSession(): Promise<void>;
 }

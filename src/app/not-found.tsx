@@ -1,6 +1,5 @@
-import Link from "next/link";
-
-import { Button, FuzzyText } from "@components/ui";
+import Link from 'next/link';
+import { FuzzyText } from '@components/ui';
 
 export default function NotFound() {
   return (
@@ -14,8 +13,7 @@ export default function NotFound() {
             hoverIntensity={0.35}
             fontSize="clamp(3rem, 11vw, 11rem)"
             fontWeight={900}
-            color="white"
-          >
+            color="white">
             404
           </FuzzyText>
           <FuzzyText
@@ -23,8 +21,7 @@ export default function NotFound() {
             hoverIntensity={0.2}
             fontSize="clamp(1rem, 4vw, 2rem)"
             fontWeight={500}
-            color="white"
-          >
+            color="white">
             ¡Ups! Página no encontrada
           </FuzzyText>
         </div>
@@ -32,15 +29,15 @@ export default function NotFound() {
         <span className="sr-only">Error 404: Página no encontrada</span>
 
         <div className="text-white/90 text-sm md:text-base  max-w-md mx-auto text-center space-y-4">
-          <p>
-            Lo sentimos, la página que estás buscando parece que se ha perdido
-            en el ciberespacio.
-          </p>
+          <p>Lo sentimos, la página que estás buscando parece que se ha perdido en el ciberespacio.</p>
           <p>
             Puedes regresar a la&nbsp;
-              <Link href="/" aria-label="Regresar a la página de inicio" className="underline font-bold text-white hover:text-chart-1">
-                página de inicio.
-              </Link>
+            <Link
+              href="/"
+              aria-label="Regresar a la página de inicio"
+              className="underline font-bold text-white hover:text-chart-1">
+              página de inicio.
+            </Link>
           </p>
         </div>
       </div>

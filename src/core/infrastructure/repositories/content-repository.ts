@@ -1,11 +1,17 @@
-import { Content } from "@core/domain/entities/Content"
-import { IContentRepository, PaginatedContentEntityResponse } from "@core/domain/interfaces/content-repository"
-import { ContentListServerResponseDto, ContentServerResponseDto, CreateContentDto, UpdateContentDto } from "@core/application/dto/content-dto"
-import { contentApiToEntity, contentsApiToEntity, createContentDtoToFormData, updateContentDtoToFormData } from "@core/application/dto/content-mapper"
-import { HttpRepository } from "@core/domain/interfaces/http-repository"
-import { PaginationParams } from "@core/domain/value-objects/pagination"
+import {
+  ContentDto,
+  CreateContentDto,
+  PaginatedContentResponse,
+  UpdateContentDto
+} from '@core/application/dto/content';
+import { ContentMapper } from '@core/application/dto/content/content-mapper';
+import { Content, ContentFilters } from '@core/domain/entities/content';
+import { ContentRepository } from '@core/domain/interfaces/content-repository';
+import { HttpRepository } from '@core/domain/interfaces/http-repository';
+import { PaginationParams } from '@core/domain/value-objects/pagination';
+import { AppError, unwrap } from '@lib/errors';
 
-export class ContentRepositoryImpl implements IContentRepository {
+export class ContentRepositoryImpl implements ContentRepository {
   private baseUrl: string;
   private httpClient: HttpRepository;
 
@@ -14,87 +20,140 @@ export class ContentRepositoryImpl implements IContentRepository {
     this.httpClient = httpClient;
   }
 
-  async getAllBySectionId(sectionId: number, params?: PaginationParams, search?: string, blocked?: boolean): Promise<PaginatedContentEntityResponse | null> {
-    try {
-      const queryParams = new URLSearchParams()
-      if (params) {
-        queryParams.set('page', params.page.toString())
-        queryParams.set('limit', params.limit.toString())
-      }
-      if (search) {
-        queryParams.set('search', search)
-      }
-      if (blocked !== undefined) {
-        queryParams.set('blocked', blocked.toString())
-      }
-      const query = queryParams.toString()
-      const url = `${this.baseUrl}/section/${sectionId}${query ? `?${query}` : ''}`
-      const response = await this.httpClient.get<ContentListServerResponseDto>(url)
-      if (!response) return null
+  /**
+   * Retrieves a paginated list of content items for a specific section, with optional filters for search and blocked status.
+   * @param sectionId  The ID of the section for which to retrieve content items.
+   * @param params  The pagination parameters, including page number and items per page.
+   * @param filters  Optional filters for searching content items by title and filtering by blocked state
+   */
+  async getAllContentBySectionId(
+    sectionId: string,
+    params: PaginationParams,
+    filters?: ContentFilters
+  ): Promise<PaginatedContentResponse> {
+    const queryParams = new URLSearchParams({
+      page: params.page.toString(),
+      limit: params.limit.toString()
+    });
+
+    if (filters) {
+      if (filters.search) queryParams.append('search', filters.search);
+      if (filters.blocked !== undefined) queryParams.append('blocked', String(filters.blocked));
+    }
+
+    const response = unwrap(
+      await this.httpClient.get(`${this.baseUrl}/section/${sectionId}?${queryParams.toString()}`)
+    );
+
+    if (!response || !Array.isArray(response.data)) {
       return {
-        data: contentsApiToEntity(response.data),
-        total: response.total ?? response.data.length,
-        page: response.page ?? params?.page ?? 1,
-        limit: response.limit ?? params?.limit ?? 10,
-      }
-    } catch (error) {
-      console.error(`[ContentRepository] Error al obtener contenidos de la sección ${sectionId}:`, error)
-      return null
+        data: [],
+        total: 0,
+        page: params.page,
+        limit: params.limit
+      };
     }
+
+    // Map the response data to Content entities using the ContentMapper
+    const content = response.data.map((item: ContentDto) => ContentMapper.toContent(item));
+
+    return {
+      data: content,
+      total: response.total || response.data.length || 0,
+      page: response.page || params.page,
+      limit: response.limit || params.limit
+    };
   }
 
-  async getById(id: number): Promise<Content | null> {
-    try {
-      const response = await this.httpClient.get<{ data: ContentServerResponseDto }>(`${this.baseUrl}/${id}`)
-      if (!response) return null
-      return contentApiToEntity(response.data)
-    } catch (error) {
-      console.error(`[ContentRepository] Error al obtener contenido ${id}:`, error)
-      return null
-    }
+  /**
+   * Retrieves a content item by its ID.
+   *
+   * @param id The ID of the content item to retrieve.
+   * @returns A promise that resolves to the content item if found, or null if not found or if an error occurs.
+   * @throws AppError if the ID is invalid or if there is an error during the HTTP request.
+   */
+  async getContentById(id: string): Promise<Content | null> {
+    const response = unwrap(await this.httpClient.get(`${this.baseUrl}/${id}`));
+    if (!response || !response.data) return null;
+
+
+    return ContentMapper.toContent(response.data as ContentDto);
   }
 
-  async getCountBySectionId(sectionId: number): Promise<number> {
-    try {
-      const response = await this.httpClient.get<{ data: ContentServerResponseDto[] }>(`${this.baseUrl}/section/${sectionId}`)
-      if (!response || !Array.isArray(response.data)) return 0
-      return response.data.length
-    } catch (error) {
-      console.error(`[ContentRepository] Error al obtener conteo de contenidos de la sección ${sectionId}:`, error)
-      return 0
-    }
+  /**
+   * Retrieves the count of content items associated with a specific section ID.
+   *
+   * @param sectionId The ID of the section for which to count content items.
+   * @returns A promise that resolves to the count of content items for the specified section ID, or 0 if no content items are found or if an error occurs.
+   */
+  async getCountBySectionId(sectionId: string): Promise<number> {
+    if (!sectionId) throw new AppError('Section ID is required to get content count', 'MISSING_SECTION_ID');
+
+    const response = unwrap(await this.httpClient.get(`${this.baseUrl}/section/${sectionId}`));
+    if (!response || !Array.isArray(response.data)) return 0;
+
+    return response.data.length;
   }
 
-  async create(data: CreateContentDto): Promise<Content | null> {
-    try {
-      const formData = createContentDtoToFormData(data)
-      const response = await this.httpClient.post<{ data: ContentServerResponseDto }>(this.baseUrl, formData)
-      if (!response?.data) return null
-      return contentApiToEntity(response.data)
-    } catch (error) {
-      console.error('[ContentRepository] Error al crear contenido:', error)
-      return null
-    }
+  /**
+   * Creates a new content item with the provided data.
+   * @param dto The data for the new content item, including title, description, duration, blocked status, section ID, objectives, performance, resource file, and brochure file.
+   * @returns A promise that resolves when the creation is complete.
+   * @throws AppError if there is an error during the HTTP request or if required fields are missing.
+   */
+  async createContent(dto: CreateContentDto): Promise<void> {
+    const formData = new FormData();
+
+    formData.append('title', dto.title);
+    formData.append('description', dto.description);
+    formData.append('duration', dto.duration);
+    formData.append('blocked', String(dto.blocked));
+    formData.append('section_id', String(dto.section_id));
+    formData.append('objectives', dto.objectives ?? '');
+    formData.append('performance', dto.performance ?? '');
+
+    if (dto.resource) formData.append('resources', dto.resource);
+    if (dto.brochure) formData.append('brochure', dto.brochure);
+
+    unwrap(await this.httpClient.post(this.baseUrl, formData));
   }
 
-  async update(id: number, data: UpdateContentDto): Promise<Content | null> {
-    try {
-      const formData = updateContentDtoToFormData(data)
-      const response = await this.httpClient.put<{ data: ContentServerResponseDto }>(`${this.baseUrl}/${id}`, formData)
-      if (!response?.data) return null
-      return contentApiToEntity(response.data)
-    } catch (error) {
-      console.error(`[ContentRepository] Error al actualizar contenido ${id}:`, error)
-      return null
+  /**
+   * Updates an existing content item with the provided ID and data.
+   * @param id The ID of the content item to update.
+   * @param dto The data to update the content item with, including optional title, description, duration, blocked status, objectives, performance, resource file, and brochure file.
+   */
+  async updateContent(id: string, dto: UpdateContentDto): Promise<void> {
+    const formData = new FormData();
+
+    if (dto?.title) formData.append('title', dto.title);
+    if (dto?.description) formData.append('description', dto.description);
+    if (dto?.duration) formData.append('duration', dto.duration);
+    if (dto?.blocked !== undefined) formData.append('blocked', String(dto.blocked));
+    if (dto?.objectives) formData.append('objectives', dto.objectives);
+    if (dto?.performance) formData.append('performance', dto.performance);
+    if (dto?.brochureUrl) formData.append('brochure_url', dto.brochureUrl); // Agregar URL del brochure existente para mantener si no se sube uno nuevo
+
+    // Only add resource if it's a valid File object and has content
+    if (dto.resource !== undefined && dto.resource instanceof File && dto.resource.size > 0) {
+      formData.append('resources', dto.resource);
     }
+    // Only add brochure if it's a valid File object and has content
+    if (dto.brochure !== undefined && dto.brochure instanceof File && dto.brochure.size > 0) {
+      formData.append('brochure', dto.brochure);
+    }
+
+    unwrap(await this.httpClient.put(`${this.baseUrl}/${id}`, formData));
   }
 
-  async delete(id: number): Promise<boolean> {
-    try {
-      return await this.httpClient.delete(`${this.baseUrl}/${id}`)
-    } catch (error) {
-      console.error(`[ContentRepository] Error al eliminar contenido ${id}:`, error)
-      return false
-    }
+  /**
+   * Deletes a content item by its ID.
+   * @param id The ID of the content item to delete.
+   * @returns A promise that resolves when the deletion is complete.
+   * @throws AppError if the ID is invalid or if there is an error during the HTTP request.
+   */
+  async deleteContent(id: string): Promise<void> {
+    if (!id) throw new AppError('Content ID is required to delete content', 'MISSING_CONTENT_ID');
+    unwrap(await this.httpClient.delete(`${this.baseUrl}/${id}`));
   }
 }

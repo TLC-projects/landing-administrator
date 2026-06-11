@@ -1,13 +1,18 @@
-import { HttpClientFactory } from "@core/infrastructure/factories/http-client-factory";
-import { SectionRepositoryImpl } from "@core/infrastructure/repositories/section-repository";
-import { ContentRepositoryImpl } from "@core/infrastructure/repositories/content-repository";
-import { SectionService } from "@core/application/services/section/section-service";
+import { SectionService } from '@core/application/services/section/section-service';
+import { HttpClientFactory } from '@core/infrastructure/factories/http-client-factory';
+import { ContentRepositoryImpl } from '@core/infrastructure/repositories/content-repository';
+import { SectionRepositoryImpl } from '@core/infrastructure/repositories/section-repository';
 
-export async function getSectionDependencies() {
-    const httpClient = await HttpClientFactory.getInstance().createHttpClient();
-    const sectionRepository = new SectionRepositoryImpl(httpClient);
-    const contentRepository = new ContentRepositoryImpl(httpClient);
-    return new SectionService(sectionRepository, contentRepository);
+// Section Service Initialization
+export async function initializeSectionService() {
+  // Create an HTTP cliente instance using the factory
+  const httpClient = await HttpClientFactory.getInstance().createHttpClient();
+
+  // Create repositories with the HTTP client
+  const sectionRepository = new SectionRepositoryImpl(httpClient);
+  const contentRepository = new ContentRepositoryImpl(httpClient);
+
+  return new SectionService(sectionRepository, contentRepository);
 }
 
 // Singleton instance of SectionService
@@ -16,7 +21,7 @@ let sectionServiceInstance: SectionService | null = null;
 
 export async function getSectionService(): Promise<SectionService> {
   if (!sectionServiceInstance) {
-    sectionServiceInstance = await getSectionDependencies();
+    sectionServiceInstance = await initializeSectionService();
   }
   return sectionServiceInstance;
 }

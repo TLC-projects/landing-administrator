@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, type ChangeEvent } from "react";
+import { type ChangeEvent,useRef } from "react";
 import { toast } from "sonner";
-import { FileReadOnlyView } from "./file-read-only-view";
+
 import { FilePreview } from "./file-preview";
+import { FileReadOnlyView } from "./file-read-only-view";
 import { FileUploadZone } from "./file-upload-zone";
 
 interface FileUploadProps {

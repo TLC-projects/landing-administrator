@@ -1,21 +1,21 @@
 'use server';
 
-import { AuthService } from "@core/application/services/auth/auth-service";
-import { CookieStorage } from "../datasources/cookie-storage/cookie-storage";
-import { DataSourceType, HttpClientFactory } from "../factories/http-client-factory";
-import { AuthRepositoryImpl } from "../repositories/auth-repository";
-import { SessionRepositoryImpl } from "../repositories/session-repository";
+import { AuthService } from '@core/application/services/auth/auth-service';
+import { CookieStorage } from '@core/infrastructure/datasources/cookie-storage/cookie-storage';
+import { DataSourceType, HttpClientFactory } from '@core/infrastructure/factories/http-client-factory';
+import { AuthRepositoryImpl } from '@core/infrastructure/repositories/auth-repository';
+import { SessionRepositoryImpl } from '@core/infrastructure/repositories/session-repository';
 
+// Auth Service Initialization
 export async function initializeAuthService() {
-    // Inicializar el servicio de autenticación
-    const httpClient = await HttpClientFactory.getInstance().createHttpClient(DataSourceType.BASIC_HTTP);
+  // Create an HTTP cliente instance using the factory
+  const httpClient = await HttpClientFactory.getInstance().createHttpClient(DataSourceType.BASIC_HTTP);
 
-    // Create repositories with the HTTP client and base URL
-    const authRepository = new AuthRepositoryImpl(httpClient);
-    const sessionRepository = new SessionRepositoryImpl(new CookieStorage());
+  // Create repositories with the HTTP client
+  const authRepository = new AuthRepositoryImpl(httpClient);
+  const sessionRepository = new SessionRepositoryImpl(new CookieStorage());
 
-    return new AuthService(authRepository, sessionRepository);
-
+  return new AuthService(authRepository, sessionRepository);
 }
 
 // Singleton instance of AuthService

@@ -1,9 +1,8 @@
-import { Section } from "@core/domain/entities/Section";
-import { PaginationParams } from "@core/domain/value-objects/pagination";
-import { PaginatedSectionResponse } from "@core/application/dto/section-dto";
-
+import { PaginatedSectionResponse } from '@core/application/dto/section';
+import { Section, SectionFilters } from '@core/domain/entities/section';
+import { PaginationParams } from '@core/domain/value-objects/pagination';
 
 export interface SectionRepository {
-    getAllSections(params: PaginationParams, search?: string): Promise<PaginatedSectionResponse>
-    getSectionById(id: string): Promise<Section | null>
+  getAllSections(params: PaginationParams, filters?: SectionFilters): Promise<PaginatedSectionResponse>;
+  getSectionById(id: string): Promise<Section | null>;
 }

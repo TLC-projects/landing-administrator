@@ -1,8 +1,8 @@
 "use client";
 
-import { getFileNameFromUrl, getFileType } from "@lib/utils";
-import { X, FileText, Image as ImageIcon, ExternalLink } from "lucide-react";
+import { ExternalLink,FileText, Image as ImageIcon, X } from "lucide-react";
 import Image from "next/image";
+import { getFileNameFromUrl, getFileType } from "@lib/utils";
 
 interface FilePreviewProps {
   filePreview: string | null;

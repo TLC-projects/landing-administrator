@@ -1,6 +1,7 @@
 import { Metadata } from "next";
-import { Shell } from "@/src/components/layouts";
 import { LoginForm, LoginHeader } from "@components/modules/auth";
+
+import { Shell } from "@/src/components/layouts";
 
 export const metadata: Metadata = {
   title: "Iniciar Sesión | Content Administrator",
@@ -10,17 +11,12 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <Shell className="grid min-h-screen lg:grid-cols-2">
-      {/* Sección del formulario */}
       <section className="flex items-center justify-center p-8 bg-card">
         <div className="w-full max-w-md space-y-8">
-          {/* Header */}
           <LoginHeader />
-
-          {/* Formulario */}
           <LoginForm />
         </div>
       </section>
-
 
       <aside className="hidden lg:flex items-center justify-center bg-linear-to-br from-primary/80 to-primary p-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.1),transparent)]" />

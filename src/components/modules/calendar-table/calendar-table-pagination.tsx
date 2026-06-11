@@ -1,11 +1,12 @@
-import { Button } from "@/src/components/ui";
-import { Table } from "@tanstack/react-table";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+import { Table } from "@tanstack/react-table";
+
+import { Button } from "@/src/components/ui";
 
 interface SectionTablePaginationProps<T> {
   table: Table<T>;
@@ -17,7 +18,7 @@ function CalendarTablePagination<T>({ table }: SectionTablePaginationProps<T>) {
   return (
     <div className="flex items-center justify-end px-2">
       <div className="flex items-center space-x-6 lg:space-x-8">
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+        <div className="flex w-25 items-center justify-center text-sm font-medium">
           Página {table.getState().pagination.pageIndex + 1} de {totalPages}
         </div>
         <div className="flex items-center gap-2 px-2">

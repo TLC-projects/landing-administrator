@@ -1,6 +1,5 @@
-import { HttpRepository } from "@/src/core/domain/interfaces/http-repository";
-
-
+import { HttpRepository } from '@core/domain/interfaces/http-repository';
+import { fail, HttpError, NetworkError, ok, Result } from '@lib/errors';
 export class BasicFetchClient<T = any> implements HttpRepository<T> {
   private baseApiUrl: string;
 
@@ -8,33 +7,46 @@ export class BasicFetchClient<T = any> implements HttpRepository<T> {
     this.baseApiUrl = baseApiUrl;
   }
 
-  async get<R = T>(url: string, options: RequestInit = {}): Promise<R | null> {
+  /***
+   * Method to perform fetch requests without authentication, with error management.
+   * It processes the response and if the response is not ok, it throws an HttpError with the status code and message.
+   *
+   * @param url The endpoint URL (relative to the base API URL) to which the request is sent.
+   * @param options Optional RequestInit object to customize the fetch request (method, headers, body, etc.).
+   * @returns The parsed JSON response from the server or null for 204 No Content responses.
+   * @throws HttpError if the response status is not ok, containing the status code and error message.
+   */
+  async get<R = T>(url: string, options: RequestInit = {}): Promise<Result<R | null>> {
+    let response: Response;
     try {
-      const response = await fetch(`${this.baseApiUrl}/${url}`, {
-        method: 'GET',
-        ...options
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}, message: ${await response.text()}`);
-      }
-
-      if (response.status === 204) {
-        return null;
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error(`Error in GET ${url}:`, error);
-      return null;
+      response = await fetch(`${this.baseApiUrl}/${url}`, { method: 'GET', ...options });
+    } catch {
+      return fail(new NetworkError());
     }
+    if (!response.ok) {
+      const fetchError = await response.json().catch(() => ({}));
+      return fail(new HttpError(response.status, fetchError.message || `HTTP ${response.status}`));
+    }
+    if (response.status === 204) return ok(null);
+    return ok(await response.json());
   }
 
-  async post<R = T>(url: string, data: any, options: RequestInit = {}): Promise<R | null> {
+  /**
+   * Method to perform a POST request to the specified URL with the provided data and optional fetch options.
+   * It checks if the data is an instance of FormData to determine how to set the body and headers.
+   * If the response is not ok, it throws an HttpError with the status code and message.
+   *
+   * @param url The endpoint URL (relative to the base API URL) to which the POST request is sent.
+   * @param data The data to be sent in the body of the POST request, can be an object or FormData.
+   * @param options Optional RequestInit object to customize the fetch request (headers, etc.).
+   * @returns The parsed JSON response from the server or null if no content is returned.
+   * @throws HttpError if the response status is not ok, containing the status code and error message.
+   */
+  async post<R = T>(url: string, data: any, options: RequestInit = {}): Promise<Result<R | null>> {
+    const isFormData = data instanceof FormData;
+    let response: Response;
     try {
-      const isFormData = data instanceof FormData;
-
-      const response = await fetch(`${this.baseApiUrl}/${url}`, {
+      response = await fetch(`${this.baseApiUrl}/${url}`, {
         method: 'POST',
         body: isFormData ? data : JSON.stringify(data),
         headers: {
@@ -43,25 +55,32 @@ export class BasicFetchClient<T = any> implements HttpRepository<T> {
         },
         ...options
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      if (response.status === 204) {
-        return null;
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error(`Error in POST ${url}:`, error);
-      return null;
+    } catch {
+      return fail(new NetworkError());
     }
+    if (!response.ok) {
+      const fetchError = await response.json().catch(() => ({}));
+      return fail(new HttpError(response.status, fetchError.message || `HTTP ${response.status}`));
+    }
+    if (response.status === 204) return ok(null);
+    return ok(await response.json());
   }
 
-  async put<R = T>(url: string, data: any, options: RequestInit = {}): Promise<R | null> {
+  /**
+   * Method to perform a PUT request to the specified URL with the provided data and optional fetch options.
+   * It sends the data as JSON and sets the appropriate Content-Type header.
+   * If the response is not ok, it throws an HttpError with the status code and message.
+   *
+   * @param url The endpoint URL (relative to the base API URL) to which the PUT request is sent.
+   * @param data The data to be sent in the body of the PUT request, should be an object that will be JSON-stringified.
+   * @param options Optional RequestInit object to customize the fetch request (headers, etc.).
+   * @returns The parsed JSON response from the server or null if no content is returned.
+   * @throws HttpError if the response status is not ok, containing the status code and error message.
+   */
+  async put<R = T>(url: string, data: any, options: RequestInit = {}): Promise<Result<R | null>> {
+    let response: Response;
     try {
-      const response = await fetch(`${this.baseApiUrl}/${url}`, {
+      response = await fetch(`${this.baseApiUrl}/${url}`, {
         method: 'PUT',
         body: JSON.stringify(data),
         headers: {
@@ -70,37 +89,47 @@ export class BasicFetchClient<T = any> implements HttpRepository<T> {
         },
         ...options
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error(`Error in PUT ${url}:`, error);
-      return null;
+    } catch {
+      return fail(new NetworkError());
     }
+    if (!response.ok) {
+      const fetchError = await response.json().catch(() => ({}));
+      return fail(new HttpError(response.status, fetchError.message || `HTTP ${response.status}`));
+    }
+    return ok(await response.json());
   }
 
-  async delete<R = boolean>(url: string, options: RequestInit = {}): Promise<R> {
+  /**
+   * Method to perform a DELETE request to the specified URL with optional fetch options.
+   * If the response is not ok, it throws an HttpError with the status code and message.
+   *
+   * @param url The endpoint URL (relative to the base API URL) to which the DELETE request is sent.
+   * @param options Optional RequestInit object to customize the fetch request (headers, etc.).
+   * @returns True if the deletion was successful (response status is ok).
+   * @throws HttpError if the response status is not ok, containing the status code and error message.
+   */
+  async delete<R = boolean>(url: string, options: RequestInit = {}): Promise<Result<R>> {
+    let response: Response;
     try {
-      const response = await fetch(`${this.baseApiUrl}/${url}`, {
-        method: 'DELETE',
-        ...options
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      return true as unknown as R;
-    } catch (error) {
-      console.error(`Error in DELETE ${url}:`, error);
-      return false as unknown as R;
+      response = await fetch(`${this.baseApiUrl}/${url}`, { method: 'DELETE', ...options });
+    } catch {
+      return fail(new NetworkError());
     }
+    if (!response.ok) {
+      const fetchError = await response.json().catch(() => ({}));
+      return fail(new HttpError(response.status, fetchError.message || `HTTP ${response.status}`));
+    }
+    return ok(true as unknown as R);
   }
 
-  // Método requerido por la interfaz, pero sin autenticación
+  /**
+   * Method to perform a fetch request with authentication. It determines the HTTP method from the options and calls the corresponding method (get, post, put, delete).
+   * If the method is not implemented, it throws an error.
+   *
+   * @param url The endpoint URL (relative to the base API URL) to which the request is sent.
+   * @param options Optional RequestInit object to customize the fetch request (method, headers, body, etc.). The method defaults to GET if not specified.
+   * @returns The parsed JSON response from the server or null if no content is returned.
+   */
   async fetchWithAuth(url: string, options?: RequestInit): Promise<any> {
     const method = options?.method || 'GET';
 

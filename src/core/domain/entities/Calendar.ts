@@ -7,5 +7,5 @@ export interface Calendar {
     id: string;
     title: string;
     date: string;
-    blocked?: boolean;
+    blocked: boolean;
 }

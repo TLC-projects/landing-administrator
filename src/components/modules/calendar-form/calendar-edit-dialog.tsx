@@ -1,23 +1,16 @@
-"use client";
+'use client';
 
-import { startTransition, useEffect, useRef } from "react";
-import { Calendar } from "@core/domain/entities/Calendar";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@components/ui/dialog";
-import { Button, Input, Label } from "@components/ui";
-import { useResettableActionState } from "@/src/hooks/use-resettable-action-state";
-import {
-  updateCalendarAction,
-  deleteCalendarAction,
-} from "@lib/actions/calendar-actions";
-import { toast } from "sonner";
-import { VisibilityToggle } from "./visibility-toggle";
-import { useLocalState } from "./lib/use-local-state";
+import { startTransition, useEffect, useRef } from 'react';
+import { toast } from 'sonner';
+import { Button, Input, Label } from '@components/ui';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@components/ui/dialog';
+import { Calendar } from '@core/domain/entities/calendar';
+import { deleteCalendarAction, updateCalendarAction } from '@lib/actions/calendar-actions';
+
+import { useResettableActionState } from '@/src/hooks/use-resettable-action-state';
+
+import { useLocalState } from './lib/use-local-state';
+import { VisibilityToggle } from './visibility-toggle';
 
 interface CalendarEditDialogProps {
   open: boolean;
@@ -34,18 +27,18 @@ export function CalendarEditDialog({
   onOpenChange,
   entry,
   onDeleted,
-  onSaved,
+  onSaved
 }: CalendarEditDialogProps) {
-  const updateWithId = updateCalendarAction.bind(null, entry.id);
-
-  const [actionState, formAction, isLoading, reset] = useResettableActionState(
-    updateWithId,
-    { message: "", status: null, data: undefined },
-  );
+  const [blocked, setBlocked] = useLocalState(entry.blocked);
 
   const titleRef = useRef<HTMLInputElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
-  const [blocked, setBlocked] = useLocalState(entry.blocked);
+
+  // Action state management for handling the update calendar action.
+  const [state, formAction, isLoading, reset] = useResettableActionState(updateCalendarAction, {
+    message: '',
+    status: false
+  });
 
   // Reset the form fields and blocked state when the dialog is opened or the entry changes
   useEffect(() => {
@@ -57,15 +50,19 @@ export function CalendarEditDialog({
 
   // Show success or error messages based on the action state and call the appropriate callbacks
   useEffect(() => {
-    if (!actionState.message) return;
-    if (actionState.status === true) {
-      toast.success(actionState.message, { onAutoClose: () => reset() });
-      if (actionState.data) onSaved(actionState.data);
+    if (!state.message) return;
+
+    if (state.status) {
+      toast.success(state.message, {
+        onAutoClose: () => reset()
+      });
+      if (state?.data) onSaved(state.data);
       onOpenChange(false);
     } else {
-      toast.error(actionState.message);
+      toast.error(state.message);
+      reset();
     }
-  }, [actionState.message, actionState.status]);
+  }, [state.message, state.status]);
 
   /**
    * Submits the edit form and updates the calendar entry with the new values.
@@ -73,9 +70,10 @@ export function CalendarEditDialog({
    */
   const handleSubmit = () => {
     const formData = new FormData();
-    formData.append("title", titleRef.current?.value ?? "");
-    formData.append("date", dateRef.current?.value ?? "");
-    formData.append("blocked", blocked ? "on" : "off");
+    formData.append('id', entry.id);
+    formData.append('title', titleRef.current?.value ?? '');
+    formData.append('date', dateRef.current?.value ?? '');
+    formData.append('blocked', blocked ? 'on' : 'off');
     startTransition(() => formAction(formData));
   };
 
@@ -113,12 +111,7 @@ export function CalendarEditDialog({
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="edit-date">Fecha</Label>
-            <Input
-              ref={dateRef}
-              id="edit-date"
-              type="date"
-              defaultValue={entry.date?.slice(0, 10)}
-            />
+            <Input ref={dateRef} id="edit-date" type="date" defaultValue={entry.date?.slice(0, 10)} />
           </div>
           <VisibilityToggle blocked={blocked ?? false} onChange={setBlocked} />
         </div>
@@ -128,17 +121,13 @@ export function CalendarEditDialog({
               Cancelar
             </Button>
           ) : (
-            <Button
-              variant="outline"
-              onClick={handleDelete}
-              disabled={isLoading}
-            >
-              {isLoading ? "Eliminando..." : "Eliminar"}
+            <Button variant="outline" onClick={handleDelete} disabled={isLoading}>
+              {isLoading ? 'Eliminando...' : 'Eliminar'}
             </Button>
           )}
 
           <Button onClick={handleSubmit} disabled={isLoading}>
-            {isLoading ? "Guardando..." : "Actualizar"}
+            {isLoading ? 'Guardando...' : 'Actualizar'}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,31 +1,32 @@
-"use client";
+'use client';
 
-import { Calendar } from "@core/domain/entities/Calendar";
-import { useState } from "react";
+import { useState } from 'react';
+import { Ban, MoreHorizontal, SquarePen } from 'lucide-react';
 import {
   Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  Separator,
-} from "@components/ui";
-import { Ban, MoreHorizontal, SquarePen } from "lucide-react";
-import { CalendarDeleteDialog } from "./calendar-delete-dialog";
-import { CalendarEditDialog } from "../calendar-form";
+  Separator
+} from '@components/ui';
+
+import { Calendar } from '@/src/core/domain/entities/calendar';
+
+import { CalendarEditDialog } from '../calendar-form';
+
+import { CalendarDeleteDialog } from './calendar-delete-dialog';
 
 interface CalendarTableActionsProps {
   calendar: Calendar;
 }
 
-export const CalendarTableActions = ({
-  calendar,
-}: CalendarTableActionsProps) => {
+export const CalendarTableActions = ({ calendar }: CalendarTableActionsProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const [modals, setModals] = useState({
     edit: false,
-    delete: false,
+    delete: false
   });
 
   /**
@@ -45,7 +46,7 @@ export const CalendarTableActions = ({
   const handleToggleEditModal = () => {
     setModals((prev) => ({ ...prev, edit: !prev.edit }));
   };
-  
+
   return (
     <>
       <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
@@ -60,8 +61,7 @@ export const CalendarTableActions = ({
             onClick={() => {
               handleToggleEditModal();
               setIsDropdownOpen(false);
-            }}
-          >
+            }}>
             <SquarePen className="h-4 w-4 " />
             <span>Editar</span>
           </DropdownMenuItem>
@@ -73,19 +73,14 @@ export const CalendarTableActions = ({
             onClick={() => {
               handleToggleDeleteModal();
               setIsDropdownOpen(false);
-            }}
-          >
+            }}>
             <Ban className="h-4 w-4 text-gray-500" />
             <span>Eliminar</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       {modals.delete && (
-        <CalendarDeleteDialog
-          isOpen={modals.delete}
-          onClose={handleToggleDeleteModal}
-          calendarId={calendar.id}
-        />
+        <CalendarDeleteDialog isOpen={modals.delete} onClose={handleToggleDeleteModal} calendarId={calendar.id} />
       )}
       {modals.edit && (
         <CalendarEditDialog

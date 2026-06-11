@@ -1,6 +1,5 @@
 import { cookies } from 'next/headers';
 
-
 interface CookieOptions {
   path?: string;
   maxAge?: number;

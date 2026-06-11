@@ -1,20 +1,25 @@
-import { HttpClientFactory } from "@core/infrastructure/factories/http-client-factory";
-import { ContentRepositoryImpl } from "@core/infrastructure/repositories/content-repository";
-import { ContentService } from "@core/application/services/content/content-service";
+import { ContentService } from '@core/application/services/content/content-service';
+import { HttpClientFactory } from '@core/infrastructure/factories/http-client-factory';
+import { ContentRepositoryImpl } from '@core/infrastructure/repositories/content-repository';
 
-export async function getContentDependencies() {
-    const httpClient = await HttpClientFactory.getInstance().createHttpClient();
-    const contentRepository = new ContentRepositoryImpl(httpClient);
-    return new ContentService(contentRepository);
+// Content Service Initialization
+export async function initializeContentService() {
+  // Create an HTTP cliente instance using the factory
+  const httpClient = await HttpClientFactory.getInstance().createHttpClient();
+
+  // Create repository with the HTTP client
+  const contentRepository = new ContentRepositoryImpl(httpClient);
+
+  return new ContentService(contentRepository);
 }
 
-// Singleton instancia de ContentService
-// Esta asegura que el ContentService se inicie una sola vez y se reutilice en toda la aplicación, evitando múltiples instancias y optimizando el rendimiento.
+// Singleton instance of ContentService
+// This ensures that the ContentService is initialized only once and reused throughout the application
 let contentServiceInstance: ContentService | null = null;
 
 export async function getContentService(): Promise<ContentService> {
   if (!contentServiceInstance) {
-    contentServiceInstance = await getContentDependencies();
+    contentServiceInstance = await initializeContentService();
   }
   return contentServiceInstance;
 }

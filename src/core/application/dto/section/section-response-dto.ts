@@ -1,4 +1,4 @@
-import { Section } from "@core/domain/entities/Section";
+import { Section } from '@core/domain/entities/section';
 
 export interface SectionDto {
   id: string;
@@ -13,8 +13,8 @@ export interface PaginatedSectionResponse {
 }
 
 export interface SectionServerResponseDto {
-  data: SectionDto[] | SectionDto
-  page?: number
-  limit?: number
-  total?: number
+  page?: number;
+  limit?: number;
+  total?: number;
+  data: SectionDto[] | SectionDto;
 }

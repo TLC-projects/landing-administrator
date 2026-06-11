@@ -1,5 +1,5 @@
-import { Eye, EyeOff } from "lucide-react";
-import { Switch } from "@components/ui";
+import { Eye, EyeOff } from 'lucide-react';
+import { Switch } from '@components/ui';
 
 interface VisibilityToggleProps {
   blocked: boolean;
@@ -18,13 +18,13 @@ export function VisibilityToggle({ blocked, onChange }: VisibilityToggleProps) {
             Visibilidad del evento
           </label>
           <span className="text-xs text-muted-foreground">
-            {!blocked ? "El evento será visible" : "El evento estará oculto"}
+            {!blocked ? 'El evento será visible' : 'El evento estará oculto'}
           </span>
         </div>
       </div>
       <div className="flex items-center gap-2.5">
-        <span className={`text-xs font-medium ${!blocked ? "text-primary" : "text-muted-foreground"}`}>
-          {!blocked ? "Visible" : "Oculto"}
+        <span className={`text-xs font-medium ${!blocked ? 'text-primary' : 'text-muted-foreground'}`}>
+          {!blocked ? 'Visible' : 'Oculto'}
         </span>
         <Switch id="cal-blocked" checked={!blocked} onCheckedChange={(v) => onChange(!v)} />
       </div>

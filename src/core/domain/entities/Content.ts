@@ -1,49 +1,23 @@
-import { ContentResourceServerResponseDto } from "../../application/dto/content-dto"
-
-export interface ContentResource {
-  id: number
-  url: string
-  content_id: number
+export interface ContentFilters {
+  search?: string;
+  blocked?: boolean;
 }
 
-export class Content {
-  constructor(
-    //clases de dominio son publicos para que puedan ser accedidos directamente, pero el bloqueado se maneja con métodos para asegurar la lógica de negocio
-    public readonly id: number,
-    public readonly sectionId: number,
-    public readonly title: string,
-    public readonly description: string,
-    public readonly duration: string,
-    private readonly _blocked: boolean,
-    public readonly resources: ContentResourceServerResponseDto[],
-    public readonly objectives?: string,
-    public readonly performance?: string,
-    public readonly brochureUrl?: string
-  ) {}
+export interface ContentResource {
+  id: string;
+  url: string;
+  contentId: string;
+}
 
-  isBlocked(): boolean {
-    return this._blocked
-  }
-
-  isVisible(): boolean {
-    return !this._blocked
-  }
-
-  hasResource(): boolean {
-    return this.resources.length > 0
-  }
-
-   getMainResourceUrl(): string | null {
-    // Devuelve la URL del primer recurso si existe
-    return this.resources && this.resources.length > 0 ? this.resources[0].url : null
-  }
-
-  block(): Content {
-    return new Content(this.id, this.sectionId, this.title, this.description, this.duration, true, this.resources, this.objectives, this.performance, this.brochureUrl)
-  }
-
-  unblock(): Content {
-    return new Content(this.id, this.sectionId, this.title, this.description, this.duration, false, this.resources, this.objectives, this.performance, this.brochureUrl)
-  }
-  
+export interface Content {
+  id: string;
+  sectionId: string;
+  title: string;
+  description: string;
+  duration: string;
+  blocked: boolean;
+  resources: ContentResource[];
+  objectives?: string;
+  performance?: string;
+  brochureUrl?: string;
 }

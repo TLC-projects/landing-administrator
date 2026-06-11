@@ -1,16 +1,15 @@
-import { SidebarProvider, SidebarInset } from "@components/ui";
-import { AppHeader, AppSidebar } from "@components/layouts";
+import { AppHeader, AppSidebar } from '@components/layouts';
+import { SidebarInset, SidebarProvider } from '@components/ui';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider
       style={
         {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
+          '--sidebar-width': 'calc(var(--spacing) * 72)',
+          '--header-height': 'calc(var(--spacing) * 12)'
         } as React.CSSProperties
-      }
-    >
+      }>
       <AppSidebar variant="inset" />
       <SidebarInset className="flex flex-1 flex-col">
         <AppHeader />

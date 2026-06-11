@@ -7,6 +7,11 @@ if (!BASE_PATH) {
 }
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb'
+    }
+  },
   basePath: BASE_PATH,
   assetPrefix: BASE_PATH,
   images: {

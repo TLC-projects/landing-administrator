@@ -1,33 +1,35 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Plus, ChevronLeft, ChevronRight, FunnelX } from "lucide-react";
-import { Button, Card, CardContent, SearchBar } from "@/src/components/ui";
-import { Calendar } from "@core/domain/entities/Calendar";
-import { CalendarFilter } from "./calendar-filter";
-import { CalendarViewToggle } from "./calendar-view-toggle";
-import { CalendarNewDialog } from "../calendar-form/calendar-new-dialog";
-import { useDebouncedCallback } from "use-debounce";
-import { CalendarGrid } from "./calendar-grid";
-import { CalendarTable } from "../calendar-table";
-import { CalendarEditDialog } from "../calendar-form";
+import { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight, FunnelX, Plus } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Calendar } from '@core/domain/entities/calendar';
 
-type ViewMode = "calendar" | "table";
+import { Button, Card, CardContent, SearchBar } from '@/src/components/ui';
+
+import { CalendarEditDialog } from '../calendar-form';
+import { CalendarNewDialog } from '../calendar-form/calendar-new-dialog';
+import { CalendarTable } from '../calendar-table';
+
+import { CalendarFilter } from './calendar-filter';
+import { CalendarGrid } from './calendar-grid';
+import { CalendarViewToggle } from './calendar-view-toggle';
+
+type ViewMode = 'calendar' | 'table';
 
 const MONTHS = [
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre",
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre'
 ];
 
 interface CalendarContainerProps {
@@ -41,25 +43,21 @@ interface CalendarContainerProps {
   };
 }
 
-export function CalendarContainer({
-  entries: initialEntries,
-  initialSearch = "",
-  pageInfo,
-}: CalendarContainerProps) {
+export function CalendarContainer({ entries: initialEntries, initialSearch = '', pageInfo }: CalendarContainerProps) {
   const searchParams = useSearchParams();
 
   const today = new Date();
-  const [view, setView] = useState<ViewMode>("table");
+  const [view, setView] = useState<ViewMode>('table');
   const [current, setCurrent] = useState({
     year: today.getFullYear(),
-    month: today.getMonth(),
+    month: today.getMonth()
   });
   const [entries, setEntries] = useState<Calendar[]>(initialEntries);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | undefined>();
   const [editingEntry, setEditingEntry] = useState<Calendar | undefined>();
 
-  const hasActiveFilters = !!(initialSearch || searchParams.get("blocked"));
+  const hasActiveFilters = !!(initialSearch || searchParams.get('blocked'));
   const isEmptyDatabase = entries.length === 0 && !hasActiveFilters;
   const noFilterResults = entries.length === 0 && hasActiveFilters;
 
@@ -74,7 +72,7 @@ export function CalendarContainer({
   const prevMonth = () =>
     setCurrent((prev) => ({
       year: prev.month === 0 ? prev.year - 1 : prev.year,
-      month: prev.month === 0 ? 11 : prev.month - 1,
+      month: prev.month === 0 ? 11 : prev.month - 1
     }));
 
   /**
@@ -86,7 +84,7 @@ export function CalendarContainer({
   const nextMonth = () =>
     setCurrent((prev) => ({
       year: prev.month === 11 ? prev.year + 1 : prev.year,
-      month: prev.month === 11 ? 0 : prev.month + 1,
+      month: prev.month === 11 ? 0 : prev.month + 1
     }));
 
   /**
@@ -126,9 +124,7 @@ export function CalendarContainer({
   const handleSaved = (entry: Calendar) => {
     setEntries((prev) => {
       const exists = prev.find((e) => e.id === entry.id);
-      return exists
-        ? prev.map((e) => (e.id === entry.id ? entry : e))
-        : [...prev, entry];
+      return exists ? prev.map((e) => (e.id === entry.id ? entry : e)) : [...prev, entry];
     });
   };
 
@@ -142,7 +138,6 @@ export function CalendarContainer({
 
   // --- Render ---
 
-
   // Set the entries state when the initialEntries prop changes
   useEffect(() => {
     setEntries(initialEntries);
@@ -152,17 +147,16 @@ export function CalendarContainer({
     <div className="space-y-4">
       {/* Toolbar — siempre visible */}
       <div className="space-y-2.5 border shadow rounded-md px-3 pt-5 pb-3 flex flex-col md:flex-row items-start gap-4">
-        <SearchBar
-          className="md:max-w-7xl"
-          placeholder="Buscar por nombre del evento ..."
-        />
+        <SearchBar className="md:max-w-7xl" placeholder="Buscar por nombre del evento ..." />
         <div className="flex items-center gap-2 ml-auto">
           <CalendarFilter />
         </div>
       </div>
 
       <div className="flex justify-end">
-        <CalendarViewToggle view={view} onChange={setView} />
+        <Button onClick={openNewDialog}>
+          <Plus className="h-4 w-4 mr-1" /> Nuevo evento
+        </Button>
       </div>
 
       {/* Estado vacío — sin datos en DB */}
@@ -173,12 +167,9 @@ export function CalendarContainer({
               <Plus className="h-10 w-10 text-muted-foreground" />
             </div>
             <div className="space-y-1.5">
-              <h3 className="text-lg font-semibold">
-                Aún no hay eventos en el calendario
-              </h3>
+              <h3 className="text-lg font-semibold">Aún no hay eventos en el calendario</h3>
               <p className="max-w-sm text-sm text-muted-foreground">
-                Empieza agregando tu primer evento. Podrás organizarlo, editarlo
-                y gestionarlo desde aquí.
+                Empieza agregando tu primer evento. Podrás organizarlo, editarlo y gestionarlo desde aquí.
               </p>
             </div>
             <Button onClick={openNewDialog}>
@@ -191,7 +182,7 @@ export function CalendarContainer({
         <>
           {/* Nav mes + toggle vista + nuevo evento */}
           <div className="flex items-center justify-between">
-            {view === "calendar" ? (
+            {view === 'calendar' ? (
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="icon" onClick={prevMonth}>
                   <ChevronLeft className="h-4 w-4" />
@@ -207,9 +198,7 @@ export function CalendarContainer({
               <div />
             )}
             <div className="flex items-center gap-2">
-              <Button onClick={openNewDialog}>
-                <Plus className="h-4 w-4 mr-1" /> Nuevo evento
-              </Button>
+              <CalendarViewToggle view={view} onChange={setView} />
             </div>
           </div>
 
@@ -225,7 +214,7 @@ export function CalendarContainer({
                 </p>
               </CardContent>
             </Card>
-          ) : view === "calendar" ? (
+          ) : view === 'calendar' ? (
             <CalendarGrid
               entries={entries}
               current={current}
