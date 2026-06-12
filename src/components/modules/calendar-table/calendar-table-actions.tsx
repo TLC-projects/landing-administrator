@@ -11,7 +11,7 @@ import {
   Separator
 } from '@components/ui';
 
-import { Calendar } from '@/src/core/domain/entities/calendar_';
+import { Calendar } from '@/src/core/domain/entities/calendar';
 
 import { CalendarEditDialog } from '../calendar-form';
 

@@ -1,5 +1,5 @@
 import { CreateCalendarDto } from '@core/application/dto/calendar';
-import { Calendar } from '@/src/core/domain/entities/calendar_';
+import { Calendar } from '@/src/core/domain/entities/calendar';
 import { CalendarRepository } from '@core/domain/interfaces/calendar-repository';
 import { AppError } from '@lib/errors';
 

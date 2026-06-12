@@ -1,4 +1,4 @@
-import { Section } from '@/src/core/domain/entities/section_';
+import { Section } from '@/src/core/domain/entities/section';
 
 import { SectionDto } from './section-response-dto';
 

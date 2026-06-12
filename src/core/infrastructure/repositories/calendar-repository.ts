@@ -4,7 +4,7 @@ import {
   CalendarServerResponseDto,
   PaginatedCalendarResponse
 } from '@core/application/dto/calendar/calendar-response-dto';
-import { Calendar, CalendarFilters } from '@/src/core/domain/entities/calendar_';
+import { Calendar, CalendarFilters } from '@/src/core/domain/entities/calendar';
 import { CalendarRepository } from '@core/domain/interfaces/calendar-repository';
 import { HttpRepository } from '@core/domain/interfaces/http-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';

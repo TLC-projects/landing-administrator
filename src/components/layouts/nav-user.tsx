@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/src/components/ui";
 import { dataFetcher } from "@lib/data-fetching";
-import { User } from "@/src/core/domain/entities/user_";
+import { User } from "@/src/core/domain/entities/user";
 import { withBasePath } from "@lib/with-base-path";
 import { ProfileSkeleton } from "../modules/skeleton";
 

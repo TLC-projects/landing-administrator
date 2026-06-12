@@ -1,4 +1,4 @@
-import { Calendar } from '@/src/core/domain/entities/calendar_';
+import { Calendar } from '@/src/core/domain/entities/calendar';
 
 import { CalendarDto } from './calendar-response-dto';
 

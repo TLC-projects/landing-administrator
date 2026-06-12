@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar } from '@/src/core/domain/entities/calendar_';
+import { Calendar } from '@/src/core/domain/entities/calendar';
 
 import { CalendarDayCell } from './calendar-day-cell';
 

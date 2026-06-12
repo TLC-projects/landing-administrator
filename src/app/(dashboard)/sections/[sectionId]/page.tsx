@@ -3,7 +3,7 @@ import { getContentService } from '@core/infrastructure/config/content-dependenc
 
 import { AppTitle, Shell } from '@/src/components/layouts';
 import { ContentTable } from '@/src/components/modules/content';
-import { ContentFilters } from '@/src/core/domain/entities/content_';
+import { ContentFilters } from '@/src/core/domain/entities/content';
 
 export async function generateMetadata({ params }: { params: Promise<{ projectId: string; sectionId: string }> }) {
   const { sectionId } = await params;

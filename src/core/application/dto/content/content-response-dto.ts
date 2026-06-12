@@ -1,4 +1,4 @@
-import { Content } from '@/src/core/domain/entities/content_';
+import { Content } from '@/src/core/domain/entities/content';
 
 export interface PaginatedContentResponse {
   total: number;

@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { getCalendarService } from '@core/infrastructure/config/calendar-dependency';
 
-import { Calendar } from '@/src/core/domain/entities/calendar_';
+import { Calendar } from '@/src/core/domain/entities/calendar';
 
 import { AppError, HttpError } from '../errors';
 

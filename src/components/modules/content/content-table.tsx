@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow
 } from '@components/ui';
-import { Content } from '@/src/core/domain/entities/content_';
+import { Content } from '@/src/core/domain/entities/content';
 import {
   flexRender,
   getCoreRowModel,

@@ -2,7 +2,7 @@
 import { type ChangeEvent, useReducer, useRef } from 'react';
 import { toast } from 'sonner';
 
-import { Content } from '@/src/core/domain/entities/content_';
+import { Content } from '@/src/core/domain/entities/content';
 
 import type { ContentFormModes } from '../types/content';
 

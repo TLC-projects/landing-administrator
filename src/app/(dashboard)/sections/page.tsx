@@ -1,7 +1,7 @@
 import { BookOpen } from 'lucide-react';
 import { AppTitle, Shell } from '@components/layouts';
 import { SectionTable } from '@components/modules/sections';
-import { SectionFilters } from '@/src/core/domain/entities/section_';
+import { SectionFilters } from '@/src/core/domain/entities/section';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 import { getSectionService } from '@core/infrastructure/config/section-dependency';
 

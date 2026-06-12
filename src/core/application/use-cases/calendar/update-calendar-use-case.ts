@@ -2,7 +2,7 @@ import { UpdateCalendarDto } from '@core/application/dto/calendar';
 import { CalendarRepository } from '@core/domain/interfaces/calendar-repository';
 import { AppError } from '@lib/errors';
 
-import { Calendar } from '@/src/core/domain/entities/calendar_';
+import { Calendar } from '@/src/core/domain/entities/calendar';
 
 /**
  * Update Calendar (Use Case)

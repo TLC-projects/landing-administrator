@@ -4,7 +4,7 @@ import { CalendarContainer } from '@components/modules/calendar';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 import { getCalendarService } from '@core/infrastructure/config/calendar-dependency';
 
-import { CalendarFilters } from '@/src/core/domain/entities/calendar_';
+import { CalendarFilters } from '@/src/core/domain/entities/calendar';
 
 export const metadata = {
   title: 'Calendario | Content Administrator',
