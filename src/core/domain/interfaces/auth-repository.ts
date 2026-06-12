@@ -1,4 +1,4 @@
-import { Auth } from '@core/domain/entities/auth';
+import { Auth } from '@/src/core/domain/entities/auth';
 
 export interface AuthRepository {
   authenticate({ email, password }: { email: string; password: string }): Promise<Auth | null>;

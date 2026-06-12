@@ -1,5 +1,5 @@
 import { PaginatedContentResponse } from '@core/application/dto/content';
-import { ContentFilters } from '@core/domain/entities/content';
+import { ContentFilters } from '@/src/core/domain/entities/content';
 import { ContentRepository } from '@core/domain/interfaces/content-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 

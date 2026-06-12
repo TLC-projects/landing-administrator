@@ -1,4 +1,4 @@
-import { Content } from '@core/domain/entities/content';
+import { Content } from '@/src/core/domain/entities/content';
 import { ContentRepository } from '@core/domain/interfaces/content-repository';
 
 import { AppError } from '@/src/lib/errors';

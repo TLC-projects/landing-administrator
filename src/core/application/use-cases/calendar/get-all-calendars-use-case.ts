@@ -1,5 +1,5 @@
 import { PaginatedCalendarResponse } from '@core/application/dto/calendar';
-import { CalendarFilters } from '@core/domain/entities/calendar';
+import { CalendarFilters } from '@/src/core/domain/entities/calendar';
 import { CalendarRepository } from '@core/domain/interfaces/calendar-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 

@@ -4,7 +4,7 @@ import { startTransition, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { Button, Input, Label } from '@components/ui';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@components/ui/dialog';
-import { Calendar } from '@core/domain/entities/calendar';
+import { Calendar } from '@/src/core/domain/entities/calendar';
 import { createCalendarAction } from '@lib/actions/calendar-actions';
 
 import { useResettableActionState } from '@/src/hooks/use-resettable-action-state';

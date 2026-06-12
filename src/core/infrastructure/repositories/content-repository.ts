@@ -5,7 +5,7 @@ import {
   UpdateContentDto
 } from '@core/application/dto/content';
 import { ContentMapper } from '@core/application/dto/content/content-mapper';
-import { Content, ContentFilters } from '@core/domain/entities/content';
+import { Content, ContentFilters } from '@/src/core/domain/entities/content';
 import { ContentRepository } from '@core/domain/interfaces/content-repository';
 import { HttpRepository } from '@core/domain/interfaces/http-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';

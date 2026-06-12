@@ -6,7 +6,7 @@ import {
   GetCalendarByIdUseCase,
   UpdateCalendarUseCase
 } from '@core/application/use-cases/calendar';
-import { Calendar, CalendarFilters } from '@core/domain/entities/calendar';
+import { Calendar, CalendarFilters } from '@/src/core/domain/entities/calendar';
 import { CalendarRepository } from '@core/domain/interfaces/calendar-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 

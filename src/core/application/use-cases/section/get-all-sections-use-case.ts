@@ -1,5 +1,5 @@
 import { PaginatedSectionResponse } from '@core/application/dto/section';
-import { SectionFilters } from '@core/domain/entities/section';
+import { SectionFilters } from '@/src/core/domain/entities/section';
 import { SectionRepository } from '@core/domain/interfaces/section-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 import { AppError } from '@lib/errors';

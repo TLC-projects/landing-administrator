@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
   Separator
 } from '@components/ui';
-import { Content } from '@core/domain/entities/content';
+import { Content } from '@/src/core/domain/entities/content';
 
 import { ContentDeleteDialog } from './content-delete-dialog';
 

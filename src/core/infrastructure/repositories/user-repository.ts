@@ -1,5 +1,5 @@
 import { UserMapper, UserResultDto, UserServerResponseDto } from '@core/application/dto/user';
-import { User } from '@core/domain/entities/user';
+import { User } from '@/src/core/domain/entities/user';
 import { HttpRepository } from '@core/domain/interfaces/http-repository';
 import { UserRepository } from '@core/domain/interfaces/user-repository';
 import { unwrap } from '@lib/errors';

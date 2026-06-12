@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, FunnelX, Plus } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { Calendar } from '@core/domain/entities/calendar';
+import { Calendar } from '@/src/core/domain/entities/calendar';
 
 import { Button, Card, CardContent, SearchBar } from '@/src/components/ui';
 
