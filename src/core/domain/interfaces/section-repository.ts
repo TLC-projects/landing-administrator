@@ -1,5 +1,5 @@
 import { PaginatedSectionResponse } from '@core/application/dto/section';
-import { Section, SectionFilters } from '@core/domain/entities/section';
+import { Section, SectionFilters } from '@/src/core/domain/entities/section_';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 
 export interface SectionRepository {

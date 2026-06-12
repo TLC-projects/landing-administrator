@@ -1,7 +1,7 @@
 import { SessionRepository } from '@core/domain/interfaces/session-repository';
 import { UserRepository } from '@core/domain/interfaces/user-repository';
 
-import { User } from '@/src/core/domain/entities/user';
+import { User } from '@/src/core/domain/entities/user_';
 
 /**
  * Get Current User (Use Case)

@@ -1,4 +1,4 @@
-import { Section } from '@core/domain/entities/section';
+import { Section } from '@/src/core/domain/entities/section_';
 import { SectionRepository } from '@core/domain/interfaces/section-repository';
 import { AppError } from '@lib/errors';
 

@@ -21,7 +21,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { Calendar } from "@/src/core/domain/entities/calendar";
+import { Calendar } from "@/src/core/domain/entities/calendar_";
 
 import { CalendarTableColumns } from "./calendar-table-columns";
 import { CalendarTablePagination } from "./calendar-table-pagination";

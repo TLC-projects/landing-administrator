@@ -1,5 +1,5 @@
 import { CreateContentDto, PaginatedContentResponse, UpdateContentDto } from '@core/application/dto/content';
-import { Content, ContentFilters } from '@core/domain/entities/content';
+import { Content, ContentFilters } from '@/src/core/domain/entities/content_';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 
 export interface ContentRepository {

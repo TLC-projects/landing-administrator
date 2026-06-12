@@ -4,7 +4,7 @@ import {
   GetSectionByIdUseCase,
   GetSectionsWithContentCountUseCase
 } from '@core/application/use-cases/section';
-import { Section, SectionFilters } from '@core/domain/entities/section';
+import { Section, SectionFilters } from '@/src/core/domain/entities/section_';
 import { ContentRepository } from '@core/domain/interfaces/content-repository';
 import { SectionRepository } from '@core/domain/interfaces/section-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';

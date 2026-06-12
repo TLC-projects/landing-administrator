@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/src/components/ui";
 import { ArrowUpDown, Eye } from "lucide-react";
 import Link from "next/link";
-import { Section } from "@/src/core/domain/entities/section";
+import { Section } from "@/src/core/domain/entities/section_";
 
 export const SectionTableColumns = (): ColumnDef<Section>[] => [
   {

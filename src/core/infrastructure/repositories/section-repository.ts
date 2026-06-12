@@ -4,7 +4,7 @@ import {
   SectionMapper,
   SectionServerResponseDto
 } from '@core/application/dto/section';
-import { Section, SectionFilters } from '@core/domain/entities/section';
+import { Section, SectionFilters } from '@/src/core/domain/entities/section_';
 import { HttpRepository } from '@core/domain/interfaces/http-repository';
 import { SectionRepository } from '@core/domain/interfaces/section-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';

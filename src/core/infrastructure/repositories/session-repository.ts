@@ -1,6 +1,6 @@
 import { SessionRepository } from '@core/domain/interfaces/session-repository';
 
-import { Session } from '@/src/core/domain/entities/session';
+import { Session } from '@/src/core/domain/entities/session_';
 import { decrypt, encrypt } from '@/src/lib/auth/jwt';
 
 import { CookieStorage } from '../datasources/cookie-storage/cookie-storage';

@@ -5,7 +5,7 @@ import { ChevronLeft, Clock, Edit, FileText, FileUp, ListCheck, Plus, Save, Targ
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Content } from '@core/domain/entities/content';
+import { Content } from '@/src/core/domain/entities/content_';
 import { createContent, updateContent } from '@lib/actions/content-actions';
 
 import { Button, Input, Textarea } from '@/src/components/ui';

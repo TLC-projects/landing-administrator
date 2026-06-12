@@ -1,5 +1,5 @@
 import { AuthMapper, AuthServerResponseDto, AuthUserDto, LoginCredentialsDto } from '@core/application/dto/auth';
-import { Auth } from '@core/domain/entities/auth';
+import { Auth } from '@/src/core/domain/entities/auth_';
 import { AuthRepository } from '@core/domain/interfaces/auth-repository';
 import { HttpRepository } from '@core/domain/interfaces/http-repository';
 import { unwrap } from '@lib/errors';

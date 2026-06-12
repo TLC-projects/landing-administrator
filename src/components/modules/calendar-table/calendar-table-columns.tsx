@@ -4,7 +4,7 @@ import { ArrowUpDown, Eye, EyeOff } from 'lucide-react';
 import { Badge, Button } from '@components/ui';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { Calendar } from '@/src/core/domain/entities/calendar';
+import { Calendar } from '@/src/core/domain/entities/calendar_';
 
 import { formatDate } from './lib/format-date';
 import { CalendarTableActions } from './calendar-table-actions';

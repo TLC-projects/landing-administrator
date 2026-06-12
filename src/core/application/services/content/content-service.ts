@@ -7,7 +7,7 @@ import {
   GetContentsBySectionUseCase,
   UpdateContentUseCase
 } from '@core/application/use-cases/content';
-import { Content, ContentFilters } from '@core/domain/entities/content';
+import { Content, ContentFilters } from '@/src/core/domain/entities/content_';
 import { ContentRepository } from '@core/domain/interfaces/content-repository';
 import { PaginationParams } from '@core/domain/value-objects/pagination';
 export class ContentService {

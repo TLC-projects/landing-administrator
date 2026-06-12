@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowUpDown, Eye, EyeOff } from 'lucide-react';
-import { Content } from '@core/domain/entities/content';
+import { Content } from '@/src/core/domain/entities/content_';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { Badge, Button } from '@/src/components/ui';

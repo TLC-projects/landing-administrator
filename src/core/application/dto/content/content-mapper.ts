@@ -1,4 +1,4 @@
-import { Content } from '@core/domain/entities/content';
+import { Content } from '@/src/core/domain/entities/content_';
 
 import { ContentDto, ContentResourcesDto } from './content-response-dto';
 
