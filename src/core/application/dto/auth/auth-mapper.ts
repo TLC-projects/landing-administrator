@@ -1,4 +1,4 @@
-import { Auth } from '@/src/core/domain/entities/auth_';
+import { Auth } from '@/src/core/domain/entities/auth';
 
 import { AuthResultDto, AuthUserDto } from './auth-response-dto';
 
